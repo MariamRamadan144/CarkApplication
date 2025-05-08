@@ -1,0 +1,41 @@
+{
+  "email_required": "Email is required",
+  "email_invalid": "Enter a valid email",
+  "phone_required": "Phone number is required",
+  "phone_invalid": "Enter a valid phone number",
+  "password_required": "Password is required",
+  "password_too_short": "Password must be at least 6 characters",
+  "first_name_required": "First name is required",
+  "last_name_required": "Last name is required",
+
+  "create_account" : "Create Account",
+  "registration_success": "Registration Successful",
+  "registration_failed": "Registration Failed!",
+  "first_name_hint": "First name",
+  "last_name_hint": "Last name",
+  "email_hint": "Email",
+  "phone_hint": "Phone Number",
+  "password_hint": "Password",
+  "register_button": "Register",
+  "already_have_account": "Already have an account?",
+  "login_text": "Login",
+
+  "login_now": "Login Now",
+  "login_intro_message": "Hello, you must login first to be able to use the application and enjoy all the features in Carك",
+  "no_account_question": "Don't have an account?",
+  "sign_up_text": "Sign Up",
+
+  "fieldIsRequired" : "This field is required",
+
+  "upload" : "Uploaded",
+  "upload_your_id": "Upload Your ID",
+  "instruction_place_id": "• Place your ID on a flat surface",
+  "instruction_position_id": "• Position it within the frame",
+  "instruction_clear_details": "• Make sure all details are clearly visible",
+  "upload_photo": "Upload Photo",
+  "image_uploaded_successfully": "Image uploaded successfully !",
+  "please_take_photo_first": "Please take a photo first."
+
+
+
+}
