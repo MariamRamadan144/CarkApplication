@@ -12,11 +12,13 @@ abstract class TextManager{
   /// UI Texts - signup
   static const String create_account = "create_account";
   static const String registration_success = "registration_success";
+  static const String name_hint = "name_hint";
   static const String first_name_hint = "first_name_hint";
   static const String last_name_hint = "last_name_hint";
   static const String email_hint = "email_hint";
   static const String phone_hint = "phone_hint";
   static const String password_hint = "password_hint";
+  static const String national_id_hint = "national_id_hint";
   static const String register_button = "register_button";
   static const String registration_failed = "registration_failed";
   static const String already_have_account = "already_have_account";
@@ -39,7 +41,17 @@ abstract class TextManager{
   static const String upload_photo = "upload_photo";
   static const String image_uploaded_successfully = "image_uploaded_successfully";
   static const String please_take_photo_first = "please_take_photo_first";
+  static const String personalInformation = "personalInformation";
+  static const String edit = "edit";
 
+  static var national_id_invalid = "national_id_invalid";
+  static var edit_profile_text = "edit_profile_text";
+  static var rentCarText = "rentCarText";
+  static var searchBarHint = "searchBarHint";
+  static var home = "home";
+  static var profile = "profile";
+  static var notification = "notification";
+  static var more = "more";
 
 
 

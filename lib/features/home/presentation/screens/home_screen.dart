@@ -1,122 +1,12 @@
-// import 'package:flutter/material.dart';
-// import '../../core/reusable_widgets/showCars.dart';
-// import '../../core/reusable_widgets/top_brands_widget.dart';
-// import '../Filter/filter_screen.dart';
-//
-// class HomeScreen extends StatefulWidget {
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
-//
-// class _HomeScreenState extends State<HomeScreen> {
-//
-//   int _selectedIndex = 0;
-//
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _selectedIndex,
-//         onTap: _onItemTapped,
-//         type: BottomNavigationBarType.fixed,
-//         selectedItemColor: const Color(0xff120A53),
-//         unselectedItemColor: Colors.grey,
-//         items: const [
-//           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
-//           BottomNavigationBarItem(icon: Icon(Icons.notification_add), label: 'NOTIFICATION'),
-//           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'PROFILE'),
-//           BottomNavigationBarItem(icon: Icon(Icons.more_vert), label: ''),
-//         ],
-//       ),
-//       body: SafeArea(
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: SingleChildScrollView(
-//             physics: const BouncingScrollPhysics(),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 const Row(
-//                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Padding(
-//                       padding: EdgeInsets.only(left: 20),
-//                       child: Image(image: AssetImage("assets/images/home/carLogo.png"),),
-//                     ),
-//                     SizedBox(width: 150),
-//                     Column(
-//                       children: [
-//                         Text("Location", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-//                         Row(
-//                           children: [
-//                             Icon(Icons.location_on, color: Colors.red),
-//                             Text("Alex, Egypt") /// GET FROM DATABASE
-//                           ],
-//                         )
-//                       ],
-//                     ),
-//                     SizedBox(width: 40),
-//                   ],
-//                 ),
-//                 const SizedBox(height: 20),
-//                 const Text("Rent a Car anytime", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-//                 const SizedBox(height: 10),
-//                 TextField(
-//                   onTap: (){
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) =>  FilterScreen(),),
-//                     );
-//                   },
-//                   decoration: InputDecoration(
-//                     hintText: "Search any car...",
-//                     prefixIcon: const Icon(Icons.search),
-//                     suffixIcon: const Icon(Icons.filter_list),
-//                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-//                   ),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 const Text("Top Brands", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//                 const SizedBox(height: 10),
-//                 const SingleChildScrollView(
-//                   scrollDirection: Axis.horizontal,
-//                   child: Row(
-//                     children: [
-//                       TopBrandsWidget(imagePath: 'assets/images/home/allBrand.png', name: 'All'),
-//                       TopBrandsWidget(imagePath: 'assets/images/home/teslaBrand.png', name: 'Tesla',),
-//                       TopBrandsWidget(imagePath: 'assets/images/home/BMW_Brand.png', name: 'BMW',),
-//                       TopBrandsWidget( imagePath: 'assets/images/home/FerrariBrand.png', name: 'Ferrari',),
-//                       TopBrandsWidget(imagePath: 'assets/images/home/AudiBrand.png', name: 'Audi',),
-//                       // _brandIcon("Porsche"),
-//                     ],
-//                   ),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 const Cars(title: 'Top Rated Cars', imagePath: 'assets/images/home/car1(home).png',),
-//                 const Cars(title: 'Most Popular Cars', imagePath: 'assets/images/home/car1(home).png',),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-//
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
+import 'package:test_cark/core/utils/text_manager.dart';
+import '../../../../config/routes/screens_name.dart';
+import '../../../auth/presentation/widgets/bottom_navigation_bar_widget.dart';
 import '../../widgets/top_brands.dart';
-import 'filter_screen.dart';
 
-/// clean
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -125,99 +15,61 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        // type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xff120A53),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notification_add), label: 'NOTIFICATION'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'PROFILE'),
-          BottomNavigationBarItem(icon: Icon(Icons.more_vert), label: ''),
-        ],
-      ),
+      // Bottom Navigation Bar
+      bottomNavigationBar: BottomNavigationBarWidget(selectedIndex: _selectedIndex,),
+
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(screenWidth * 0.04),
+          padding: EdgeInsets.all(0.04.sw),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: screenWidth * 0.05),
-                      child: Image(
-                        image:
-                            const AssetImage(AssetsManager.carLogo),
-                        // "assets/images/home/carLogo.png"
-                        width: screenWidth * 0.15,
-                      ),
-                    ),
-                    SizedBox(width: screenWidth * 0.3),
-                    Column(
-                      children: [
-                        Text("Location",
-                            style: TextStyle(
-                                fontSize: screenWidth * 0.04,
-                                fontWeight: FontWeight.w500)),
-                        const Row(
-                          children: [
-                            Icon(Icons.location_on, color: Colors.red),
-                            Text("Alex, Egypt") //
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(width: screenWidth * 0.1),
-                  ],
+                // Cark Logo
+                Image(
+                  image: const AssetImage(AssetsManager.carLogo),
+                  width: 0.15.sw,
                 ),
-                SizedBox(height: screenHeight * 0.02),
-                Text("Rent a Car anytime",
-                    style: TextStyle(
-                        fontSize: screenWidth * 0.06,
-                        fontWeight: FontWeight.bold)),
-                SizedBox(height: screenHeight * 0.015),
+
+                SizedBox(height: 0.02.sh),
+
+                // Rent a Car anytime
+                // Text(TextManager.rentCarText.tr(),
+                //     style: TextStyle(
+                //         fontSize: 0.02.sh, fontWeight: FontWeight.bold)),
+
+                // SizedBox(height: 0.015.sh),
+
+                // Search Bar
                 TextField(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FilterScreen()),
-                    );
+                    Navigator.pushNamed(context, ScreensName.filterScreen);
                   },
                   decoration: InputDecoration(
-                    hintText: "Search any car...",
+                    hintText: TextManager.searchBarHint.tr(),
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: const Icon(Icons.filter_list),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+
+                SizedBox(height: 0.02.sh),
+
+                // Top Brands
                 Text("Top Brands",
                     style: TextStyle(
-                        fontSize: screenWidth * 0.05,
-                        fontWeight: FontWeight.bold)),
-                SizedBox(height: screenHeight * 0.015),
+                        fontSize: 0.05.sp, fontWeight: FontWeight.bold)),
+
+                SizedBox(height: 0.015.sh),
+
+                // From The Database
                 const SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -230,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+
+                SizedBox(height: 0.02.sh),
                 // const Cars(
                 //     title: 'Top Rated Cars',
                 //     imagePath: 'assets/images/home/car1(home).png'),
@@ -245,3 +98,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+/// removed from ui:
+//Column(
+//                       children: [
+//                         Text("Location",
+//                             style: TextStyle(
+//                                 fontSize: 0.04.sw,
+//                                 fontWeight: FontWeight.w500)),
+//                         const Row(
+//                           children: [
+//                             Icon(Icons.location_on, color: Colors.red),
+//                             Text("Alex, Egypt") //
+//                           ],
+//                         )
+//                       ],
+//                     ),

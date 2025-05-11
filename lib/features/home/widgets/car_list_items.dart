@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CarListItem extends StatelessWidget {
-  final String carName;
-  final String imagePath;
-  final int seats;
-  final String transmission;
-  final String smallBags;
-  final String largeBags;
-  final bool isSelected;
-  final VoidCallback onTap;
-
   const CarListItem({
     super.key,
     required this.carName,
@@ -21,6 +12,15 @@ class CarListItem extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
   });
+  final String carName;
+  final String imagePath;
+  final int seats;
+  final String transmission;
+  final String smallBags;
+  final String largeBags;
+  final bool isSelected;
+  final VoidCallback onTap;
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,10 @@ class CarListItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xff120A53).withOpacity(0.5): Colors.white,
+          color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.5): Theme.of(context).colorScheme.onPrimary,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? Color(0xff120A53).withOpacity(0.5) : Colors.grey.shade300,
+            color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.5) : Theme.of(context).colorScheme.secondary,
             width: isSelected ? 2 : 1,
           ),
         ),

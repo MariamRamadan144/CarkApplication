@@ -1,4 +1,3 @@
-// lib/presentation/screens/upload_documents/document_upload_screen.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../widgets/image_upload_widget.dart';
@@ -75,7 +74,6 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
               onPressed: _selectedFile != null
                   ? () => widget.onNext(widget.documentType, _selectedFile!)
                   : null,
-              /// Styling for the button - ازاي مش بياخد الحاجات ال defualt
               child: const Text('Next' ,),
             ),
           ],

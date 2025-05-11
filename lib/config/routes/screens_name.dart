@@ -3,4 +3,9 @@ abstract class ScreensName{
   static const String getStarted = "/getStarted";
   static const String login = "/login";
   static const String signup = "/signup";
+  static const String profile = "/profile";
+  static const String editProfile = "/editProfile";
+  static const String homeScreen = "/homeScreen";
+  static const String filterScreen = "/filterScreen";
+
 }

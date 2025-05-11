@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
-import 'package:test_cark/features/auth/presentation/screens/login_screen.dart';
-import 'package:test_cark/features/auth/presentation/screens/signup.dart';
+import 'package:test_cark/features/auth/presentation/screens/login/login_screen.dart';
+import 'package:test_cark/features/auth/presentation/screens/signup/signup_screen.dart';
 import 'package:test_cark/features/splash/presentation/screens/get_started_screen.dart';
-import '../../features/auth/presentation/screens/login_cubit_test.dart';
-import '../../features/auth/presentation/screens/signup_cubit_test.dart';
+import '../../features/auth/presentation/screens/profile/edit_profile_screen.dart';
+import '../../features/auth/presentation/screens/profile/profile_screen.dart';
+import '../../features/home/presentation/screens/filter_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 
 abstract class RoutesManager {
   static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
-    print("in RoutesManager , route settings name: ${routeSettings.name}" );
+    print("in RoutesManager , route settings name: ${routeSettings.name}");
     switch (routeSettings.name) {
       case ScreensName.splash:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
       case ScreensName.getStarted:
-        return MaterialPageRoute(builder: (context) => const GetStartedScreen());
+        return MaterialPageRoute(
+            builder: (context) => const GetStartedScreen());
       case ScreensName.login:
-        return MaterialPageRoute(builder: (context) =>  (LoginScreen())); // LoginCubitTest
+        return MaterialPageRoute(builder: (context) => (LoginScreen()));
       case ScreensName.signup:
-        return MaterialPageRoute(builder: (context) => const SignUpCubitTest()); // SignUpScreen
+        return MaterialPageRoute(builder: (context) => const SignUpScreen());
+      case ScreensName.profile:
+        return MaterialPageRoute(builder: (context) => const ProfileScreen());
+      case ScreensName.editProfile:
+        return MaterialPageRoute(
+            builder: (context) => const EditProfileScreen());
+      case ScreensName.homeScreen:
+        return MaterialPageRoute(builder: (context) => const HomeScreen());
+
+      case ScreensName.filterScreen:
+        return MaterialPageRoute(builder: (context) => const FilterScreen());
+
       default:
         return MaterialPageRoute(builder: (context) {
           return const Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
 
-import '../../../auth/presentation/screens/login_screen.dart';
+import '../../../auth/presentation/screens/login/login_screen.dart';
 
 
 /// clean
