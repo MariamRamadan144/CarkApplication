@@ -1,28 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
-import 'package:test_cark/core/utils/text_manager.dart';
-import '../../../../config/routes/screens_name.dart';
-import '../../../auth/presentation/widgets/bottom_navigation_bar_widget.dart';
-import '../../widgets/top_brands.dart';
+import '../widgets/home_widgets/brand_section_widget.dart';
+import '../widgets/home_widgets/filter_section_widget.dart';
+import '../widgets/home_widgets/view_cars_section_widget.dart';
+import '../../removed/custom_search_bar.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final int _selectedIndex = 0;
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBarWidget(selectedIndex: _selectedIndex,),
-
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(0.04.sw),
@@ -36,60 +26,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   image: const AssetImage(AssetsManager.carLogo),
                   width: 0.15.sw,
                 ),
-
                 SizedBox(height: 0.02.sh),
-
-                // Rent a Car anytime
-                // Text(TextManager.rentCarText.tr(),
-                //     style: TextStyle(
-                //         fontSize: 0.02.sh, fontWeight: FontWeight.bold)),
-
-                // SizedBox(height: 0.015.sh),
 
                 // Search Bar
-                TextField(
-                  onTap: () {
-                    Navigator.pushNamed(context, ScreensName.filterScreen);
-                  },
-                  decoration: InputDecoration(
-                    hintText: TextManager.searchBarHint.tr(),
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: const Icon(Icons.filter_list),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
-
+                const CustomSearchBar(),
                 SizedBox(height: 0.02.sh),
 
-                // Top Brands
-                Text("Top Brands",
-                    style: TextStyle(
-                        fontSize: 0.05.sp, fontWeight: FontWeight.bold)),
+                // All brands in general
+                const BrandSectionWidget(),
 
-                SizedBox(height: 0.015.sh),
+                // Filter Section
+                const FilterSectionWidget(),
 
-                // From The Database
-                const SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    /// from the database
-                    children: [
-                      TopBrandsWidget(
-                          imagePath: AssetsManager.allBrand,
-                          // assets/images/home/allBrand.png
-                          name: 'All'),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 0.02.sh),
-                // const Cars(
-                //     title: 'Top Rated Cars',
-                //     imagePath: 'assets/images/home/car1(home).png'),
-                // const Cars(
-                //     title: 'Most Popular Cars',
-                //     imagePath: 'assets/images/home/car1(home).png'),
+                // View Cars Section
+                ViewCarsSectionWidget(),
               ],
             ),
           ),
@@ -114,3 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
 //                         )
 //                       ],
 //                     ),
+/// car section
+// const Cars(
+//     title: 'Top Rated Cars',
+//     imagePath: 'assets/images/home/car1(home).png'),
+// const Cars(
+//     title: 'Most Popular Cars',
+//     imagePath: 'assets/images/home/car1(home).png'),
+/// Rent a Car anytime text
+// Text(TextManager.rentCarText.tr(),
+//     style: TextStyle(
+//         fontSize: 0.02.sh, fontWeight: FontWeight.bold),),
+// SizedBox(height: 0.02.sh),
+

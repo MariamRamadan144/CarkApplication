@@ -3,26 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/utils/text_manager.dart';
 
-class BottomNavigationBarWidget extends StatefulWidget {
-  BottomNavigationBarWidget({super.key, required this.selectedIndex});
+class BottomNavigationBarWidget extends StatelessWidget {
+  BottomNavigationBarWidget({super.key, required this.selectedIndex, required this.onTap});
   int selectedIndex;
-
-  @override
-  State<BottomNavigationBarWidget> createState() => _BottomNavigationBarWidgetState();
-}
-
-class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
-  void _onItemTapped(int index) {
-    setState(() {
-      widget.selectedIndex = index;
-    });
-  }
+  final void Function(int) onTap;
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: widget.selectedIndex,
-      onTap: _onItemTapped,
+      currentIndex: selectedIndex,
+      onTap: onTap,
       selectedItemColor: Theme.of(context).colorScheme.primary,
       unselectedItemColor: Colors.grey,
       items: [

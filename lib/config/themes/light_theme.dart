@@ -6,7 +6,7 @@ import 'package:test_cark/config/themes/app_colors.dart';
 ThemeData lightTheme = ThemeData(
   fontFamily: 'Inter',
   // Color scheme for light mode
-  colorScheme: const ColorScheme(
+  colorScheme: ColorScheme(
     // Light theme brightness
     brightness: Brightness.light,
     // Main color
@@ -17,6 +17,8 @@ ThemeData lightTheme = ThemeData(
     secondary: AppColors.gray,
     // Text color on secondary
     onSecondary: AppColors.black,
+    onSecondaryContainer: Colors.grey.shade200 ,
+    onSecondaryFixedVariant: Colors.grey.shade400,
     // Error color
     error: AppColors.red,
     // Text color on error background
@@ -25,6 +27,10 @@ ThemeData lightTheme = ThemeData(
     surface: AppColors.white,
     // Text color on surfaces
     onSurface: AppColors.black,
+
+
+
+
   ),
   // Styling for all ElevatedButtons in the app
   elevatedButtonTheme: ElevatedButtonThemeData(

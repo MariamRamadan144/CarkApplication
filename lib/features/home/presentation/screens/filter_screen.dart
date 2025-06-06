@@ -1,117 +1,72 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/filter_options.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_cark/config/routes/screens_name.dart';
+import 'package:test_cark/core/utils/text_manager.dart';
+import '../cubit/home_cubit.dart';
+import '../widgets/filter_widgets/car_category_widget.dart';
+import '../widgets/filter_widgets/car_type_widget.dart';
 
-/// clean
-/// filter by ??
-class FilterScreen extends StatefulWidget {
-  const FilterScreen({super.key});
-
-  @override
-  _FilterScreenState createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
-  Map<String, bool> filters = {
-    "Location": false,
-    "Capacity": false,
-    "Brand": false,
-    "Price": false,
-    "Model": false,
-    "Car Type": false,
-    "Availability": false,
-  };
+class FilterScreen2 extends StatelessWidget {
+  const FilterScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final carCubit = context.read<CarCubit>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Filter',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: screenWidth * 0.06),
-            child: IconButton(
-              icon: const Icon(Icons.camera_alt, size: 24, color: Colors.black),
-              onPressed: () {},
-            ),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search Bar
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Search for car",
-                prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.grey.shade300,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.02),
-
-            // Filter Options
-            Expanded(
-              child: ListView(
-                children: filters.keys.map((filter) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: screenHeight * 0.01),
-                    child: FilterOption(
-                      title: filter,
-                      isSelected: filters[filter]!,
-                      onTap: () {
-                        setState(() {
-                          filters[filter] = !filters[filter]!;
-                        });
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            // Apply Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo.shade900,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 0.04.sw, vertical: 0.02.sh),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Row: Close & Clear
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Close Button
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, ScreensName.homeScreen),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015),
-                ),
-                onPressed: () {
-                  // Handle Apply button action
-                },
-                child: Text(
-                  "Apply",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth * 0.045,
-                      fontWeight: FontWeight.bold),
-                ),
+
+                  // Filter Title
+                  Text(
+                    TextManager.filter.tr(),
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  TextButton(
+                    onPressed: () {
+                      carCubit.resetFilters();
+                    },
+                    child: Text(
+                      TextManager.clear.tr(),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+
+              SizedBox(height: 0.02.sh),
+
+              // Car Type Filter Widget
+              const CarTypeWidget(),
+
+              SizedBox(height: 0.05.sh),
+
+              // Car Category Filter Widget
+              const CarCategoryWidget(),
+
+            ],
+          ),
         ),
       ),
     );
   }
 }
-

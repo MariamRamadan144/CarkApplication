@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
 import '../../../../../config/themes/app_colors.dart';
 import '../../../../../core/utils/text_manager.dart';
-import '../../../../home/widgets/camera_preview_box.dart';
+import '../../../../home/presentation/widgets/search_widgets/camera_preview_box.dart';
 import '../../widgets/instruction_text.dart';
 
 

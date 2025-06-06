@@ -7,5 +7,8 @@ abstract class ScreensName{
   static const String editProfile = "/editProfile";
   static const String homeScreen = "/homeScreen";
   static const String filterScreen = "/filterScreen";
+  static const String mainNavigationScreen = "/mainNavigationScreen";
+  static const String carDetailsScreen = "/carDetailsScreen";
 
 }
+

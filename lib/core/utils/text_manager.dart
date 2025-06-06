@@ -52,7 +52,47 @@ abstract class TextManager{
   static var profile = "profile";
   static var notification = "notification";
   static var more = "more";
-
-
-
+  static var topBrands = "topBrands";
+  static var all = "all";
+  static var toyotaCar = "toyotaCar" ;
+  static var BMWCar= "BMWCar";
+  static var fordCar= "fordCar";
+  static var hondaCar= "hondaCar";
+  static var teslaCar= "teslaCar";
+  static var volkswagenCar= "volkswagenCar";
+  static var audiCar= "audiCar";
+  static var kiaCar= "kiaCar";
+  static var mazdaCar= " mazdaCar";
+  static var mercedesBenzCar= "mercedesBenzCar";
+  static var subaruCar= "subaruCar";
+  static var lexusCar= "lexusCar";
+  static var nissanCar= "nissanCar";
+  static var hyundaiCar= "hyundaiCar";
+  static var chevroletCar= "chevroletCar";
+  static var porscheCar= "porscheCar";
+  static var buickCar= "buickCar";
+  static var jeepCar= "jeepCar";
+  static var renaultCar= "renaultCar";
+  static var volvoCar= "volvoCar";
+  static var location = "location";
+  static var capacity = "capacity";
+  static var brand = "brand";
+  static var price = "price";
+  static var model = "model";
+  static var carType = "carType";
+  static var availability = "availability";
+  static var filter = "filter";
+  static var applyButton = "applyButton";
+  static var carCategory = "carCategory";
+  static var driverOption = "driverOption";
+  static var withDriver = "withDriver";
+  static var withoutDriver = "withoutDriver";
+  static var availableCarTypes = "availableCarTypes";
+  static var allCars = "allCars";
+  static var available = "available";
+  static var unAvailable = "unAvailable";
+  static var seats = "seats";
+  static var fuelType = "fuelType";
+  static var transmissionTypes = "transmissionTypes";
+  static var clear = "clear";
 }

@@ -7,6 +7,7 @@ import '../../features/auth/presentation/screens/profile/edit_profile_screen.dar
 import '../../features/auth/presentation/screens/profile/profile_screen.dart';
 import '../../features/home/presentation/screens/filter_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/shared/presentation/screens/navigation_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 
 abstract class RoutesManager {
@@ -28,10 +29,14 @@ abstract class RoutesManager {
         return MaterialPageRoute(
             builder: (context) => const EditProfileScreen());
       case ScreensName.homeScreen:
-        return MaterialPageRoute(builder: (context) => const HomeScreen());
+        return MaterialPageRoute(builder: (context) => HomeScreen());
 
+       case ScreensName.mainNavigationScreen:
+        return MaterialPageRoute(
+            builder: (context) => MainNavigationScreen());
       case ScreensName.filterScreen:
-        return MaterialPageRoute(builder: (context) => const FilterScreen());
+        return MaterialPageRoute(builder: (context) => const FilterScreen2());
+
 
       default:
         return MaterialPageRoute(builder: (context) {

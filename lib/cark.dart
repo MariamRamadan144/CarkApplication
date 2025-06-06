@@ -6,6 +6,8 @@ import 'package:test_cark/config/routes/routes_manager.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/config/themes/light_theme.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
+import 'features/home/presentation/cubit/home_cubit.dart';
 
 class Cark extends StatelessWidget {
   const Cark({super.key});
@@ -21,8 +23,18 @@ class Cark extends StatelessWidget {
         splitScreenMode: true,
         designSize: const Size(412, 917),
         builder: (context, child) {
-          return BlocProvider(
-            create: (context) => AuthCubit(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => AuthCubit(),
+              ),
+              BlocProvider(
+                create: (context) => NavigationCubit(),
+              ),
+              BlocProvider(
+                create: (context) => CarCubit(),
+              ),
+            ],
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
@@ -33,7 +45,7 @@ class Cark extends StatelessWidget {
               theme: lightTheme,
               // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.homeScreen, // Initial screen
+              initialRoute: ScreensName.filterScreen, // Initial screen
             ),
           );
         },
