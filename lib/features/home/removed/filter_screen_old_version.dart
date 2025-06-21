@@ -3,7 +3,7 @@
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import '../../../../core/utils/text_manager.dart';
-// import '../cubit/home_cubit.dart';
+// import '../cubit/car_cubit.dart';
 // import '../widgets/search_widgets/apply_button.dart';
 // import '../widgets/search_widgets/custom_search_bar.dart';
 // import '../widgets/search_widgets/filter_config.dart';

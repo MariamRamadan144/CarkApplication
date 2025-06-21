@@ -55,7 +55,7 @@ class CarModel {
       availability: json['availability'],
       currentStatus: json['current_status'],
       approvalStatus: json['approval_status'],
-      rentalOptions: RentalOptions.fromJson(json['rental_options']),
+      rentalOptions: RentalOptions.fromJson(json['rental_widgets']),
       imageUrl: 'https://cdn-icons-png.flaticon.com/512/743/743007.png',
 
     );

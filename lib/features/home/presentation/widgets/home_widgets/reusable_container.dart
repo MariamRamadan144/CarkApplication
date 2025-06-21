@@ -20,6 +20,7 @@ class ReusableContainer extends StatelessWidget {
 
       // Container decorations ( padding, border radius, color)
       decoration: BoxDecoration(
+        // Background color changes based on selection
         color: isSelected
             ? Theme.of(context).colorScheme.primary
             : Theme.of(context).colorScheme.onSecondaryContainer,
@@ -38,14 +39,17 @@ class ReusableContainer extends StatelessWidget {
       child: Center(
         child: DefaultTextStyle(
           style: TextStyle(
+            // Text color changes based on selection
             color: isSelected
                 ? Theme.of(context).colorScheme.onPrimary
                 : Theme.of(context).colorScheme.onSecondary,
+
             fontWeight: FontWeight.w500,
             fontSize: 14.sp,
           ),
-          child: option,
 
+          // Display the option widget (icon and text)
+          child: option,
         ),
       ),
     );

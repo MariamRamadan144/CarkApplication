@@ -17,6 +17,7 @@ ThemeData lightTheme = ThemeData(
     secondary: AppColors.gray,
     // Text color on secondary
     onSecondary: AppColors.black,
+    onSecondaryFixed: AppColors.black.withOpacity(0.5),
     onSecondaryContainer: Colors.grey.shade200 ,
     onSecondaryFixedVariant: Colors.grey.shade400,
     // Error color
@@ -27,6 +28,7 @@ ThemeData lightTheme = ThemeData(
     surface: AppColors.white,
     // Text color on surfaces
     onSurface: AppColors.black,
+    // onSurfaceVariant: AppColors.green,
 
 
 

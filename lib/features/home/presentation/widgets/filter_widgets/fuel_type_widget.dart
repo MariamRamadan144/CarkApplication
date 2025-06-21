@@ -6,51 +6,46 @@ import 'package:test_cark/features/home/presentation/widgets/home_widgets/reusab
 import '../../../../../core/utils/text_manager.dart';
 import '../../cubit/car_cubit.dart';
 // Done
-class CarCategoryWidget extends StatelessWidget {
-  const CarCategoryWidget({super.key});
+class FuelTypeWidget extends StatelessWidget {
+  const FuelTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const categories = CarCubit.carCategories;
-    final selected = context.watch<CarCubit>().state.category;
+    const fuelTypes = CarCubit.fuelTypes;
+    final selected = context.watch<CarCubit>().state.fuel;
     final cubit = context.read<CarCubit>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Car Category Title
         Text(
-          TextManager.carCategory.tr(),
+          TextManager.fuelType.tr(),
           style: TextStyle(fontSize: 0.02.sh, fontWeight: FontWeight.bold),
         ),
 
         SizedBox(height: 0.01.sh),
 
-        // Car Category List
+        // Fuel Type List
         SizedBox(
-          height: 0.05.sh,
+          height: 50,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-
-            // Space between items
+            itemCount: fuelTypes.length,
             separatorBuilder: (_, __) => SizedBox(width: 0.03.sw),
-
-            // Item Builder
             itemBuilder: (context, index) {
-              final category = categories[index];
-              final isSelected = selected == category.label;
+              final fuel = fuelTypes[index];
+              final isSelected = selected == fuel.label;
 
               return GestureDetector(
-                onTap: () => cubit.setCategory(category.label),
+                onTap: () => cubit.setFuel(fuel.label),
 
-                // Category Container
-                child:  ReusableContainer(isSelected: isSelected, option: Row(
+                // Fuel Type Container
+                child: ReusableContainer(isSelected: isSelected, option: Row(
                   children: [
                     SizedBox(width: 0.01.sw),
 
                     Icon(
-                      category.icon,
+                      fuel.icon,
                       size: 20.sp,
                       color: isSelected
                           ? Theme.of(context).colorScheme.onPrimary
@@ -60,7 +55,7 @@ class CarCategoryWidget extends StatelessWidget {
                     SizedBox(width: 0.01.sw),
 
                     Text(
-                      category.label,
+                      fuel.label,
                       style: TextStyle(fontSize: 14.sp),
                     ),
                   ],

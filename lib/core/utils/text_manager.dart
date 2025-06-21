@@ -82,7 +82,7 @@ abstract class TextManager{
   static var carType = "carType";
   static var availability = "availability";
   static var filter = "filter";
-  static var applyButton = "applyButton";
+  static var applyButton = "Show offers";
   static var carCategory = "carCategory";
   static var driverOption = "driverOption";
   static var withDriver = "withDriver";
@@ -95,4 +95,5 @@ abstract class TextManager{
   static var fuelType = "fuelType";
   static var transmissionTypes = "transmissionTypes";
   static var clear = "clear";
+  static var showOffers = "showOffers";
 }

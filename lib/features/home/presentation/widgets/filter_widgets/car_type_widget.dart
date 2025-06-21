@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/features/home/presentation/widgets/home_widgets/reusable_container.dart';
 import '../../../../../core/utils/text_manager.dart';
-import '../../cubit/home_cubit.dart';
+import '../../cubit/car_cubit.dart';
 
 // Done
 class CarTypeWidget extends StatelessWidget {
@@ -36,16 +36,18 @@ class CarTypeWidget extends StatelessWidget {
             separatorBuilder: (_, __) => SizedBox(width: 0.03.sw),
             itemBuilder: (context, index) {
               final type = carTypes[index];
-              final isSelected = selected == type.type;
+              final isSelected = selected == type.label;
 
               return GestureDetector(
-                onTap: () => cubit.setCarType(type.type),
+                onTap: () => cubit.setCarType(type.label),
+                // Car Type Container
                 child: ReusableContainer(
                   isSelected: isSelected,
                   option: Row(
                     children: [
                       SizedBox(width: 0.01.sw),
 
+                      // Icon and Label
                       Icon(
                         type.icon,
                         size: 20.sp,
@@ -57,7 +59,7 @@ class CarTypeWidget extends StatelessWidget {
                       SizedBox(width: 0.01.sw),
 
                       Text(
-                        type.type,
+                        type.label,
                         style: TextStyle(fontSize: 14.sp),
                       ),
                     ],

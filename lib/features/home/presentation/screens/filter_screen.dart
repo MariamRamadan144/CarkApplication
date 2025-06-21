@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/text_manager.dart';
-import '../cubit/home_cubit.dart';
-import '../widgets/filter_widgets/car_category_widget.dart';
-import '../widgets/filter_widgets/car_type_widget.dart';
+import '../cubit/car_cubit.dart';
+import '../widgets/filter_widgets/car_filters.dart';
 
-class FilterScreen2 extends StatelessWidget {
-  const FilterScreen2({super.key});
+class FilterScreen extends StatelessWidget {
+  const FilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +27,10 @@ class FilterScreen2 extends StatelessWidget {
                 children: [
                   // Close Button
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close ,color: Theme.of(context).colorScheme.onSecondary,),
                     onPressed: () =>
                         Navigator.pushNamed(context, ScreensName.homeScreen),
+
                   ),
 
                   // Filter Title
@@ -55,13 +55,46 @@ class FilterScreen2 extends StatelessWidget {
 
               SizedBox(height: 0.02.sh),
 
-              // Car Type Filter Widget
-              const CarTypeWidget(),
+              // Car Filters Section
+              const CarFilters(),
 
-              SizedBox(height: 0.05.sh),
+              SizedBox(height: 0.08.sh),
 
-              // Car Category Filter Widget
-              const CarCategoryWidget(),
+              // Show offers
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: (){
+                    // final carCubit = context.read<CarCubit>();
+
+                    // Set the filters in the CarCubit
+                    carCubit.setFilters(
+                      carType: carCubit.state.carType,
+                      category: carCubit.state.category,
+                      transmission: carCubit.state.transmission,
+                      fuel: carCubit.state.fuel,
+                      withDriver: carCubit.state.withDriver,
+                      withoutDriver: carCubit.state.withoutDriver,
+                    );
+
+                    Navigator.pushNamed(context, ScreensName.homeScreen);
+                  },
+
+                  // Apply Filters Button
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+
+                  // Button Text
+                  child: Text(
+                    TextManager.applyButton.tr(),
+                    style: Theme.of(context).elevatedButtonTheme.style!.textStyle!.resolve({}),
+                  ),
+                ),
+              ),
 
             ],
           ),

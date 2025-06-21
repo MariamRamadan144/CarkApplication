@@ -36,7 +36,7 @@ class LoginForm extends StatelessWidget {
             CustomTextFormField(
               controller: emailController,
               prefixIcon: Icons.person,
-              hintText: TextManager.email_hint,
+              hintText: TextManager.email_hint.tr(),
             ),
 
             SizedBox(height: 0.02.sh),
@@ -45,7 +45,7 @@ class LoginForm extends StatelessWidget {
             CustomTextFormField(
               controller: passwordController,
               prefixIcon: Icons.lock,
-              hintText: TextManager.password_hint,
+              hintText: TextManager.password_hint.tr(),
             ),
 
             SizedBox(height: 0.05.sh),

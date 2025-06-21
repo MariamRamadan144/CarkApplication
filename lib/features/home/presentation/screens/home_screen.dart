@@ -6,9 +6,11 @@ import '../widgets/home_widgets/brand_section_widget.dart';
 import '../widgets/home_widgets/filter_section_widget.dart';
 import '../widgets/home_widgets/view_cars_section_widget.dart';
 import '../../removed/custom_search_bar.dart';
+import '../widgets/rental_widgets/filter_button.dart';
+import '../widgets/rental_widgets/rental_summary_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,16 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 0.02.sh),
 
                 // Search Bar
-                const CustomSearchBar(),
+                // const CustomSearchBar(),
+                const RentalSummaryCard(),
+                SizedBox(height: 0.02.sh),
+
+                // Filter Button
+                const FilterButton(),
                 SizedBox(height: 0.02.sh),
 
                 // All brands in general
                 const BrandSectionWidget(),
-
-                // Filter Section
-                const FilterSectionWidget(),
 
                 // View Cars Section
                 ViewCarsSectionWidget(),

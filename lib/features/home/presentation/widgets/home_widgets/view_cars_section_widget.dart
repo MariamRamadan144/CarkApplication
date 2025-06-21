@@ -1,15 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../core/utils/text_manager.dart';
+import '../../cubit/car_cubit.dart';
+import '../../cubit/choose_car_state.dart';
+import '../../cubit/rental_cubit.dart';
 import '../../model/car_model.dart';
 import '../../screens/car_details_screen.dart';
 import 'car_card_widget.dart';
 
 class ViewCarsSectionWidget extends StatelessWidget {
   ViewCarsSectionWidget({super.key});
+
   // Dummy data for cars
   final List<CarModel> dummyCars = [
     CarModel(
@@ -78,7 +81,7 @@ class ViewCarsSectionWidget extends StatelessWidget {
       approvalStatus: true,
       rentalOptions: RentalOptions(
         availableWithoutDriver: true,
-        availableWithDriver: true,
+        availableWithDriver: false,
         dailyRentalPrice: 350.0,
         dailyRentalPriceWithDriver: 450.0,
       ),
@@ -89,39 +92,89 @@ class ViewCarsSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section Title
-        Text(
-          TextManager.allCars.tr(),
-          style:
-          TextStyle(fontSize: 0.02.sh, fontWeight: FontWeight.bold),
-        ),
+    return BlocBuilder<CarCubit, ChooseCarState>(
+      builder: (context, state) {
+        final rentalState = context.watch<CarCubit>().state;
+        final showWithDriver = rentalState.withDriver;
+        final showWithoutDriver = rentalState.withoutDriver;
 
-        SizedBox(height: 0.04.sh),
+        final filteredCars = dummyCars.where((car) {
+          final matchesType =
+              state.carType == null || car.carType == state.carType;
 
-        // Cars List
-        ListView.builder(
-          itemCount: dummyCars.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return CarCardWidget(
-              car: dummyCars[index],
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        CarDetailsScreen(car: dummyCars[index]),
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      ],
+          final matchesCategory =
+              state.category == null || car.carCategory == state.category;
+
+          final matchesTransmission = state.transmission == null ||
+              car.transmissionType == state.transmission;
+
+          final matchesFuel =
+              state.fuel == null || car.fuelType == state.fuel;
+
+          // Driver filter logic:
+          // - If withDriver is true: show only cars available with driver
+          // - If withoutDriver is true: show only cars available without driver  
+          // - If both are null: show all cars (no driver filter applied)
+          final matchesDriver = (showWithDriver == true && car.rentalOptions.availableWithDriver == true) ||
+              (showWithoutDriver == true && car.rentalOptions.availableWithoutDriver == true) ||
+              (showWithDriver == null && showWithoutDriver == null);
+
+          return matchesType &&
+              matchesCategory &&
+              matchesTransmission &&
+              matchesFuel &&
+              matchesDriver;
+        }).toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title
+            Text(
+              TextManager.allCars.tr(),
+              style: TextStyle(fontSize: 0.02.sh, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 0.02.sh),
+
+            // Debug information (can be removed in production)
+            if (showWithDriver != null || showWithoutDriver != null)
+              Padding(
+                padding: EdgeInsets.only(bottom: 0.01.sh),
+                child: Text(
+                  "Driver Filter: ${showWithDriver == true ? 'With Driver' : showWithoutDriver == true ? 'Without Driver' : 'None'}",
+                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                ),
+              ),
+
+            // Cars list
+            if (filteredCars.isEmpty)
+              Text(
+                "No cars match your filters.",
+                style: TextStyle(fontSize: 16.sp),
+              )
+            else
+              ListView.builder(
+                itemCount: filteredCars.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return CarCardWidget(
+                    car: filteredCars[index],
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              CarDetailsScreen(car: filteredCars[index]),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+          ],
+        );
+      },
     );
   }
 }

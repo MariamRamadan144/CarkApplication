@@ -74,16 +74,17 @@
   "availability": "Availability",
   "filter": "Filter",
   "applyButton": "Apply",
-  "carCategory": "Car Categories",
-  "driverOption": "Driver Options",
+  "carCategory": "Car categories",
+  "driverOption": "Driver options",
   "withDriver": "With Driver",
   "withoutDriver": "Without Driver",
-  "availableCarTypes": "Car Types",
+  "availableCarTypes": "Car types",
   "allCars": "All Cars",
   "available": "Available",
   "unAvailable": "unAvailable",
   "seats": "Seats",
-  "fuelType" : "Fuel Type",
-  "transmissionTypes": "Transmission Types",
-  "clear " : "Clear"
+  "fuelType" : "Fuel types",
+  "transmissionTypes": "Transmission types",
+  "clear " : "Clear",
+  "showOffers" : "Show offers"
 }

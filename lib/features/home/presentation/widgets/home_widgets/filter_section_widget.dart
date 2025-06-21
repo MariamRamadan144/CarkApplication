@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:test_cark/features/home/removed/transmission_widget.dart';
+import 'package:test_cark/features/home/presentation/widgets/filter_widgets/car_transmission_widget.dart';
 
 import '../filter_widgets/car_category_widget.dart';
 import '../filter_widgets/car_type_widget.dart';
-import '../../../removed/driver_option_widget.dart';
-import '../../../removed/fuel_type_widget.dart';
+import '../filter_widgets/driver_option_widget.dart';
+import '../filter_widgets/fuel_type_widget.dart';
 
 class FilterSectionWidget extends StatelessWidget {
   const FilterSectionWidget({super.key});

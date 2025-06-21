@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
 import '../../../../../core/utils/text_manager.dart';
-import '../../cubits/auth_cubit.dart';
 import '../../widgets/auth_options_text.dart';
 import '../../widgets/login_custom_widgets/login_form.dart';
 import '../../widgets/login_custom_widgets/login_header.dart';

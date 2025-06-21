@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({super.key, required this.text, required this.onPressed});
   final String text ;
@@ -13,7 +11,7 @@ class CustomElevatedButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text.tr(),
-          style: Theme.of(context).elevatedButtonTheme!.style!.textStyle!.resolve({}),
+          style: Theme.of(context).elevatedButtonTheme.style!.textStyle!.resolve({}),
         ),
       ),
     );
