@@ -1,5 +1,6 @@
 // Car States
 import 'package:flutter/material.dart';
+import '../model/location_model.dart';
 
 class ChooseCarState {
   final String? carType;
@@ -13,9 +14,13 @@ class ChooseCarState {
   final double? yearlyPrice;
 
   // NEW FIELDS
-  final String? pickupStation;
-  final String? returnStation;
+  final LocationModel? pickupStation;
+  final LocationModel? returnStation;
   final DateTimeRange? dateRange;
+  final String? selectedPaymentMethod;
+  
+  // Validation flags
+  final bool showValidation;
 
   /// Constructors
   const ChooseCarState({
@@ -31,6 +36,8 @@ class ChooseCarState {
     this.pickupStation,
     this.returnStation,
     this.dateRange,
+    this.selectedPaymentMethod,
+    this.showValidation = false,
   });
 
   // Initial state (all filters cleared)
@@ -48,9 +55,11 @@ class ChooseCarState {
     double? dailyPrice,
     double? monthlyPrice,
     double? yearlyPrice,
-    String? pickupStation,
-    String? returnStation,
+    LocationModel? pickupStation,
+    LocationModel? returnStation,
     DateTimeRange? dateRange,
+    String? selectedPaymentMethod,
+    bool? showValidation,
   }) {
     return ChooseCarState(
       // Use the existing value if the new value is null
@@ -66,6 +75,8 @@ class ChooseCarState {
       pickupStation: pickupStation ?? this.pickupStation,
       returnStation: returnStation ?? this.returnStation,
       dateRange: dateRange ?? this.dateRange,
+      selectedPaymentMethod: selectedPaymentMethod ?? this.selectedPaymentMethod,
+      showValidation: showValidation ?? this.showValidation,
     );
   }
 }

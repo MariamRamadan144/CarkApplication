@@ -1,12 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/utils/text_manager.dart';
 import '../../model/car_model.dart';
 
-
-// favorite screen
-// rates
 class CarCardWidget extends StatelessWidget {
   final CarModel car;
   final VoidCallback onTap;
@@ -19,162 +14,170 @@ class CarCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final price = car.rentalOptions.availableWithoutDriver
-        ? car.rentalOptions.dailyRentalPrice
-        : car.rentalOptions.dailyRentalPriceWithDriver;
-
-    final hasDriver = car.rentalOptions.availableWithDriver;
-    final availability = car.availability ? TextManager.available.tr() : TextManager.unAvailable.tr();
+    final price = car.rentalOptions.availableWithDriver
+        ? car.rentalOptions.dailyRentalPriceWithDriver
+        : car.rentalOptions.dailyRentalPrice;
 
     return GestureDetector(
       onTap: onTap,
-
-      child: Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Column(
-          children: [
-            // Using Stack to overlay the image and icons
-            Stack(
+      child: Container(
+        height: 250.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            image: NetworkImage(car.imageUrl),
+            fit: BoxFit.cover,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withOpacity(0.6),
+                  Colors.black.withOpacity(0.2),
+                  Colors.transparent,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+            child: Stack(
               children: [
-                // Positioned to place the image at the top of the card
-                ClipRRect(
-                  // Using ClipRRect to apply rounded corners to the image
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12),),
-                  // Displaying the car image - from database
-                  child: Image.network(
-                    car.imageUrl,
-                    height: 0.2.sh,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // Content on top of the image
+                Padding(
+                  padding: EdgeInsets.all(16.r),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Top section with car info chips
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${car.brand} ${car.model}',
+                            style: TextStyle(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            'or similar | ${car.carType}',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                        ],
+                      ),
 
-                // Positioned to place the icons on top of the image
-                const Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Icon(
-                    Icons.favorite_border,
-                    color: Colors.redAccent,
-                  ),
-                ),
-
-                // Positioned to place the rating badge on the top left corner
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 0.01.sw, vertical: 0.01.sh),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-
-                    // Displaying the rating icon and value
-                    child: Row(
-                      children: [
-                        const Icon(Icons.star, color: Colors.orange, size: 16),
-                        SizedBox(width: 0.01.sw),
-                        // Displaying a static rating for demonstration purposes
-                        Text('4.9', style: TextStyle(fontSize: 12.sp),),
-                      ],
-                    ),
+                      // Bottom section with pricing and details
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              _buildInfoChip(
+                                icon: Icons.person_outline,
+                                text: '${car.seatingCapacity}',
+                              ),
+                              SizedBox(width: 8.w),
+                              _buildInfoChip(
+                                icon: Icons.luggage_outlined,
+                                text: '${car.luggageCapacity}',
+                              ),
+                              SizedBox(width: 8.w),
+                              _buildInfoChip(
+                                icon: Icons.settings_input_component_outlined,
+                                text: car.transmissionType,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.white,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: '\$${price?.toStringAsFixed(2) ?? 'N/A'}',
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text: ' / day',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (price != null)
+                                Text(
+                                  '\$${(price * 3).toStringAsFixed(2)} total',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-
-            // Car details section
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0.05.sw, vertical: 0.04.sh),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Displaying the car type
-                  Text(
-                    car.carType,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 0.01.sh),
-
-                  // Displaying the car brand and model with price
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Display the car brand and model
-                      Text(
-                        "${car.brand} ${car.model}",
-                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
-                      ),
-
-                      SizedBox(width: 0.01.sh),
-
-                      // Display the price per day
-                      Text(
-                        "\$${price?.toStringAsFixed(2) ?? 'N/A'}/day",
-                        style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 0.01.sh),
-
-                  // Displaying the car transmission type , fuel type and seating capacity
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildInfoIcon(Icons.settings, car.transmissionType, context),
-                      _buildInfoIcon(Icons.local_gas_station, car.fuelType , context),
-                      _buildInfoIcon(Icons.event_seat, "${car.seatingCapacity} ${TextManager.seats.tr()}", context),
-                    ],
-                  ),
-                  SizedBox(height: 0.02.sh),
-
-                  // Displaying the availability status and driver option
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Displaying the availability status and driver option
-                      Text(
-                        hasDriver ? TextManager.withDriver.tr()  :TextManager.withoutDriver.tr() ,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: hasDriver ? Colors.green : Colors.red,
-                        ),
-                      ),
-
-                      // Displaying the availability status
-                      Text(
-                        availability,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: car.availability ? Colors.green : Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildInfoIcon(IconData icon, String text, BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: Theme.of(context).colorScheme.secondary),
-        SizedBox(width: 0.04.sw),
-        Text(text, style: TextStyle(fontSize: 12.sp),),
-      ],
+  Widget _buildInfoChip({required IconData icon, required String text}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Colors.grey.shade300,
+            size: 16.sp,
+          ),
+          SizedBox(width: 6.w),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

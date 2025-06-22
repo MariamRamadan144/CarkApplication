@@ -7,22 +7,22 @@ import '../../cubit/car_cubit.dart';
 import '../../cubit/choose_car_state.dart';
 import '../../cubit/rental_cubit.dart';
 import '../../model/car_model.dart';
-import '../../screens/car_details_screen.dart';
+import '../../screens/booking_screens/car_details_screen.dart';
 import 'car_card_widget.dart';
 
 class ViewCarsSectionWidget extends StatelessWidget {
   ViewCarsSectionWidget({super.key});
 
-  // Dummy data for cars
+  // Enhanced dummy data for cars with driver information
   final List<CarModel> dummyCars = [
     CarModel(
       id: 1,
-      model: 'Corolla',
+      model: 'Camry',
       brand: 'Toyota',
       carType: 'Sedan',
       carCategory: 'Economy',
       plateNumber: 'ABC123',
-      year: 2020,
+      year: 2022,
       color: 'White',
       seatingCapacity: 5,
       transmissionType: 'Automatic',
@@ -33,60 +33,111 @@ class ViewCarsSectionWidget extends StatelessWidget {
       approvalStatus: true,
       rentalOptions: RentalOptions(
         availableWithoutDriver: true,
-        availableWithDriver: false,
-        dailyRentalPrice: 150.0,
+        availableWithDriver: true,
+        dailyRentalPrice: 120.0,
+        dailyRentalPriceWithDriver: 180.0,
       ),
       imageUrl:
-      'https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_960_720.jpg',
+          'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400',
+      driverName: 'Ahmed Hassan',
+      driverRating: 4.8,
+      driverTrips: 156,
+      kmLimitPerDay: 200,
+      waitingHourCost: 15.0,
+      extraKmRate: 0.5,
     ),
     CarModel(
       id: 2,
-      model: 'X5',
-      brand: 'BMW',
-      carType: 'SUV',
-      carCategory: 'Luxury',
+      model: 'Accord',
+      brand: 'Honda',
+      carType: 'Sedan',
+      carCategory: 'Economy',
       plateNumber: 'XYZ789',
-      year: 2022,
+      year: 2023,
       color: 'Black',
-      seatingCapacity: 7,
+      seatingCapacity: 5,
       transmissionType: 'Automatic',
-      fuelType: 'Diesel',
+      fuelType: 'Petrol',
       currentOdometerReading: 12000,
       availability: true,
       currentStatus: 'Available',
       approvalStatus: true,
       rentalOptions: RentalOptions(
-        availableWithoutDriver: false,
+        availableWithoutDriver: true,
         availableWithDriver: true,
-        dailyRentalPriceWithDriver: 400.0,
+        dailyRentalPrice: 140.0,
+        dailyRentalPriceWithDriver: 200.0,
       ),
       imageUrl:
-      'https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_960_720.jpg',
+          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400',
+      driverName: 'Mohammed Ali',
+      driverRating: 4.9,
+      driverTrips: 203,
+      kmLimitPerDay: 250,
+      waitingHourCost: 18.0,
+      extraKmRate: 0.6,
     ),
     CarModel(
       id: 3,
-      model: 'Model 3',
-      brand: 'Tesla',
+      model: '3 Series',
+      brand: 'BMW',
       carType: 'Sedan',
-      carCategory: 'Electric',
-      plateNumber: 'TESLA01',
-      year: 2023,
-      color: 'Red',
+      carCategory: 'Luxury',
+      plateNumber: 'BMW001',
+      year: 2022,
+      color: 'Blue',
       seatingCapacity: 5,
       transmissionType: 'Automatic',
-      fuelType: 'Electric',
+      fuelType: 'Petrol',
       currentOdometerReading: 5000,
       availability: true,
       currentStatus: 'Available',
       approvalStatus: true,
       rentalOptions: RentalOptions(
         availableWithoutDriver: true,
-        availableWithDriver: false,
-        dailyRentalPrice: 350.0,
-        dailyRentalPriceWithDriver: 450.0,
+        availableWithDriver: true,
+        dailyRentalPrice: 180.0,
+        dailyRentalPriceWithDriver: 250.0,
       ),
       imageUrl:
-      'https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_960_720.jpg',
+          'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400',
+      driverName: 'Omar Khalil',
+      driverRating: 4.7,
+      driverTrips: 89,
+      kmLimitPerDay: 300,
+      waitingHourCost: 20.0,
+      extraKmRate: 0.7,
+    ),
+    CarModel(
+      id: 4,
+      model: 'C-Class',
+      brand: 'Mercedes',
+      carType: 'Sedan',
+      carCategory: 'Luxury',
+      plateNumber: 'MB001',
+      year: 2023,
+      color: 'Silver',
+      seatingCapacity: 5,
+      transmissionType: 'Automatic',
+      fuelType: 'Petrol',
+      currentOdometerReading: 8000,
+      availability: true,
+      currentStatus: 'Available',
+      approvalStatus: true,
+      rentalOptions: RentalOptions(
+        availableWithoutDriver: true,
+        availableWithDriver: true,
+        dailyRentalPrice: 220.0,
+        dailyRentalPriceWithDriver: 300.0,
+      ),
+      imageUrl:
+          'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400',
+      driverName: 'Youssef Mahmoud',
+      driverRating: 4.9,
+      driverTrips: 134,
+      kmLimitPerDay: 350,
+      waitingHourCost: 25.0,
+      extraKmRate: 0.8,
     ),
   ];
 
@@ -108,15 +159,16 @@ class ViewCarsSectionWidget extends StatelessWidget {
           final matchesTransmission = state.transmission == null ||
               car.transmissionType == state.transmission;
 
-          final matchesFuel =
-              state.fuel == null || car.fuelType == state.fuel;
+          final matchesFuel = state.fuel == null || car.fuelType == state.fuel;
 
           // Driver filter logic:
           // - If withDriver is true: show only cars available with driver
-          // - If withoutDriver is true: show only cars available without driver  
+          // - If withoutDriver is true: show only cars available without driver
           // - If both are null: show all cars (no driver filter applied)
-          final matchesDriver = (showWithDriver == true && car.rentalOptions.availableWithDriver == true) ||
-              (showWithoutDriver == true && car.rentalOptions.availableWithoutDriver == true) ||
+          final matchesDriver = (showWithDriver == true &&
+                  car.rentalOptions.availableWithDriver == true) ||
+              (showWithoutDriver == true &&
+                  car.rentalOptions.availableWithoutDriver == true) ||
               (showWithDriver == null && showWithoutDriver == null);
 
           return matchesType &&
@@ -129,9 +181,9 @@ class ViewCarsSectionWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title
+            // Title - Changed to "Available Cars"
             Text(
-              TextManager.allCars.tr(),
+              'Available Cars',
               style: TextStyle(fontSize: 0.02.sh, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 0.02.sh),
@@ -158,17 +210,20 @@ class ViewCarsSectionWidget extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return CarCardWidget(
-                    car: filteredCars[index],
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              CarDetailsScreen(car: filteredCars[index]),
-                        ),
-                      );
-                    },
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 16.h),
+                    child: CarCardWidget(
+                      car: filteredCars[index],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                CarDetailsScreen(car: filteredCars[index]),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),

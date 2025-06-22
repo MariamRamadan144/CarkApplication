@@ -7,8 +7,8 @@ import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/config/themes/light_theme.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
+import 'features/home/presentation/cubit/booking_cubit.dart';
 import 'features/home/presentation/cubit/car_cubit.dart';
-import 'features/home/presentation/cubit/rental_cubit.dart';
 
 class Cark extends StatelessWidget {
   const Cark({super.key});
@@ -35,6 +35,9 @@ class Cark extends StatelessWidget {
               BlocProvider(
                 create: (context) => CarCubit(),
               ),
+              BlocProvider(
+                create: (context) => BookingCubit(),
+              ),
               // BlocProvider(
               //   create: (context) => RentalCubit(),
               // ),
@@ -48,7 +51,7 @@ class Cark extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: lightTheme, // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.homeScreen, // Initial screen
+              initialRoute: ScreensName.splash, // Initial screen
             ),
           );
         },

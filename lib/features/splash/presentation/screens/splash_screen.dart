@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_cark/config/routes/screens_name.dart';
+import 'package:test_cark/features/shared/presentation/screens/navigation_screen.dart';
 
 import 'get_started_screen.dart';
 
@@ -43,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           context,
           PageRouteBuilder(
             transitionDuration: const Duration(seconds: 1), // Set duration to 1 second
-            pageBuilder: (context, animation, secondaryAnimation) => GetStartedScreen(),
+            pageBuilder: (context, animation, secondaryAnimation) => MainNavigationScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0); // Slide from right
               const end = Offset.zero;
@@ -72,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF05011F), // Set custom background color (green in this case)
+      backgroundColor: const Color(0xFF120A53), // Updated background color
       body: Stack(
         children: [
           // Car image (animated)

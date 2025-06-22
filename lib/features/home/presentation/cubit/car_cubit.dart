@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../model/icon_label_model.dart';
+import '../model/location_model.dart';
 import 'choose_car_state.dart';
 
 /// filter by price , number of seats, and availability
@@ -101,14 +102,20 @@ class CarCubit extends Cubit<ChooseCarState> {
     );
   }
 
-  void setPickupStation(String value) =>
+  void setPickupStation(LocationModel value) =>
       emit(state.copyWith(pickupStation: value));
 
-  void setReturnStation(String value) =>
+  void setReturnStation(LocationModel value) =>
       emit(state.copyWith(returnStation: value));
 
   void setDateRange(DateTimeRange range) =>
       emit(state.copyWith(dateRange: range));
+
+  void setSelectedPaymentMethod(String method) =>
+      emit(state.copyWith(selectedPaymentMethod: method));
+
+  void enableValidation() =>
+      emit(state.copyWith(showValidation: true));
 
   void setFilters({
     String? carType,

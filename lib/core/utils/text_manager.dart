@@ -96,4 +96,6 @@ abstract class TextManager{
   static var transmissionTypes = "transmissionTypes";
   static var clear = "clear";
   static var showOffers = "showOffers";
+  static var booking_history = "booking_history";
+  static var renter_notification = "renter_notification";
 }

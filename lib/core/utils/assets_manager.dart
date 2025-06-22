@@ -1,4 +1,4 @@
-abstract class AssetsManager{
+abstract class AssetsManager {
   static const String _imagesPath = "assets/images";
   static const String _homeImages = "$_imagesPath/home";
   static const String _imgImages = "$_imagesPath/img";
@@ -6,9 +6,10 @@ abstract class AssetsManager{
   static const String _signupImages = "$_imagesPath/signup";
   static const String _uploadsImages = "$_imagesPath/uploads";
 
+  // Home page
+  static const String carLogo = "$_homeImages/carLogo.png";
   static const String allBrand = "$_homeImages/allBrand.png";
   static const String car1Home = "$_homeImages/car1(home).png";
-  static const String carLogo = "$_homeImages/carLogo.png";
   static const String toyotaLogo = "$_homeImages/toyota_logo.jpeg";
   static const String BMWLogo = "$_homeImages/BMW.jpeg";
   static const String fordLogo = "$_homeImages/Ford.jpeg";
@@ -26,16 +27,26 @@ abstract class AssetsManager{
   static const String teslaLogo = "$_homeImages/Tesla.png";
   static const String volkswagenLogo = "$_homeImages/Volkswagen.jpeg";
   static const String volvoLogo = "$_homeImages/Volvo.png";
+  static const String suv = "$_homeImages/SUV.jpg";
+  static const String carBackground = "$_homeImages/car_background.jpeg";
 
+  // Generic images
   static const String map = "$_imgImages/map.jpg";
   static const String text = "$_imgImages/text.png";
   static const String car = "$_imgImages/car.png";
 
+  // Login screen
   static const String carLoginScreen = "$_loginImages/car(Login_screen).png";
 
-  static const String carSignUp= "$_signupImages/car(signUp).png";
+  // Signup screen
+  static const String carSignUp = "$_signupImages/car(signUp).png";
   static const String carkSignUp = "$_signupImages/Cark(signUp).png";
+  static const String frontSideId = "$_signupImages/frontSideID.jpg";
+  static const String backSideId = "$_signupImages/backSideID.jpg";
 
+  // Uploads
   static const String camera = "$_uploadsImages/camera.png";
 
-  }
+  // Translations
+  static const String translations = "assets/translation";
+}

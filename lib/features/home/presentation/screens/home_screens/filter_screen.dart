@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/text_manager.dart';
-import '../cubit/car_cubit.dart';
-import '../widgets/filter_widgets/car_filters.dart';
+import '../../cubit/car_cubit.dart';
+import '../../widgets/filter_widgets/car_filters.dart';
 
 class FilterScreen extends StatelessWidget {
   const FilterScreen({super.key});
@@ -28,9 +28,8 @@ class FilterScreen extends StatelessWidget {
                   // Close Button
                   IconButton(
                     icon: Icon(Icons.close ,color: Theme.of(context).colorScheme.onSecondary,),
-                    onPressed: () =>
-                        Navigator.pushNamed(context, ScreensName.homeScreen),
-
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                        context, ScreensName.mainNavigationScreen, (route) => false),
                   ),
 
                   // Filter Title
@@ -77,7 +76,8 @@ class FilterScreen extends StatelessWidget {
                       withoutDriver: carCubit.state.withoutDriver,
                     );
 
-                    Navigator.pushNamed(context, ScreensName.homeScreen);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, ScreensName.mainNavigationScreen, (route) => false);
                   },
 
                   // Apply Filters Button

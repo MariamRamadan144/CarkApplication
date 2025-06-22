@@ -9,9 +9,11 @@ abstract class ScreensName{
   static const String filterScreen = "/filterScreen";
   static const String mainNavigationScreen = "/mainNavigationScreen";
   static const String carDetailsScreen = "/carDetailsScreen";
-  static const String rentalSearchScreen = "/rentalSearchScreen";
+  static const String rentalSearchScreen = "/rental_search_screen";
   static const String documentUploadScreen = "/documentUploadScreen";
-
-
+  static const String bookingSummaryScreen = "/booking_summary_screen";
+  static const String tripManagementScreen = "/trip_management_screen";
+  static const String ownerNotificationScreen = "/owner_notification_screen";
+  static const String renterNotificationScreen = "/renter_notification_screen";
 }
 

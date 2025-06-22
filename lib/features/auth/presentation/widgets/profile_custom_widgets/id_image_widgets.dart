@@ -17,7 +17,7 @@ class IdImageWidgets extends StatelessWidget {
         log("builder called when state ${state.runtimeType}");
         return InkWell(
           onTap: () {
-            authCubit.uploadIdImage();
+            authCubit.uploadIdImage(isFront: true);
           },
           child: SizedBox(
             width: double.infinity,

@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +15,9 @@ class AuthCubit extends Cubit<AuthState> {
   String idImagePath = '';
   String licenceImagePath = '';
   String profileImage = '';
+
+  File? frontIdImage;
+  File? backIdImage;
 
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
@@ -32,32 +38,24 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signup(String firstname, String lastname, String email,
       String phone, String password) async {
     emit(SignUpLoading());
-    await Future.delayed(const Duration(seconds: 5), () {
-      userModel = UserModel(
-        idImagePath,
-        licenceImagePath,
-        firstName: firstname,
-        lastName: lastname,
-        email: email,
-        phoneNumber: phone,
-      );
-      emit(SignUpSuccess("Signup successfully"));
-    });
+    await Future.delayed(const Duration(seconds: 2));
+    log("firstname: $firstname, lastname: $lastname, email: $email, phone: $phone, password: $password");
+    emit(SignUpSuccess("Signup successful"));
   }
 
-  Future<void> uploadIdImage() async {
+  Future<void> uploadIdImage({required bool isFront}) async {
     emit(UploadIdImageLoading());
-    final pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      idImagePath = pickedFile.path;
+      if (isFront) {
+        frontIdImage = File(pickedFile.path);
+      } else {
+        backIdImage = File(pickedFile.path);
+      }
       emit(UploadIdImageSuccess());
     } else {
-      if (idImagePath.isEmpty) {
-        emit(UploadIdImageFailure("No image selected"));
-      }
-      else {
-        emit(UploadIdImageSuccess());
-      }
+      emit(UploadIdImageFailure("No image selected"));
     }
   }
 

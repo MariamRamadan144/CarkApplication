@@ -23,10 +23,16 @@ class GetStartedScreen extends StatelessWidget {
             Stack(
               alignment: Alignment.center,
               children: [
-                Image.asset(
-                   AssetsManager.map,
+                ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    const Color(0xFF120A53).withOpacity(0.3),
+                    BlendMode.modulate,
+                  ),
+                  child: Image.asset(
+                     AssetsManager.map,
                     //'assets/images/img/map2.png'
                     width: screenWidth
+                  ),
                 ),
                 Column(
                   children: [
@@ -83,45 +89,74 @@ class GetStartedScreen extends StatelessWidget {
               width: screenWidth * 0.5,
             ),
             SizedBox(height: screenHeight * 0.08),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: const Duration(seconds: 1),
-                    pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
-                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(1.0, 0.0);
-                      const end = Offset.zero;
-                      const curve = Curves.easeInOutQuad;
-
-                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
+            Container(
+              width: screenWidth * 0.7,
+              height: 55,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white,
+                    Colors.white.withOpacity(0.9),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white.withOpacity(0.5),
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.1,
-                  vertical: screenHeight * 0.02,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                ],
               ),
-              child: Text(
-                'Get Started',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: screenWidth * 0.045,
-                  color: Colors.white,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(seconds: 1),
+                      pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOutQuad;
+
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: const Color(0xFF120A53),
+                      size: 20,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Get Started',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF120A53),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

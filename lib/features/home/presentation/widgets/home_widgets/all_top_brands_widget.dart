@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../../../core/utils/assets_manager.dart';
 import '../../../../../core/utils/text_manager.dart';
 import 'top_brands_widget.dart';
+
 // done
 class AllTopBrandsWidget extends StatelessWidget {
   const AllTopBrandsWidget({super.key});

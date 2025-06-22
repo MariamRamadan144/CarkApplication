@@ -32,7 +32,7 @@ class RentalSummaryCard extends StatelessWidget {
                 children: [
 
                   Text(
-                    state.pickupStation?.isNotEmpty == true ? state.pickupStation! : 'Pick-up Station',
+                    state.pickupStation != null ? state.pickupStation!.name : 'Pick-up Station',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
 

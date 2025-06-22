@@ -17,14 +17,17 @@ class BottomNavigationBarWidget extends StatelessWidget {
       unselectedItemColor: Colors.grey,
       items: [
         BottomNavigationBarItem(
-            icon: const Icon(Icons.home), label: TextManager.home.tr()),
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: TextManager.home.tr()),
         BottomNavigationBarItem(
-            icon: const Icon(Icons.notification_add),
-            label: TextManager.notification.tr()),
+            icon: const Icon(Icons.notifications_outlined),
+            activeIcon: const Icon(Icons.notifications),
+            label: TextManager.renter_notification.tr()),
         BottomNavigationBarItem(
-            icon: const Icon(Icons.person), label: TextManager.profile.tr()),
-        BottomNavigationBarItem(
-            icon: const Icon(Icons.more_vert), label: TextManager.more.tr()),
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
+            label: TextManager.profile.tr()),
       ],
     );
   }

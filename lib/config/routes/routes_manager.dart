@@ -6,11 +6,17 @@ import 'package:test_cark/features/splash/presentation/screens/get_started_scree
 import '../../features/auth/presentation/screens/profile/edit_profile_screen.dart';
 import '../../features/auth/presentation/screens/profile/profile_screen.dart';
 import '../../features/auth/presentation/screens/upload_documents/document_upload_screen.dart';
-import '../../features/home/presentation/screens/filter_screen.dart';
-import '../../features/home/presentation/screens/home_screen.dart';
-import '../../features/home/presentation/screens/rental_search_screen.dart';
+import '../../features/home/presentation/screens/home_screens/filter_screen.dart';
+import '../../features/home/presentation/screens/home_screens/home_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/rental_search_screen.dart';
+import '../../features/notifications/presentation/screens/owner_notification_screen.dart';
+import '../../features/notifications/presentation/screens/renter_notification_screen.dart';
 import '../../features/shared/presentation/screens/navigation_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/booking_summary_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/trip_management_screen.dart';
+import '../../features/home/presentation/model/car_model.dart';
+import '../../features/home/presentation/model/location_model.dart';
 
 abstract class RoutesManager {
   static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
@@ -41,8 +47,32 @@ abstract class RoutesManager {
       case ScreensName.rentalSearchScreen:
         return MaterialPageRoute(
             builder: (context) => const RentalSearchScreen());
-
-
+      case ScreensName.bookingSummaryScreen:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        final car = args['car'] as CarModel;
+        final totalPrice = args['totalPrice'] as double;
+        return MaterialPageRoute(
+            builder: (context) => BookingSummaryScreen(
+                  car: car,
+                  totalPrice: totalPrice,
+                ));
+      case ScreensName.tripManagementScreen:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        final car = args['car'] as CarModel;
+        final totalPrice = args['totalPrice'] as double;
+        final stops = args['stops'] as List<dynamic>;
+        return MaterialPageRoute(
+            builder: (context) => TripManagementScreen(
+                  car: car,
+                  totalPrice: totalPrice,
+                  stops: stops.cast<LocationModel>(),
+                ));
+      case ScreensName.ownerNotificationScreen:
+        return MaterialPageRoute(
+            builder: (context) => const OwnerNotificationScreen());
+      case ScreensName.renterNotificationScreen:
+        return MaterialPageRoute(
+            builder: (context) => const RenterNotificationScreen());
 
       default:
         return MaterialPageRoute(builder: (context) {

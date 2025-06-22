@@ -11,6 +11,7 @@ import '../../../../../core/utils/text_manager.dart';
 import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../core/widgets/custom_text_form_field.dart';
 import '../profile_custom_widgets/licence_image_widget.dart';
+import 'id_image_upload_widget.dart';
 
 class SignupForm extends StatelessWidget {
   const SignupForm({
@@ -142,50 +143,10 @@ class SignupForm extends StatelessWidget {
 
           SizedBox(height: 0.03.sh),
 
-          // Upload ID Image
-          BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              final authCubit = context.read<AuthCubit>();
-              log("builder called when state ${state.runtimeType}");
-              return InkWell(
-                onTap: () {
-                  authCubit.uploadIdImage();
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: authCubit.idImagePath.isNotEmpty
-                        ? ClipRRect(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(
-                              File(authCubit.idImagePath),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.2),
-                            ),
-                          ),
-                  ),
-                ),
-              );
-            },
-            buildWhen: (previous, current) {
-              return current is UploadIdImageLoading ||
-                  current is UploadIdImageSuccess ||
-                  current is UploadIdImageFailure;
-            },
-          ),
-          SizedBox(
-            height: 0.03.sh,
-          ),
+          // Upload ID Images
+          const IdImageUploadWidget(),
+
+          SizedBox(height: 0.03.sh),
 
           // Upload Licence Image Button
           const LicenceImageWidget(),
