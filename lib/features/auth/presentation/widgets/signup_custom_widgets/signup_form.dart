@@ -10,8 +10,10 @@ import '../../../../../core/utils/custom_toast.dart';
 import '../../../../../core/utils/text_manager.dart';
 import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../core/widgets/custom_text_form_field.dart';
+import '../../screens/upload_documents/document_upload_flow.dart';
 import '../profile_custom_widgets/licence_image_widget.dart';
 import 'id_image_upload_widget.dart';
+
 
 class SignupForm extends StatelessWidget {
   const SignupForm({
@@ -144,12 +146,12 @@ class SignupForm extends StatelessWidget {
           SizedBox(height: 0.03.sh),
 
           // Upload ID Images
-          const IdImageUploadWidget(),
+          // const IdImageUploadWidget(),
 
           SizedBox(height: 0.03.sh),
 
           // Upload Licence Image Button
-          const LicenceImageWidget(),
+          // const LicenceImageWidget(),
 
           SizedBox(
             height: 0.03.sh,
@@ -159,6 +161,12 @@ class SignupForm extends StatelessWidget {
             listener: (context, state) {
               if (state is SignUpSuccess) {
                 showCustomToast(state.message, false);
+                // Navigate to DocumentUploadFlow after successful signup
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => const DocumentUploadFlow(),
+                  ),
+                );
               } else if (state is SignUpFailure) {
                 showCustomToast(state.error, true);
               }

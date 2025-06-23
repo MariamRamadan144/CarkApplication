@@ -10,6 +10,7 @@ import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
 import 'features/home/presentation/cubit/booking_cubit.dart';
 import 'features/home/presentation/cubit/car_cubit.dart';
 
+
 class Cark extends StatelessWidget {
   const Cark({super.key});
 
@@ -51,7 +52,7 @@ class Cark extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: lightTheme, // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.splash, // Initial screen
+              initialRoute: ScreensName.signup, // Initial screen
             ),
           );
         },
