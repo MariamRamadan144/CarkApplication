@@ -1,8 +1,9 @@
 // Car States
 import 'package:flutter/material.dart';
 import '../model/location_model.dart';
+import 'package:equatable/equatable.dart';
 
-class ChooseCarState {
+class ChooseCarState extends Equatable {
   final String? carType;
   final String? category;
   final String? transmission;
@@ -16,6 +17,9 @@ class ChooseCarState {
   // NEW FIELDS
   final LocationModel? pickupStation;
   final LocationModel? returnStation;
+  final List<LocationModel> stops;
+  final DateTime? pickupDate;
+  final DateTime? returnDate;
   final DateTimeRange? dateRange;
   final String? selectedPaymentMethod;
   
@@ -35,6 +39,9 @@ class ChooseCarState {
     this.yearlyPrice,
     this.pickupStation,
     this.returnStation,
+    this.stops = const [],
+    this.pickupDate,
+    this.returnDate,
     this.dateRange,
     this.selectedPaymentMethod,
     this.showValidation = false,
@@ -57,6 +64,9 @@ class ChooseCarState {
     double? yearlyPrice,
     LocationModel? pickupStation,
     LocationModel? returnStation,
+    List<LocationModel>? stops,
+    DateTime? pickupDate,
+    DateTime? returnDate,
     DateTimeRange? dateRange,
     String? selectedPaymentMethod,
     bool? showValidation,
@@ -74,11 +84,35 @@ class ChooseCarState {
       yearlyPrice: yearlyPrice ?? this.yearlyPrice,
       pickupStation: pickupStation ?? this.pickupStation,
       returnStation: returnStation ?? this.returnStation,
+      stops: stops ?? this.stops,
+      pickupDate: pickupDate ?? this.pickupDate,
+      returnDate: returnDate ?? this.returnDate,
       dateRange: dateRange ?? this.dateRange,
       selectedPaymentMethod: selectedPaymentMethod ?? this.selectedPaymentMethod,
       showValidation: showValidation ?? this.showValidation,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        carType,
+        category,
+        transmission,
+        fuel,
+        withDriver,
+        withoutDriver,
+        dailyPrice,
+        monthlyPrice,
+        yearlyPrice,
+        pickupStation,
+        returnStation,
+        stops,
+        pickupDate,
+        returnDate,
+        dateRange,
+        selectedPaymentMethod,
+        showValidation,
+      ];
 }
 
 // Filter States

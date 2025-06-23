@@ -9,6 +9,8 @@ import '../../widgets/rental_widgets/driver_filter_selector.dart';
 import '../../widgets/rental_widgets/payment_method_selector.dart';
 import '../../widgets/rental_widgets/station_input.dart';
 import '../../widgets/rental_widgets/stops_station_input.dart';
+import 'package:test_cark/features/home/presentation/widgets/rental_widgets/rental_search_form.dart';
+import 'package:test_cark/features/home/presentation/widgets/rental_widgets/rental_summary_card.dart';
 
 class RentalSearchScreen extends StatelessWidget {
   const RentalSearchScreen({super.key});
@@ -138,17 +140,21 @@ class RentalSearchScreen extends StatelessWidget {
                         // Return Station (Optional)
                         const StationInput(isPickup: false),
 
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 16.h),
 
-                            // Conditional fields for With Driver
-                            if (withDriver == true) ...[
-                              const StopsStationInput(),
-                              SizedBox(height: 20.h),
-                              const PaymentMethodSelector(),
-                              SizedBox(height: 20.h),
-                            ],
+                        // Stops Section
+                        const StopsStationInput(),
+                        SizedBox(height: 16.h),
 
+                        // Date Selector
                         const DateSelector(),
+                        SizedBox(height: 16.h),
+
+                        // Conditional fields for With Driver
+                        if (withDriver == true) ...[
+                          const PaymentMethodSelector(),
+                          SizedBox(height: 20.h),
+                        ],
 
                         SizedBox(height: 40.h),
 

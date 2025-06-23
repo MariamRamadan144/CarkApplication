@@ -141,17 +141,16 @@ class _TripManagementScreenState extends State<TripManagementScreen>
   }
 
   void _proceedToPayment() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Payment processing...'),
-        backgroundColor: Colors.green,
-      ),
+    Navigator.of(context).pop();
+    Navigator.pushNamed(
+      context,
+      '/payment_screen',
+      arguments: {'totalPrice': widget.totalPrice},
     );
   }
 
   String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    return '${twoDigits(duration.inHours)}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
+    return '${(duration.inHours).toString().padLeft(2, '0')}:${(duration.inMinutes.remainder(60)).toString().padLeft(2, '0')}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
   }
 
   @override

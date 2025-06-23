@@ -13,6 +13,7 @@ abstract class ScreensName{
   static const String documentUploadScreen = "/documentUploadScreen";
   static const String bookingSummaryScreen = "/booking_summary_screen";
   static const String tripManagementScreen = "/trip_management_screen";
+  static const String paymentScreen = "/payment_screen";
   static const String ownerNotificationScreen = "/owner_notification_screen";
   static const String renterNotificationScreen = "/renter_notification_screen";
 }

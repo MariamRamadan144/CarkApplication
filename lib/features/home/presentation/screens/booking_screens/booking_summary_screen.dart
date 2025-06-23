@@ -5,6 +5,8 @@ import 'package:test_cark/config/themes/app_colors.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import '../../model/car_model.dart';
 import '../../model/location_model.dart';
+import '../../cubit/car_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
   final CarModel car;
@@ -235,29 +237,25 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
       child: ElevatedButton(
         onPressed: _agreedToTerms
             ? () {
-                // Create sample stops for the trip
-                final stops = [
-                  LocationModel(
-                    name: 'Pickup Station - Riyadh Central',
-                    address: 'King Fahd Road, Riyadh',
-                    description: 'Main pickup location',
-                  ),
-                  LocationModel(
-                    name: 'Stop 1 - Shopping Mall',
-                    address: 'Olaya Street, Riyadh',
-                    description: 'Shopping destination',
-                  ),
-                  LocationModel(
-                    name: 'Stop 2 - Business District',
-                    address: 'King Abdullah Financial District',
-                    description: 'Business meeting location',
-                  ),
-                  LocationModel(
-                    name: 'Return Station - Airport',
-                    address: 'King Khalid International Airport',
-                    description: 'Final destination',
-                  ),
-                ];
+                final stops = context.read<CarCubit>().state.stops;
+
+                // Ensure there's at least a pickup and return station, even if no intermediate stops are added
+                if (stops.isEmpty) {
+                  final pickup = context.read<CarCubit>().state.pickupStation;
+                  final dropoff = context.read<CarCubit>().state.returnStation;
+                  if (pickup != null) stops.add(pickup);
+                  if (dropoff != null) stops.add(dropoff);
+                }
+
+                if (stops.length < 2) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please select at least a pickup and return station.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
                 
                 Navigator.pushNamed(
                   context,

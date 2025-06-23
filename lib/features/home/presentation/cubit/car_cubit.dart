@@ -105,8 +105,30 @@ class CarCubit extends Cubit<ChooseCarState> {
   void setPickupStation(LocationModel value) =>
       emit(state.copyWith(pickupStation: value));
 
-  void setReturnStation(LocationModel value) =>
-      emit(state.copyWith(returnStation: value));
+  void setReturnStation(LocationModel station) {
+    emit(state.copyWith(returnStation: station));
+  }
+
+  void addStop(LocationModel stop) {
+    final List<LocationModel> updatedStops = List.from(state.stops)..add(stop);
+    emit(state.copyWith(stops: updatedStops));
+  }
+
+  void removeStop(int index) {
+    final List<LocationModel> updatedStops = List.from(state.stops)
+      ..removeAt(index);
+    emit(state.copyWith(stops: updatedStops));
+  }
+
+  void updateStop(int index, LocationModel stop) {
+    final List<LocationModel> updatedStops = List.from(state.stops);
+    updatedStops[index] = stop;
+    emit(state.copyWith(stops: updatedStops));
+  }
+
+  void setPickupDate(DateTime date) {
+    emit(state.copyWith(pickupDate: date));
+  }
 
   void setDateRange(DateTimeRange range) =>
       emit(state.copyWith(dateRange: range));

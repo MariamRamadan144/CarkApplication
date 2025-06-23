@@ -15,6 +15,7 @@ import '../../features/shared/presentation/screens/navigation_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/booking_summary_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/trip_management_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/payment_screen.dart';
 import '../../features/home/presentation/model/car_model.dart';
 import '../../features/home/presentation/model/location_model.dart';
 
@@ -66,6 +67,13 @@ abstract class RoutesManager {
                   car: car,
                   totalPrice: totalPrice,
                   stops: stops.cast<LocationModel>(),
+                ));
+      case ScreensName.paymentScreen:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        final totalPrice = args['totalPrice'] as double;
+        return MaterialPageRoute(
+            builder: (context) => PaymentScreen(
+                  totalPrice: totalPrice,
                 ));
       case ScreensName.ownerNotificationScreen:
         return MaterialPageRoute(
