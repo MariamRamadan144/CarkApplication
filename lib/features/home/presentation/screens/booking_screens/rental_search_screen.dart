@@ -142,9 +142,11 @@ class RentalSearchScreen extends StatelessWidget {
 
                         SizedBox(height: 16.h),
 
-                        // Stops Section
-                        const StopsStationInput(),
-                        SizedBox(height: 16.h),
+                        // Stops Section (only with driver)
+                        if (withDriver == true) ...[
+                          const StopsStationInput(),
+                          SizedBox(height: 16.h),
+                        ],
 
                         // Date Selector
                         const DateSelector(),

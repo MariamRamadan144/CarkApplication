@@ -5,8 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/text_manager.dart';
 import 'package:test_cark/features/home/presentation/widgets/rental_widgets/station_input.dart';
+import 'package:test_cark/features/home/presentation/widgets/rental_widgets/stops_station_input.dart';
+import '../../cubit/car_cubit.dart';
 import 'date_selector.dart';
 import 'driver_filter_selector.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // This widget is used to display the rental search form at the bottom of the screen
 class RentalSearchForm extends StatelessWidget {
@@ -36,6 +39,22 @@ class RentalSearchForm extends StatelessWidget {
             // Return Station (Optional)
             const StationInput(isPickup: false),
             SizedBox(height: 20.h),
+
+            // Stops Section (only with driver)
+            BlocBuilder<CarCubit, dynamic>(
+              builder: (context, state) {
+                final withDriver = state.withDriver;
+                if (withDriver == true) {
+                  return Column(
+                    children: [
+                      const StopsStationInput(),
+                      SizedBox(height: 20.h),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
 
             // Date Selector
             const DateSelector(),
