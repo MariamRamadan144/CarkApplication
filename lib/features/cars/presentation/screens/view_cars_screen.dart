@@ -6,7 +6,7 @@ import '../../../../core/utils/text_manager.dart';
 import '../cubits/add_car_cubit.dart';
 import '../cubits/add_car_state.dart';
 import 'package:test_cark/features/home/presentation/model/car_model.dart';
-import 'addcar_screen.dart';
+import 'add_car_screen.dart';
 import '../widgets/car_data_table.dart';
 import 'view_car_details_screen.dart';
 

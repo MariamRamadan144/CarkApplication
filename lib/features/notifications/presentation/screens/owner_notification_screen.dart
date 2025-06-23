@@ -101,8 +101,14 @@ class WithoutDriverView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.primary, // or your preferred color
+        ),
         onPressed: () => _generateAndShowPdf(context),
-        child: const Text('Generate Contract PDF'),
+        child: const Text(
+          'Generate Contract PDF',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

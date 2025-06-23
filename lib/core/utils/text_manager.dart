@@ -159,4 +159,9 @@ abstract class TextManager{
   static const String fuel_type_required = "fuel_type_required";
   static const String odometer_required = "odometer_required";
   static const String odometer_invalid = "odometer_invalid";
+
+  static const String owner_navigation = "owner_navigation";
+  static const String owner_home = "owner_home";
+  static const String owner_profile = "owner_profile";
+  static const String owner_notification = "owner_notification";
 }

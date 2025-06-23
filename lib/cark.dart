@@ -56,7 +56,7 @@ class Cark extends StatelessWidget {
               theme: lightTheme,
               // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.ShowCarDetailsScreen, // Initial screen
+              initialRoute: ScreensName.ownerNavigationScreen, // Initial screen
             ),
           );
         },

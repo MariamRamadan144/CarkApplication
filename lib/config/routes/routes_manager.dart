@@ -7,7 +7,7 @@ import 'package:test_cark/features/splash/presentation/screens/get_started_scree
 import '../../features/auth/presentation/screens/profile/edit_profile_screen.dart';
 import '../../features/auth/presentation/screens/profile/profile_screen.dart';
 import '../../features/auth/presentation/screens/upload_documents/document_upload_screen.dart';
-import '../../features/cars/presentation/screens/addcar_screen.dart';
+import '../../features/cars/presentation/screens/add_car_screen.dart';
 import '../../features/cars/presentation/screens/car_rental_options_screen.dart';
 import '../../features/cars/presentation/screens/car_usage_policy_screen.dart';
 import '../../features/cars/presentation/screens/view_cars_screen.dart';
@@ -24,6 +24,10 @@ import '../../features/home/presentation/screens/booking_screens/trip_management
 import '../../features/home/presentation/screens/booking_screens/payment_screen.dart';
 import '../../features/home/presentation/model/car_model.dart';
 import '../../features/home/presentation/model/location_model.dart';
+import '../../features/owner/presentation/screens/owner_navigation_screen.dart';
+import '../../features/owner/presentation/screens/owner_home_screen.dart';
+import '../../features/owner/presentation/screens/owner_profile_screen.dart';
+import '../../features/owner/presentation/screens/owner_notification_screen.dart' hide OwnerNotificationScreen;
 
 abstract class RoutesManager {
   static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
@@ -139,6 +143,15 @@ abstract class RoutesManager {
             ),
           ),
         );
+
+      case ScreensName.ownerNavigationScreen:
+        return MaterialPageRoute(builder: (context) => const OwnerNavigationScreen());
+      case ScreensName.ownerHomeScreen:
+        return MaterialPageRoute(builder: (context) => const OwnerHomeScreen());
+      case ScreensName.ownerProfileScreen:
+        return MaterialPageRoute(builder: (context) => const OwnerProfileScreen());
+      case ScreensName.ownerNotificationScreenMain:
+        return MaterialPageRoute(builder: (context) => const OwnerNotificationScreen());
 
       default:
         return MaterialPageRoute(builder: (context) {

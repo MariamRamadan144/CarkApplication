@@ -75,7 +75,10 @@ class _CarUsagePolicyScreenState extends State<CarUsagePolicyScreen> {
       body: BlocConsumer<AddCarCubit, AddCarState>(
         listener: (context, state) {
           if (state is AddCarSuccess) {
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/ownerNavigationScreen',
+              (route) => false,
+            );
           } else if (state is AddCarError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),

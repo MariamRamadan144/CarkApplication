@@ -23,5 +23,10 @@ abstract class ScreensName{
   static const String rentalOptionScreen = "/rentalScreen" ;
   static const String usagePolicyScreen ="/usagePolicyScreen" ;
   static const String ShowCarDetailsScreen = "/ShowCarDetailsScreen" ;
+
+  static const String ownerNavigationScreen = "/ownerNavigationScreen";
+  static const String ownerHomeScreen = "/ownerHomeScreen";
+  static const String ownerProfileScreen = "/ownerProfileScreen";
+  static const String ownerNotificationScreenMain = "/ownerNotificationScreenMain";
 }
 

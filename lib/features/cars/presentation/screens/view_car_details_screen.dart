@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/styles_manager.dart';
 import 'package:test_cark/features/home/presentation/model/car_model.dart';
 import '../widgets/car_detail_section.dart';
-import 'addcar_screen.dart';
+import 'add_car_screen.dart';
 
 class ViewCarDetailsScreen extends StatelessWidget {
   final CarModel car;
