@@ -126,5 +126,60 @@
   "no_booking_history": "No Booking History",
   "no_bookings_yet": "You haven't booked any cars yet. Start exploring!",
   "no_notifications": "No Notifications",
-  "no_notifications_yet": "You have no new notifications right now."
+  "no_notifications_yet": "You have no new notifications right now.",
+
+  "add_car_title": "Add New Car",
+  "brand_hint": "Enter car brand (e.g., Toyota, Honda)",
+  "brand_label": "Brand",
+  "brand_required": "Please enter brand",
+
+  "model_hint": "Enter car model",
+  "model_label": "Model",
+  "model_required": "Please enter model",
+
+  "car_type_hint": "Enter car type (e.g., Sedan, SUV)",
+  "car_type_label": "Car Type",
+  "car_type_required": "Please enter car type",
+
+  "car_category_hint": "Enter car category",
+  "car_category_label": "Car Category",
+  "car_category_required": "Please enter car category",
+
+  "plate_number_hint": "Enter plate number",
+  "plate_number_label": "Plate Number",
+  "plate_number_required": "Please enter plate number",
+  "plate_number_invalid": "Plate number must be at least 3 characters",
+
+  "year_hint": "Enter car year",
+  "year_label": "Year",
+  "year_required": "Please enter year",
+  "year_invalid": "Please enter a valid year",
+  "year_range_invalid": "Please enter a valid year between 1900 and current+1",
+
+  "color_hint": "Enter car color",
+  "color_label": "Color",
+  "color_required": "Please enter color",
+
+  "seating_capacity_hint": "Enter seating capacity",
+  "seating_capacity_label": "Seating Capacity",
+  "seating_capacity_required": "Please enter seating capacity",
+  "seating_capacity_invalid": "Please enter a valid number",
+  "seating_capacity_range": "Please enter a valid seating capacity between 1 and 50",
+
+  "transmission_type_hint": "Enter transmission type (e.g., Automatic, Manual)",
+  "transmission_type_label": "Transmission Type",
+  "transmission_type_required": "Please enter transmission type",
+
+  "fuel_type_hint": "Enter fuel type (e.g., Petrol, Diesel)",
+  "fuel_type_label": "Fuel Type",
+  "fuel_type_required": "Please enter fuel type",
+
+  "odometer_hint": "Enter current odometer reading",
+  "odometer_label": "Current Odometer Reading",
+  "odometer_required": "Please enter odometer reading",
+  "odometer_invalid": "Please enter a valid number for odometer reading",
+
+  "add_car_button": "Add Car",
+  "car_added_success": "Car added successfully!",
+  "car_added_error": "Failed to add car. Please try again."
 }

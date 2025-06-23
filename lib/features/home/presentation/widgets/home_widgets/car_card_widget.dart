@@ -5,11 +5,15 @@ import '../../model/car_model.dart';
 class CarCardWidget extends StatelessWidget {
   final CarModel car;
   final VoidCallback onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   const CarCardWidget({
     super.key,
     required this.car,
     required this.onTap,
+    this.onEdit,
+    this.onDelete,
   });
 
   @override
@@ -38,22 +42,21 @@ class CarCardWidget extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.black.withOpacity(0.6),
-                  Colors.black.withOpacity(0.2),
-                  Colors.transparent,
-                ],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-              ),
-            ),
-            child: Stack(
-              children: [
-                // Content on top of the image
-                Padding(
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withOpacity(0.6),
+                      Colors.black.withOpacity(0.2),
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
+                ),
+                child: Padding(
                   padding: EdgeInsets.all(16.r),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,8 +148,29 @@ class CarCardWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              // Edit and Delete icons (top right)
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Row(
+                  children: [
+                    if (onEdit != null)
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.white, size: 22.sp),
+                        onPressed: onEdit,
+                        tooltip: 'Edit',
+                      ),
+                    if (onDelete != null)
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.redAccent, size: 22.sp),
+                        onPressed: onDelete,
+                        tooltip: 'Delete',
+                      ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

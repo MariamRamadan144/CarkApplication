@@ -98,4 +98,65 @@ abstract class TextManager{
   static var showOffers = "showOffers";
   static var booking_history = "booking_history";
   static var renter_notification = "renter_notification";
+
+  ///
+  /// UI Texts - Add Car
+  static const String add_car_title = "add_car_title";
+  static const String edit_car_title = "edit_car_title";
+  static const String view_cars_title = "view_cars_title";
+  static const String add_car_button = "add_car_button";
+  static const String car_added_success = "car_added_success";
+  static const String car_updated_success = "car_updated_success";
+  static const String car_deleted_success = "car_deleted_success";
+  static const String car_added_error = "car_added_error";
+  static const String delete_car_title = "delete_car_title";
+  static const String delete_car_confirmation = "delete_car_confirmation";
+  static const String no_cars_message = "no_cars_message";
+  static const String cancel = "cancel";
+  static const String delete = "delete";
+
+  /// Car Form Labels
+  static const String brand_label = "brand_label";
+  static const String model_label = "model_label";
+  static const String car_type_label = "car_type_label";
+  static const String car_category_label = "car_category_label";
+  static const String plate_number_label = "plate_number_label";
+  static const String year_label = "year_label";
+  static const String color_label = "color_label";
+  static const String seating_capacity_label = "seating_capacity_label";
+  static const String transmission_type_label = "transmission_type_label";
+  static const String fuel_type_label = "fuel_type_label";
+  static const String odometer_label = "odometer_label";
+
+  /// Car Form Hints
+  static const String brand_hint = "brand_hint";
+  static const String model_hint = "model_hint";
+  static const String car_type_hint = "car_type_hint";
+  static const String car_category_hint = "car_category_hint";
+  static const String plate_number_hint = "plate_number_hint";
+  static const String year_hint = "year_hint";
+  static const String color_hint = "color_hint";
+  static const String seating_capacity_hint = "seating_capacity_hint";
+  static const String transmission_type_hint = "transmission_type_hint";
+  static const String fuel_type_hint = "fuel_type_hint";
+  static const String odometer_hint = "odometer_hint";
+
+  /// Car Form Validation Messages
+  static const String brand_required = "brand_required";
+  static const String model_required = "model_required";
+  static const String car_type_required = "car_type_required";
+  static const String car_category_required = "car_category_required";
+  static const String plate_number_required = "plate_number_required";
+  static const String plate_number_invalid = "plate_number_invalid";
+  static const String year_required = "year_required";
+  static const String year_invalid = "year_invalid";
+  static const String year_range_invalid = "year_range_invalid";
+  static const String color_required = "color_required";
+  static const String seating_capacity_required = "seating_capacity_required";
+  static const String seating_capacity_invalid = "seating_capacity_invalid";
+  static const String seating_capacity_range = "seating_capacity_range";
+  static const String transmission_type_required = "transmission_type_required";
+  static const String fuel_type_required = "fuel_type_required";
+  static const String odometer_required = "odometer_required";
+  static const String odometer_invalid = "odometer_invalid";
 }

@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:test_cark/features/auth/presentation/screens/signup/signup_screen.dart';
+import 'package:test_cark/features/cars/presentation/screens/view_car_details_screen.dart';
 import 'package:test_cark/features/splash/presentation/screens/get_started_screen.dart';
 import '../../features/auth/presentation/screens/profile/edit_profile_screen.dart';
 import '../../features/auth/presentation/screens/profile/profile_screen.dart';
 import '../../features/auth/presentation/screens/upload_documents/document_upload_screen.dart';
+import '../../features/cars/presentation/screens/addcar_screen.dart';
+import '../../features/cars/presentation/screens/car_rental_options_screen.dart';
+import '../../features/cars/presentation/screens/car_usage_policy_screen.dart';
+import '../../features/cars/presentation/screens/view_cars_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/car_details_screen.dart';
 import '../../features/home/presentation/screens/home_screens/filter_screen.dart';
 import '../../features/home/presentation/screens/home_screens/home_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/rental_search_screen.dart';
@@ -81,6 +87,58 @@ abstract class RoutesManager {
       case ScreensName.renterNotificationScreen:
         return MaterialPageRoute(
             builder: (context) => const RenterNotificationScreen());
+
+      case ScreensName.ShowCarDetailsScreen:
+        if (routeSettings.arguments is CarModel) {
+          return MaterialPageRoute(
+            builder: (context) => ViewCarDetailsScreen(car: routeSettings.arguments as CarModel),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(child: Text('Error: No car data provided')),
+          ),
+        );
+
+      case ScreensName.viewCarsScreen:
+        return MaterialPageRoute(builder: (context) => const ViewCarsScreen());
+
+      case ScreensName.addCarScreen:
+        return MaterialPageRoute(builder: (context) => const AddCarScreen());
+
+      case ScreensName.rentalOptionScreen:
+        if (routeSettings.arguments is CarModel) {
+          return MaterialPageRoute(
+            builder: (context) => CarRentalOptionsScreen(
+              carData: routeSettings.arguments as CarModel,
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(
+              child: Text('Error: No car data provided'),
+            ),
+          ),
+        );
+
+      case ScreensName.usagePolicyScreen:
+        if (routeSettings.arguments is Map<String, dynamic>) {
+          final args = routeSettings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => CarUsagePolicyScreen(
+              carData: args['car'] as CarModel,
+              rentalOptions: args['rentalOptions'] as RentalOptions,
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(
+              child: Text('Error: Invalid arguments for usage policy screen'),
+            ),
+          ),
+        );
 
       default:
         return MaterialPageRoute(builder: (context) {

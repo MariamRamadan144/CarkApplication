@@ -7,9 +7,9 @@ import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/config/themes/light_theme.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
+import 'features/cars/presentation/cubits/add_car_cubit.dart';
 import 'features/home/presentation/cubit/booking_cubit.dart';
 import 'features/home/presentation/cubit/car_cubit.dart';
-
 
 class Cark extends StatelessWidget {
   const Cark({super.key});
@@ -18,7 +18,7 @@ class Cark extends StatelessWidget {
   Widget build(BuildContext context) {
     return EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
-      path: "assets/translation",   // json files
+      path: "assets/translation", // json files
       fallbackLocale: const Locale('en'),
       child: ScreenUtilInit(
         minTextAdapt: true,
@@ -39,6 +39,9 @@ class Cark extends StatelessWidget {
               BlocProvider(
                 create: (context) => BookingCubit(),
               ),
+              BlocProvider(
+                create: (context) => AddCarCubit(),
+              )
               // BlocProvider(
               //   create: (context) => RentalCubit(),
               // ),
@@ -50,9 +53,10 @@ class Cark extends StatelessWidget {
               onGenerateRoute: RoutesManager.onGenerateRoute,
               title: 'Cark',
               debugShowCheckedModeBanner: false,
-              theme: lightTheme, // darkTheme: ThemeData.dark(),
+              theme: lightTheme,
+              // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.signup, // Initial screen
+              initialRoute: ScreensName.ShowCarDetailsScreen, // Initial screen
             ),
           );
         },
