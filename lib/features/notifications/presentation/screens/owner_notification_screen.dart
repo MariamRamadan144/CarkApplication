@@ -7,6 +7,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:test_cark/config/themes/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/notification_cubit.dart';
 
 class OwnerNotificationScreen extends StatelessWidget {
   const OwnerNotificationScreen({super.key});
@@ -41,48 +43,51 @@ class WithDriverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Replace with actual data model and list builder
-    return ListView(
-      padding: EdgeInsets.all(16.r),
-      children: [
-        Card(
-          elevation: 2,
-          child: Padding(
-            padding: EdgeInsets.all(16.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('New Booking Request',
-                    style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                SizedBox(height: 8.h),
-                const Text('Car: Honda Accord'),
-                const Text('Renter: John Doe'),
-                const Text('Duration: 3 Days'),
-                SizedBox(height: 16.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+    return BlocBuilder<NotificationCubit, NotificationState>(
+      builder: (context, state) {
+        if (state is NotificationLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is NotificationError) {
+          return Center(child: Text(state.message));
+        } else if (state is NotificationLoaded) {
+          if (state.notifications.isEmpty) {
+            return const Center(child: Text('No notifications.'));
+          }
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: state.notifications.map((notification) => Card(
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Cancel'),
-                    ),
-                    SizedBox(width: 8.w),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                      ),
-                      child: const Text('Confirm',
-                          style: TextStyle(color: Colors.white)),
-                    ),
+                    Text(notification.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Text(notification.message),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('Cancel'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () => context.read<NotificationCubit>().markAsRead(notification.id),
+                          child: const Text('Mark as Read', style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
-        )
-      ],
+                ),
+              ),
+            )).toList(),
+          );
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }
@@ -90,26 +95,48 @@ class WithDriverView extends StatelessWidget {
 class WithoutDriverView extends StatelessWidget {
   const WithoutDriverView({super.key});
 
-  Future<void> _generateAndShowPdf(BuildContext context) async {
-    final pdf = await _generateContractPdf();
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary, // or your preferred color
-        ),
-        onPressed: () => _generateAndShowPdf(context),
-        child: const Text(
-          'Generate Contract PDF',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+    return BlocBuilder<NotificationCubit, NotificationState>(
+      builder: (context, state) {
+        if (state is NotificationLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is NotificationError) {
+          return Center(child: Text(state.message));
+        } else if (state is NotificationLoaded) {
+          if (state.notifications.isEmpty) {
+            return const Center(child: Text('No notifications.'));
+          }
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: state.notifications.map((notification) => Card(
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(notification.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Text(notification.message),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => context.read<NotificationCubit>().markAsRead(notification.id),
+                          child: const Text('Mark as Read', style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )).toList(),
+          );
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }

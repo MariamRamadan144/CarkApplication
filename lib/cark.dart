@@ -46,6 +46,10 @@ class Cark extends StatelessWidget {
               BlocProvider(
                 create: (context) => DocumentCubit(),
 
+              ),
+              BlocProvider(
+                create: (context) => NavigationCubit(),
+
               )
               // BlocProvider(
               //   create: (context) => RentalCubit(),

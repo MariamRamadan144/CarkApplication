@@ -1,101 +1,52 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:test_cark/config/themes/app_colors.dart';
-
-enum NotificationType { requestSent, confirmed, cancelled }
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/notification_cubit.dart';
 
 class RenterNotificationScreen extends StatelessWidget {
   const RenterNotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Mock data
-    final List<Map<String, dynamic>> notifications = [
-      {'type': NotificationType.requestSent, 'carName': 'Toyota Camry'},
-      {'type': NotificationType.confirmed, 'carName': 'BMW X5'},
-      {'type': NotificationType.cancelled, 'carName': 'Ford Focus'},
-    ];
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr('renter_notification')),
+        title: const Text('Renter Notifications'),
         automaticallyImplyLeading: false,
       ),
-      body: notifications.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.notifications_off_outlined,
-                      size: 80.sp, color: Colors.grey.shade400),
-                  SizedBox(height: 20.h),
-                  Text(tr('no_notifications'),
-                      style: TextStyle(
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade700)),
-                  SizedBox(height: 8.h),
-                  Text(tr('no_notifications_yet'),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 16.sp, color: Colors.grey.shade500)),
-                ],
-              ),
-            )
-          : ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              itemCount: notifications.length,
-              separatorBuilder: (context, index) =>
-                  Divider(height: 1.h, indent: 16.w, endIndent: 16.w),
+      body: BlocBuilder<NotificationCubit, NotificationState>(
+        builder: (context, state) {
+          if (state is NotificationLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is NotificationError) {
+            return Center(child: Text(state.message));
+          } else if (state is NotificationLoaded) {
+            if (state.notifications.isEmpty) {
+              return const Center(child: Text('No notifications.'));
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: state.notifications.length,
+              separatorBuilder: (context, index) => const Divider(height: 1, indent: 16, endIndent: 16),
               itemBuilder: (context, index) {
-                final notification = notifications[index];
-                return _buildNotificationTile(
-                    notification['type'], notification['carName']);
+                final notification = state.notifications[index];
+                return ListTile(
+                  leading: Icon(
+                    notification.isRead ? Icons.notifications : Icons.notifications_active,
+                    color: notification.isRead ? Colors.grey : Theme.of(context).colorScheme.primary,
+                  ),
+                  title: Text(notification.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(notification.message),
+                  trailing: Text(
+                    '${notification.date.hour}:${notification.date.minute}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  onTap: () => context.read<NotificationCubit>().markAsRead(notification.id),
+                );
               },
-            ),
-    );
-  }
-
-  Widget _buildNotificationTile(NotificationType type, String carName) {
-    IconData icon;
-    Color color;
-    String title;
-    String subtitle;
-
-    switch (type) {
-      case NotificationType.requestSent:
-        icon = Icons.hourglass_top_outlined;
-        color = Colors.blue.shade700;
-        title = tr('request_sent');
-        subtitle =
-            "${tr('your_booking_request_for')} $carName ${tr('has_been_sent')}\n${tr('awaiting_owner_response')}";
-        break;
-      case NotificationType.confirmed:
-        icon = Icons.check_circle_outline;
-        color = Colors.green.shade700;
-        title = tr('booking_confirmed');
-        subtitle =
-            "${tr('your_booking_for')} $carName ${tr('is_confirmed')}";
-        break;
-      case NotificationType.cancelled:
-        icon = Icons.cancel_outlined;
-        color = Colors.red.shade700;
-        title = tr('booking_cancelled');
-        subtitle =
-            "${tr('your_booking_for_cancelled')} $carName ${tr('was_cancelled')}";
-        break;
-    }
-
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: color.withOpacity(0.1),
-        child: Icon(icon, color: color),
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(subtitle),
-      trailing: Text('1h ago',
-          style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500)),
     );
   }
 } 
