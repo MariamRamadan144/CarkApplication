@@ -110,7 +110,7 @@ class _CarUsagePolicyScreenState extends State<CarUsagePolicyScreen> {
                       _buildInputField(
                         controller: _dailyKmLimitController,
                         label: 'Daily Kilometer Limit',
-                        hint: 'Enter limit in KM',
+                        hint: 'e.g., 200',
                         suffix: 'KM',
                         inputType: TextInputType.number,
                       ),
@@ -118,7 +118,7 @@ class _CarUsagePolicyScreenState extends State<CarUsagePolicyScreen> {
                       _buildInputField(
                         controller: _extraKmCostController,
                         label: 'Extra Kilometer Cost',
-                        hint: 'Enter cost per extra KM',
+                        hint: 'e.g., 2.5',
                         suffix: 'EGP',
                         inputType: const TextInputType.numberWithOptions(decimal: true),
                       ),
@@ -126,7 +126,7 @@ class _CarUsagePolicyScreenState extends State<CarUsagePolicyScreen> {
                       _buildInputField(
                         controller: _dailyHourLimitController,
                         label: 'Daily Hour Limit',
-                        hint: 'Enter limit in hours',
+                        hint: 'e.g., 8',
                         suffix: 'Hours',
                         inputType: TextInputType.number,
                       ),
@@ -134,7 +134,7 @@ class _CarUsagePolicyScreenState extends State<CarUsagePolicyScreen> {
                       _buildInputField(
                         controller: _extraHourCostController,
                         label: 'Extra Hour Cost',
-                        hint: 'Enter cost per extra hour',
+                        hint: 'e.g., 10',
                         suffix: 'EGP',
                         inputType: const TextInputType.numberWithOptions(decimal: true),
                       ),

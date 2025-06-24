@@ -32,58 +32,64 @@ class AddCarForm extends StatelessWidget {
   });
 
   String? _validateNotEmpty(String? value, String fieldName) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Please enter $fieldName';
+    }
+    return null;
+  }
+
+  String? _validateAlpha(String? value, String fieldName) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter $fieldName';
+    }
+    // Only letters and spaces allowed
+    if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(value.trim())) {
+      return 'Please enter only letters for $fieldName';
     }
     return null;
   }
 
   String? _validateNumber(String? value, String fieldName) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Please enter $fieldName';
     }
-    if (int.tryParse(value) == null) {
-      return 'Please enter a valid number for $fieldName';
+    final n = num.tryParse(value);
+    if (n == null || n < 0) {
+      return 'Please enter a valid positive number for $fieldName';
     }
     return null;
   }
 
   String? _validateYear(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Please enter year';
     }
     final year = int.tryParse(value);
-    if (year == null) {
-      return 'Please enter a valid year';
-    }
-    if (year < 1900 || year > DateTime.now().year + 1) {
-      return 'Please enter a valid year between 1900 and ${DateTime.now().year + 1}';
+    final currentYear = DateTime.now().year;
+    if (year == null || year < 1900 || year > currentYear + 1) {
+      return 'Enter a valid year between 1900 and ${currentYear + 1}';
     }
     return null;
   }
 
   String? _validatePlateNumber(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Please enter plate number';
     }
-    // Add your country-specific plate number validation here
-    // This is a basic example
-    if (value.length < 3) {
-      return 'Plate number must be at least 3 characters';
+    // Accepts 2+ letters followed by 1+ digits
+    if (!RegExp(r'^[A-Za-z]{2,}[0-9]{1,}$').hasMatch(value.trim())) {
+      return 'Plate number must be at least 2 letters followed by numbers (e.g., ABC123)';
     }
     return null;
   }
 
   String? _validateSeatingCapacity(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Please enter seating capacity';
     }
     final seats = int.tryParse(value);
-    if (seats == null) {
-      return 'Please enter a valid number';
-    }
-    if (seats < 1 || seats > 50) {
-      return 'Please enter a valid seating capacity between 1 and 50';
+    if (seats == null || seats < 1 || seats > 50) {
+      return 'Seating capacity must be between 1 and 50';
     }
     return null;
   }
@@ -92,6 +98,7 @@ class AddCarForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -99,11 +106,11 @@ class AddCarForm extends StatelessWidget {
             controller: brandController,
             decoration: const InputDecoration(
               labelText: 'Brand',
-              hintText: 'Enter car brand (e.g., Toyota, Honda)',
+              hintText: 'e.g., Toyota',
               prefixIcon: Icon(Icons.branding_watermark),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'brand'),
+            validator: (value) => _validateAlpha(value, 'brand'),
           ),
           SizedBox(height: 0.02.sh),
 
@@ -111,11 +118,11 @@ class AddCarForm extends StatelessWidget {
             controller: modelController,
             decoration: const InputDecoration(
               labelText: 'Model',
-              hintText: 'Enter car model',
+              hintText: 'e.g., Corolla',
               prefixIcon: Icon(Icons.model_training),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'model'),
+            validator: (value) => _validateAlpha(value, 'model'),
           ),
           SizedBox(height: 0.02.sh),
 
@@ -123,11 +130,11 @@ class AddCarForm extends StatelessWidget {
             controller: carTypeController,
             decoration: const InputDecoration(
               labelText: 'Car Type',
-              hintText: 'Enter car type (e.g., Sedan, SUV)',
+              hintText: 'e.g., Sedan, SUV',
               prefixIcon: Icon(Icons.car_rental),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'car type'),
+            validator: (value) => _validateAlpha(value, 'car type'),
           ),
           SizedBox(height: 0.02.sh),
 
@@ -135,11 +142,11 @@ class AddCarForm extends StatelessWidget {
             controller: carCategoryController,
             decoration: const InputDecoration(
               labelText: 'Car Category',
-              hintText: 'Enter car category',
+              hintText: 'e.g., Economy, Luxury',
               prefixIcon: Icon(Icons.category),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'car category'),
+            validator: (value) => _validateAlpha(value, 'car category'),
           ),
           SizedBox(height: 0.02.sh),
 
@@ -147,7 +154,7 @@ class AddCarForm extends StatelessWidget {
             controller: plateNumberController,
             decoration: const InputDecoration(
               labelText: 'Plate Number',
-              hintText: 'Enter plate number',
+              hintText: 'e.g., ABC123',
               prefixIcon: Icon(Icons.pin),
             ),
             textCapitalization: TextCapitalization.characters,
@@ -159,7 +166,7 @@ class AddCarForm extends StatelessWidget {
             controller: yearController,
             decoration: const InputDecoration(
               labelText: 'Year',
-              hintText: 'Enter car year',
+              hintText: 'e.g., 2020',
               prefixIcon: Icon(Icons.calendar_today),
             ),
             keyboardType: TextInputType.number,
@@ -171,11 +178,11 @@ class AddCarForm extends StatelessWidget {
             controller: colorController,
             decoration: const InputDecoration(
               labelText: 'Color',
-              hintText: 'Enter car color',
+              hintText: 'e.g., Red',
               prefixIcon: Icon(Icons.color_lens),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'color'),
+            validator: (value) => _validateAlpha(value, 'color'),
           ),
           SizedBox(height: 0.02.sh),
 
@@ -183,7 +190,7 @@ class AddCarForm extends StatelessWidget {
             controller: seatingCapacityController,
             decoration: const InputDecoration(
               labelText: 'Seating Capacity',
-              hintText: 'Enter seating capacity',
+              hintText: 'e.g., 5',
               prefixIcon: Icon(Icons.airline_seat_recline_normal),
             ),
             keyboardType: TextInputType.number,
@@ -195,11 +202,11 @@ class AddCarForm extends StatelessWidget {
             controller: transmissionTypeController,
             decoration: const InputDecoration(
               labelText: 'Transmission Type',
-              hintText: 'Enter transmission type (e.g., Automatic, Manual)',
+              hintText: 'e.g., Automatic, Manual',
               prefixIcon: Icon(Icons.settings),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'transmission type'),
+            validator: (value) => _validateAlpha(value, 'transmission type'),
           ),
           SizedBox(height: 0.02.sh),
 
@@ -207,19 +214,19 @@ class AddCarForm extends StatelessWidget {
             controller: fuelTypeController,
             decoration: const InputDecoration(
               labelText: 'Fuel Type',
-              hintText: 'Enter fuel type (e.g., Petrol, Diesel)',
+              hintText: 'e.g., Petrol, Diesel',
               prefixIcon: Icon(Icons.local_gas_station),
             ),
             textCapitalization: TextCapitalization.words,
-            validator: (value) => _validateNotEmpty(value, 'fuel type'),
+            validator: (value) => _validateAlpha(value, 'fuel type'),
           ),
           SizedBox(height: 0.02.sh),
 
           TextFormField(
             controller: odometerController,
             decoration: const InputDecoration(
-              labelText: 'Current Odometer Reading',
-              hintText: 'Enter current odometer reading',
+              labelText: 'Odometer Reading',
+              hintText: 'e.g., 35000',
               prefixIcon: Icon(Icons.speed),
             ),
             keyboardType: TextInputType.number,

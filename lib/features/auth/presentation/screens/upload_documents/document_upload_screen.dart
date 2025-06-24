@@ -2,11 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../config/themes/app_colors.dart';
 import '../../../../../core/utils/assets_manager.dart';
-import '../../../../../core/utils/text_manager.dart';
 import '../../../../home/presentation/widgets/search_widgets/camera_preview_box.dart';
 import 'document_upload_flow.dart';
+import '../../cubits/document_cubit.dart';
+import '../../cubits/document_state.dart';
 
 class DocumentUploadScreen extends StatefulWidget {
   final DocumentType documentType;
@@ -28,7 +30,6 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
   @override
   void didUpdateWidget(covariant DocumentUploadScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Reset the selected file when the document type changes
     if (oldWidget.documentType != widget.documentType) {
       setState(() {
         _selectedFile = null;
@@ -43,6 +44,12 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
       setState(() {
         _selectedFile = File(picked.path);
       });
+    }
+  }
+
+  void _uploadDocument(BuildContext context) {
+    if (_selectedFile != null) {
+      context.read<DocumentCubit>().uploadDocument(widget.documentType, _selectedFile!);
     }
   }
 
@@ -109,66 +116,86 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     final label = _getLabelForType(widget.documentType);
     final instructions = _getInstructionsForType(widget.documentType);
     final theme = Theme.of(context);
-
-    // Stepper logic
-    final documentTypes = DocumentType.values;
-    final currentIndex = documentTypes.indexOf(widget.documentType);
-
-    return Scaffold(
-      backgroundColor: Colors.white, // Always white for light theme
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: Text(label, style: const TextStyle(color: Colors.black)),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0.1.sw),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 0.09.sh), // More white space at top
-              _DocumentStepper(
-                totalSteps: documentTypes.length,
-                currentStep: currentIndex,
-                theme: theme,
-              ),
-              SizedBox(height: 0.07.sh), // More space above box
-              _DottedInstructionBox(text: instructions, theme: theme),
-              SizedBox(height: 0.05.sh),
-              CameraPreviewBox(
-                onTap: _pickImage,
-                imageProvider: _selectedFile != null
-                    ? FileImage(_selectedFile!)
-                    : const AssetImage(AssetsManager.camera),
-              ),
-              SizedBox(height: 0.2.sh),
-              SizedBox(
-                width: double.infinity,
-                height: 0.07.sh,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.upload, color: AppColors.white),
-                  label: Text(
-                    'Upload',
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.bold,
+    final documentType = widget.documentType;
+    return BlocConsumer<DocumentCubit, DocumentState>(
+      listener: (context, state) {
+        if (state is DocumentSuccess && state.message.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+          widget.onNext(documentType, state.documents[documentType]!);
+        } else if (state is DocumentFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error)),
+          );
+        }
+      },
+      builder: (context, state) {
+        final file = state.documents[documentType];
+        final isLoading = state is DocumentLoading;
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.black),
+            title: Text(label, style: const TextStyle(color: Colors.black)),
+          ),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 0.1.sw),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 0.09.sh),
+                  _DocumentStepper(
+                    totalSteps: DocumentType.values.length,
+                    currentStep: DocumentType.values.indexOf(documentType),
+                    theme: theme,
+                  ),
+                  SizedBox(height: 0.07.sh),
+                  _DottedInstructionBox(text: instructions, theme: theme),
+                  SizedBox(height: 0.05.sh),
+                  CameraPreviewBox(
+                    onTap: isLoading ? () {} : () { _pickImage(); },
+                    imageProvider: _selectedFile != null
+                        ? FileImage(_selectedFile!)
+                        : (file != null ? FileImage(file) : const AssetImage(AssetsManager.camera)),
+                  ),
+                  SizedBox(height: 0.2.sh),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 0.07.sh,
+                    child: ElevatedButton.icon(
+                      icon: isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                            )
+                          : const Icon(Icons.upload, color: AppColors.white),
+                      label: Text(
+                        isLoading ? 'Uploading...' : 'Upload',
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: (!isLoading && _selectedFile != null)
+                          ? () => _uploadDocument(context)
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                      ),
                     ),
                   ),
-                  onPressed: _selectedFile != null
-                      ? () => widget.onNext(widget.documentType, _selectedFile!)
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                  ),
-                ),
+                  SizedBox(height: 0.04.sh),
+                ],
               ),
-              SizedBox(height: 0.04.sh),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

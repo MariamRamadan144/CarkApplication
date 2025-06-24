@@ -9,20 +9,20 @@ abstract class ScreensName{
   static const String filterScreen = "/filterScreen";
   static const String mainNavigationScreen = "/mainNavigationScreen";
   static const String carDetailsScreen = "/carDetailsScreen";
-  static const String rentalSearchScreen = "/rental_search_screen";
+  static const String rentalSearchScreen = "/rentalSearchScreen";
   static const String documentUploadScreen = "/documentUploadScreen";
-  static const String bookingSummaryScreen = "/booking_summary_screen";
-  static const String tripManagementScreen = "/trip_management_screen";
+  static const String bookingSummaryScreen = "/bookingSummaryScreen";
+  static const String tripManagementScreen = "/tripManagementScreen";
   static const String paymentScreen = "/payment_screen";
-  static const String ownerNotificationScreen = "/owner_notification_screen";
-  static const String renterNotificationScreen = "/renter_notification_screen";
+  static const String ownerNotificationScreen = "/ownerNotificationScreen";
+  static const String renterNotificationScreen = "/renterNotificationScreen";
 
   //
   static const String addCarScreen = "/addCarScreen" ;
   static const String viewCarsScreen = "/viewCars";
-  static const String rentalOptionScreen = "/rentalScreen" ;
+  static const String rentalOptionScreen = "/rentalOptionScreen" ;
   static const String usagePolicyScreen ="/usagePolicyScreen" ;
-  static const String ShowCarDetailsScreen = "/ShowCarDetailsScreen" ;
+  static const String showCarDetailsScreen = "/ShowCarDetailsScreen" ;
 
   static const String ownerNavigationScreen = "/ownerNavigationScreen";
   static const String ownerHomeScreen = "/ownerHomeScreen";

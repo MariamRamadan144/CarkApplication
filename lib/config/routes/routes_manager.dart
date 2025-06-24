@@ -92,7 +92,7 @@ abstract class RoutesManager {
         return MaterialPageRoute(
             builder: (context) => const RenterNotificationScreen());
 
-      case ScreensName.ShowCarDetailsScreen:
+      case ScreensName.showCarDetailsScreen:
         if (routeSettings.arguments is CarModel) {
           return MaterialPageRoute(
             builder: (context) => ViewCarDetailsScreen(car: routeSettings.arguments as CarModel),

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
+
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -36,10 +37,10 @@ class AuthCubit extends Cubit<AuthState> {
   // }
 
   Future<void> signup(String firstname, String lastname, String email,
-      String phone, String password) async {
+      String phone, String password, String id) async {
     emit(SignUpLoading());
     await Future.delayed(const Duration(seconds: 2));
-    log("firstname: $firstname, lastname: $lastname, email: $email, phone: $phone, password: $password");
+    log("firstname: $firstname, lastname: $lastname, email: $email, phone: $phone, password: $password , id : $id");
     emit(SignUpSuccess("Signup successful"));
   }
 
@@ -68,28 +69,31 @@ class AuthCubit extends Cubit<AuthState> {
     } else {
       if (licenceImagePath.isEmpty) {
         emit(UploadLicenceImageFailure("No image selected"));
-      }
-      else {
+      } else {
         emit(UploadLicenceImageSuccess());
       }
     }
   }
 
   Future<void> editProfile(
-      {required String firstname, required String lastname, required String email, required String phoneNumber}) async {
+      {required String firstname,
+      required String lastname,
+      required String email,
+      required String phoneNumber,
+      required id}) async {
     emit(EditProfileLoading());
     await Future.delayed(const Duration(seconds: 5), () {
       userModel = UserModel(
-        idImagePath,
-        licenceImagePath,
         firstName: firstname,
         lastName: lastname,
         email: email,
         phoneNumber: phoneNumber,
+        id: id,
       );
       emit(EditProfileSuccess("Profile updated successfully"));
     });
   }
+
   Future<void> uploadProfileImage() async {
     emit(UploadProfileScreenImageLoading());
     final pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
@@ -99,12 +103,9 @@ class AuthCubit extends Cubit<AuthState> {
     } else {
       if (profileImage.isEmpty) {
         emit(UploadProfileScreenImageFailure("No image selected"));
-      }
-      else {
+      } else {
         emit(UploadProfileScreenImageSuccess());
       }
     }
   }
-
 }
-

@@ -3,15 +3,13 @@ class UserModel {
   final String lastName;
   final String email;
   final String phoneNumber;
-  final String idImagePath;
-  final String licenceImagePath;
+  final String id;
 
-
-  UserModel(
-      this.idImagePath, this.licenceImagePath,
-      {required this.firstName,
-      required this.lastName,
-      required this.email,
-      required this.phoneNumber,
-      });
+  UserModel({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.phoneNumber,
+  });
 }

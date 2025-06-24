@@ -4,9 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
 import '../../widgets/home_widgets/brand_section_widget.dart';
-import '../../widgets/home_widgets/filter_section_widget.dart';
 import '../../widgets/home_widgets/view_cars_section_widget.dart';
-import '../../../removed/custom_search_bar.dart';
 import '../../widgets/rental_widgets/filter_button.dart';
 import '../../widgets/rental_widgets/rental_summary_card.dart';
 

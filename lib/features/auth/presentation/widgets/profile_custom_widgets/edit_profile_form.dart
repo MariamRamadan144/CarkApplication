@@ -20,13 +20,15 @@ class EditProfileForm extends StatelessWidget {
       required this.firstnameController,
       required this.lastnameController,
       required this.emailController,
-      required this.phoneController});
+      required this.phoneController,
+      required this.idController});
 
   final GlobalKey<FormState> formKey;
   final TextEditingController firstnameController;
   final TextEditingController lastnameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
+  final TextEditingController idController;
 
   String? _validateEmail(String value) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
@@ -132,6 +134,7 @@ class EditProfileForm extends StatelessWidget {
                       lastname: lastnameController.text,
                       email: emailController.text,
                       phoneNumber: phoneController.text,
+                      id: idController.text,
                       // idImage: authCubit.idImage,
                       // licenceImage: authCubit.licenceImage,
                     );

@@ -19,6 +19,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _lastnameController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _idController; // Uncomment if needed
 
   @override
   void initState() {
@@ -57,6 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               lastnameController: _lastnameController,
               emailController: _emailController,
               phoneController: _phoneController,
+              idController: _idController,
             ),
           ),
         ),

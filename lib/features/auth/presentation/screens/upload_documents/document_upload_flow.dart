@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../home/presentation/screens/booking_screens/rental_search_screen.dart';
 import 'document_upload_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../cubits/document_cubit.dart';
 
 enum DocumentType {
   IDFront,
@@ -43,20 +45,15 @@ class _DocumentUploadFlowState extends State<DocumentUploadFlow> {
     DocumentType.CarTest,
   ];
   int _currentIndex = 0;
-  final Map<DocumentType, File> _uploadedDocuments = {};
 
   void _handleNext(DocumentType type, File file) {
-    _uploadedDocuments[type] = file;
     if (_currentIndex < _documentTypes.length - 1) {
       setState(() {
         _currentIndex++;
       });
     } else {
       // All documents uploaded successfully
-      debugPrint('All documents uploaded:');
-      for (var entry in _uploadedDocuments.entries) {
-        debugPrint('${entry.key.name}: ${entry.value.path}');
-      }
+      debugPrint('All documents uploaded (see cubit state)');
       // Navigate or trigger submission logic
     }
   }
@@ -71,9 +68,7 @@ class _DocumentUploadFlowState extends State<DocumentUploadFlow> {
   @override
   Widget build(BuildContext context) {
     final currentType = _documentTypes[_currentIndex];
-    final isIDStep = _currentIndex == 0 || _currentIndex == 1;
     final isFirstOptional = _currentIndex == 2;
-
     return Scaffold(
       body: Stack(
         children: [

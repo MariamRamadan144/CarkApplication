@@ -136,7 +136,7 @@ class SignupForm extends StatelessWidget {
             controller: nationalIdController,
             prefixIcon: Icons.perm_identity,
             hintText: TextManager.national_id_hint,
-            // validator: _validatePassword,
+             validator: _validateNationalId,
           ),
 
           SizedBox(height: 0.03.sh),
@@ -188,6 +188,7 @@ class SignupForm extends StatelessWidget {
                       emailController.text,
                       phoneController.text,
                       passwordController.text,
+                      nationalIdController.text,
                     );
                   }
                 },

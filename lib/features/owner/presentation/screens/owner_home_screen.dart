@@ -45,23 +45,29 @@ class OwnerHomeScreen extends StatelessWidget {
           },
           builder: (context, state) {
             final cars = context.read<AddCarCubit>().getCars();
-            return CarDataTable(
-              cars: cars,
-              onEdit: (car) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Edit tapped!')),
-                );
-              },
-              onDelete: (car) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Delete tapped!')),
-                );
-              },
-              onViewDetails: (car) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('View details tapped!')),
-                );
-              },
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  CarDataTable(
+                    cars: cars,
+                    onEdit: (car) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Edit tapped!')),
+                      );
+                    },
+                    onDelete: (car) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Delete tapped!')),
+                      );
+                    },
+                    onViewDetails: (car) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('View details tapped!')),
+                      );
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),
