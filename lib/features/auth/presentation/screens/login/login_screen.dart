@@ -60,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // Signup or login
               const AuthOptionsText(
-                text1: TextManager.no_account_question,
-                text2: TextManager.sign_up_text,
+                text1: TextManager.noAccountQuestion,
+                text2: TextManager.signUpText,
                 screenName: ScreensName.signup,
               ),
 

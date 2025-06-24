@@ -31,10 +31,10 @@ class ProfileScreen extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: const [
-                    EditableInfo(title: TextManager.name_hint, value: "Mariam"),
-                    EditableInfo(title: TextManager.email_hint, value: "mariam@gmail.com"),
-                    EditableInfo(title: TextManager.phone_hint, value: "01029587445"),
-                    EditableInfo(title: TextManager.national_id_hint, value: "30301442875268"),
+                    EditableInfo(title: TextManager.nameHint, value: "Mariam"),
+                    EditableInfo(title: TextManager.emailHint, value: "mariam@gmail.com"),
+                    EditableInfo(title: TextManager.phoneHint, value: "01029587445"),
+                    EditableInfo(title: TextManager.nationalIdHint, value: "30301442875268"),
                   ],
                 ),
               ),

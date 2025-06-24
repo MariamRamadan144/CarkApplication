@@ -75,15 +75,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   phoneController: _phoneController,
                   passwordController: _passwordController,
                   nationalIdController: _nationalIdController,
-                  headerText: TextManager.create_account,
+                  headerText: TextManager.createAccount,
                 ),
 
                 SizedBox(height: 0.02.sh),
 
                 // Signup Or Login
                 const AuthOptionsText(
-                  text1: TextManager.already_have_account,
-                  text2: TextManager.login_text,
+                  text1: TextManager.alreadyHaveAccount,
+                  text2: TextManager.loginText,
                   screenName: ScreensName.login,
                 )
               ],

@@ -36,7 +36,7 @@ class LoginForm extends StatelessWidget {
             CustomTextFormField(
               controller: emailController,
               prefixIcon: Icons.person,
-              hintText: TextManager.email_hint.tr(),
+              hintText: TextManager.emailHint.tr(),
             ),
 
             SizedBox(height: 0.02.sh),
@@ -45,7 +45,7 @@ class LoginForm extends StatelessWidget {
             CustomTextFormField(
               controller: passwordController,
               prefixIcon: Icons.lock,
-              hintText: TextManager.password_hint.tr(),
+              hintText: TextManager.passwordHint.tr(),
             ),
 
             SizedBox(height: 0.05.sh),
@@ -67,7 +67,7 @@ class LoginForm extends StatelessWidget {
                   );
                 }
                 return CustomElevatedButton(
-                  text: TextManager.login_text,
+                  text: TextManager.loginText,
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       authCubit.login(

@@ -24,7 +24,7 @@ class AllTopBrandsWidget extends StatelessWidget {
           // BMW
           TopBrandsWidget(
             imagePath: AssetsManager.BMWLogo,
-            name: TextManager.BMWCar.tr(),
+            name: TextManager.bmwCar.tr(),
           ),
 
           // Honda
