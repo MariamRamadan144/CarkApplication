@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:test_cark/cark.dart';
 
+///DONE
+
 class EditableInfo extends StatelessWidget {
   final String title;
   final String value;

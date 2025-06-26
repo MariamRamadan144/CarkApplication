@@ -152,8 +152,8 @@ class RentalSearchScreen extends StatelessWidget {
                         const DateSelector(),
                         SizedBox(height: 16.h),
 
-                        // Conditional fields for With Driver
-                        if (withDriver == true) ...[
+                        // Payment Method Selector (for both with and without driver)
+                        if (withDriver != null) ...[
                           const PaymentMethodSelector(),
                           SizedBox(height: 20.h),
                         ],
@@ -309,6 +309,40 @@ class RentalSearchScreen extends StatelessWidget {
                                       (route) => false
                                     );
                                   } else if (withDriver == false) {
+                                    // Check if payment method is selected for without driver
+                                    if (selectedPaymentMethod == null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.warning,
+                                                color: Colors.white,
+                                                size: 20.sp,
+                                              ),
+                                              SizedBox(width: 10.w),
+                                              Expanded(
+                                                child: Text(
+                                                  'Please select a payment method',
+                                                  style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          backgroundColor: Colors.orange,
+                                          duration: Duration(seconds: 3),
+                                          behavior: SnackBarBehavior.floating,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.r),
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    
                                     // Without Driver flow - navigate to home screen
                                     Navigator.pushNamedAndRemoveUntil(
                                       context, 

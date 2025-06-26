@@ -99,69 +99,107 @@ abstract class TextManager{
   static var bookingHistory = "booking_history";
   static var renterNotification = "renter_notification";
 
-  ///
   /// UI Texts - Add Car
-  static const String add_car_title = "add_car_title";
-  static const String edit_car_title = "edit_car_title";
-  static const String view_cars_title = "view_cars_title";
-  static const String add_car_button = "add_car_button";
-  static const String car_added_success = "car_added_success";
-  static const String car_updated_success = "car_updated_success";
-  static const String car_deleted_success = "car_deleted_success";
-  static const String car_added_error = "car_added_error";
-  static const String delete_car_title = "delete_car_title";
-  static const String delete_car_confirmation = "delete_car_confirmation";
-  static const String no_cars_message = "no_cars_message";
+  static const String addCarTitle = "add_car_title";
+  static const String editCarTitle = "edit_car_title";
+  static const String viewCarsTitle = "view_cars_title";
+  static const String addCarButton = "add_car_button";
+  static const String carAddedSuccess = "car_added_success";
+  static const String carUpdatedSuccess = "car_updated_success";
+  static const String carDeletedSuccess = "car_deleted_success";
+  static const String carAddedError = "car_added_error";
+  static const String deleteCarTitle = "delete_car_title";
+  static const String deleteCarConfirmation = "delete_car_confirmation";
+  static const String noCarsMessage = "no_cars_message";
   static const String cancel = "cancel";
   static const String delete = "delete";
 
   /// Car Form Labels
-  static const String brand_label = "brand_label";
-  static const String model_label = "model_label";
-  static const String car_type_label = "car_type_label";
-  static const String car_category_label = "car_category_label";
-  static const String plate_number_label = "plate_number_label";
-  static const String year_label = "year_label";
-  static const String color_label = "color_label";
-  static const String seating_capacity_label = "seating_capacity_label";
-  static const String transmission_type_label = "transmission_type_label";
-  static const String fuel_type_label = "fuel_type_label";
-  static const String odometer_label = "odometer_label";
+  static const String brandLabel = "brand_label";
+  static const String modelLabel = "model_label";
+  static const String carTypeLabel = "car_type_label";
+  static const String carCategoryLabel = "car_category_label";
+  static const String plateNumberLabel = "plate_number_label";
+  static const String yearLabel = "year_label";
+  static const String colorLabel = "color_label";
+  static const String seatingCapacityLabel = "seating_capacity_label";
+  static const String transmissionTypeLabel = "transmission_type_label";
+  static const String fuelTypeLabel = "fuel_type_label";
+  static const String odometerLabel = "odometer_label";
 
   /// Car Form Hints
-  static const String brand_hint = "brand_hint";
-  static const String model_hint = "model_hint";
-  static const String car_type_hint = "car_type_hint";
-  static const String car_category_hint = "car_category_hint";
-  static const String plate_number_hint = "plate_number_hint";
-  static const String year_hint = "year_hint";
-  static const String color_hint = "color_hint";
-  static const String seating_capacity_hint = "seating_capacity_hint";
-  static const String transmission_type_hint = "transmission_type_hint";
-  static const String fuel_type_hint = "fuel_type_hint";
-  static const String odometer_hint = "odometer_hint";
+  static const String brandHint = "brand_hint";
+  static const String modelHint = "model_hint";
+  static const String carTypeHint = "car_type_hint";
+  static const String carCategoryHint = "car_category_hint";
+  static const String plateNumberHint = "plate_number_hint";
+  static const String yearHint = "year_hint";
+  static const String colorHint = "color_hint";
+  static const String seatingCapacityHint = "seating_capacity_hint";
+  static const String transmissionTypeHint = "transmission_type_hint";
+  static const String fuelTypeHint = "fuel_type_hint";
+  static const String odometerHint = "odometer_hint";
 
   /// Car Form Validation Messages
-  static const String brand_required = "brand_required";
-  static const String model_required = "model_required";
-  static const String car_type_required = "car_type_required";
-  static const String car_category_required = "car_category_required";
-  static const String plate_number_required = "plate_number_required";
-  static const String plate_number_invalid = "plate_number_invalid";
-  static const String year_required = "year_required";
-  static const String year_invalid = "year_invalid";
-  static const String year_range_invalid = "year_range_invalid";
-  static const String color_required = "color_required";
-  static const String seating_capacity_required = "seating_capacity_required";
-  static const String seating_capacity_invalid = "seating_capacity_invalid";
-  static const String seating_capacity_range = "seating_capacity_range";
-  static const String transmission_type_required = "transmission_type_required";
-  static const String fuel_type_required = "fuel_type_required";
-  static const String odometer_required = "odometer_required";
-  static const String odometer_invalid = "odometer_invalid";
+  static const String brandRequired = "brand_required";
+  static const String modelRequired = "model_required";
+  static const String carTypeRequired = "car_type_required";
+  static const String carCategoryRequired = "car_category_required";
+  static const String plateNumberRequired = "plate_number_required";
+  static const String plateNumberInvalid = "plate_number_invalid";
+  static const String yearRequired = "year_required";
+  static const String yearInvalid = "year_invalid";
+  static const String yearRangeInvalid = "year_range_invalid";
+  static const String colorRequired = "color_required";
+  static const String seatingCapacityRequired = "seating_capacity_required";
+  static const String seatingCapacityInvalid = "seating_capacity_invalid";
+  static const String seatingCapacityRange = "seating_capacity_range";
+  static const String transmissionTypeRequired = "transmission_type_required";
+  static const String fuelTypeRequired = "fuel_type_required";
+  static const String odometerRequired = "odometer_required";
+  static const String odometerInvalid = "odometer_invalid";
 
-  static const String owner_navigation = "owner_navigation";
-  static const String owner_home = "owner_home";
-  static const String owner_profile = "owner_profile";
-  static const String owner_notification = "owner_notification";
+  static const String ownerNavigation = "owner_navigation";
+  static const String ownerHome = "owner_home";
+  static const String ownerProfile = "owner_profile";
+  static const String ownerNotification = "owner_notification";
+
+  /// Document Labels
+  static const String idFront = "document.id_front";
+  static const String idBack = "document.id_back";
+  static const String driverLicense = "document.driver_license";
+  static const String drugsTest = "document.drugs_test";
+  static const String criminalRecord = "document.criminal_record";
+  static const String drivingViolations = "document.driving_violations";
+  static const String profilePhoto = "document.profile_photo";
+  static const String carPhoto = "document.car_photo";
+  static const String carLicense = "document.car_license";
+  static const String vehicleViolations = "document.vehicle_violations";
+  static const String insurance = "document.insurance";
+  static const String carTest = "document.car_test";
+
+  // Document Instructions
+  static const String instructionIdFront = "instructions.id_front";
+  static const String instructionIdBack = "instructions.id_back";
+  static const String instructionDriverLicense = "instructions.driver_license";
+  static const String instructionDrugsTest = "instructions.drugs_test";
+  static const String instructionCriminalRecord = "instructions.criminal_record";
+  static const String instructionDrivingViolations = "instructions.driving_violations";
+  static const String instructionProfilePhoto = "instructions.profile_photo";
+  static const String instructionCarPhoto = "instructions.car_photo";
+  static const String instructionCarLicense = "instructions.car_license";
+  static const String instructionVehicleViolations = "instructions.vehicle_violations";
+  static const String instructionInsurance = "instructions.insurance";
+  static const String instructionCarTest = "instructions.car_test";
+
+  static const String uploadButton = "button.upload";
+  static const String uploading = "button.uploading";
+
+  // Document messages
+  static const String uploadSuccess = "upload_success";
+  static const String removeSuccess = "remove_success";
+  static const String uploadFailed = "upload_failed";
+
+  static const String skipNow = "skip_now";
+
 }

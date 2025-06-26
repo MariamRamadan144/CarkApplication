@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../screens/upload_documents/document_upload_flow.dart';
+import '../widgets/profile_custom_widgets/document_upload_flow.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -28,5 +28,10 @@ class DocumentFailure extends DocumentState {
   final String error;
 
   DocumentFailure(Map<DocumentType, File?> documents, this.error)
+      : super(documents);
+}
+
+class DocumentTempSelected extends DocumentState {
+  DocumentTempSelected(Map<DocumentType, File?> documents)
       : super(documents);
 }

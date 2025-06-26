@@ -103,7 +103,7 @@ class ViewCarsScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(TextManager.view_cars_title.tr()),
+        title: Text(TextManager.viewCarsTitle.tr()),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -124,7 +124,7 @@ class ViewCarsScreen extends StatelessWidget {
           if (state is AddCarSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(TextManager.car_deleted_success.tr()),
+                content: Text(TextManager.carDeletedSuccess.tr()),
                 backgroundColor: Colors.green,
               ),
             );
@@ -156,7 +156,7 @@ class ViewCarsScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   Text(
-                    TextManager.no_cars_message.tr(),
+                    TextManager.noCarsMessage.tr(),
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: Colors.grey,

@@ -6,6 +6,7 @@ import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import '../../widgets/profile_custom_widgets/edit_profile_form.dart';
 import '../../widgets/signup_custom_widgets/signup_form.dart';
 
+/// DONE
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
 
@@ -19,7 +20,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _lastnameController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
-  late final TextEditingController _idController; // Uncomment if needed
+  late final TextEditingController _idController;
 
   @override
   void initState() {

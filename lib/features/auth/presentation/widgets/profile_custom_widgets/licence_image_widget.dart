@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../cubits/auth_cubit.dart';
 
+///DONE
 class LicenceImageWidget extends StatelessWidget {
   const LicenceImageWidget({super.key});
 

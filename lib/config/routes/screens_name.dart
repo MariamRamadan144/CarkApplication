@@ -16,6 +16,7 @@ abstract class ScreensName{
   static const String paymentScreen = "/payment_screen";
   static const String ownerNotificationScreen = "/ownerNotificationScreen";
   static const String renterNotificationScreen = "/renterNotificationScreen";
+  static const String bookingHistoryScreen = "/bookingHistoryScreen";
 
   //
   static const String addCarScreen = "/addCarScreen" ;

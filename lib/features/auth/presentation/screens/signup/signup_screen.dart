@@ -5,9 +5,10 @@ import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/text_manager.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import '../../../../../core/utils/assets_manager.dart';
-import '../../widgets/auth_options_text.dart';
+import '../../widgets/shared/auth_options_text.dart';
 import '../../widgets/signup_custom_widgets/signup_form.dart';
 
+/// DONE
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -52,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0.08.sw, vertical: 0.02.sh),
+          padding: EdgeInsets.symmetric(horizontal: 0.08.sw, vertical: 0.03.sh),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -61,10 +62,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(AssetsManager.carSignUp, height: 0.05.sh),
+
                     SizedBox(width: 0.02.sw),
+
                     Image.asset(AssetsManager.carkSignUp, height: 0.03.sh),
                   ],
                 ),
+
+                SizedBox(height: 0.05.sh),
 
                 // Signup with name , email , phone number and password
                 SignupForm(

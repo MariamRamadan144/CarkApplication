@@ -51,7 +51,7 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                _selectedImage != null ? TextManager.upload.tr(): widget.label,
+                _selectedImage != null ? TextManager.uploadButton.tr(): widget.label,
                 style: TextStyle(
                   color: _selectedImage != null ? Colors.green : Colors.black54,
                 ),

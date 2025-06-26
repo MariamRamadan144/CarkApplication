@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../cubits/auth_cubit.dart';
 
+///DONE
+
+// Widget to display and upload ID images in the profile section.
 class IdImageWidgets extends StatelessWidget {
   const IdImageWidgets({super.key});
 
@@ -15,10 +18,12 @@ class IdImageWidgets extends StatelessWidget {
       builder: (context, state) {
         final authCubit = context.read<AuthCubit>();
         log("builder called when state ${state.runtimeType}");
+
         return InkWell(
           onTap: () {
             authCubit.uploadIdImage(isFront: true);
           },
+
           child: SizedBox(
             width: double.infinity,
             child: AspectRatio(
@@ -45,6 +50,7 @@ class IdImageWidgets extends StatelessWidget {
           ),
         );
       },
+
       buildWhen: (previous, current) {
         return current is UploadIdImageLoading ||
             current is UploadIdImageSuccess ||

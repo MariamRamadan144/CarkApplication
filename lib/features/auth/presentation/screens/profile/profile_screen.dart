@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/core/utils/text_manager.dart';
 import '../../../../../config/themes/app_colors.dart';
 import '../../widgets/profile_custom_widgets/editable_info.dart';
@@ -20,12 +21,12 @@ class ProfileScreen extends StatelessWidget {
             children: [
               const ProfileHeader(),
       
-              const SizedBox(height: 20),
+              SizedBox(height: 0.02.sh),
       
               // Profile Picture
               const ProfilePicture(),
       
-              const SizedBox(height: 30),
+              SizedBox(height: 0.02.sh),
       
               // User Information
               Expanded(

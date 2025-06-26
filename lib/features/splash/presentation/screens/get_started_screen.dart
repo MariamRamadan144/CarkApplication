@@ -3,7 +3,6 @@ import 'package:test_cark/core/utils/assets_manager.dart';
 
 import '../../../auth/presentation/screens/login/login_screen.dart';
 
-
 /// clean
 class GetStartedScreen extends StatelessWidget {
   const GetStartedScreen({super.key});
@@ -28,11 +27,9 @@ class GetStartedScreen extends StatelessWidget {
                     const Color(0xFF120A53).withOpacity(0.3),
                     BlendMode.modulate,
                   ),
-                  child: Image.asset(
-                     AssetsManager.map,
-                    //'assets/images/img/map2.png'
-                    width: screenWidth
-                  ),
+                  child: Image.asset(AssetsManager.map,
+                      //'assets/images/img/map2.png'
+                      width: screenWidth),
                 ),
                 Column(
                   children: [
@@ -114,13 +111,16 @@ class GetStartedScreen extends StatelessWidget {
                     context,
                     PageRouteBuilder(
                       transitionDuration: const Duration(seconds: 1),
-                      pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          LoginScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
                         const begin = Offset(1.0, 0.0);
                         const end = Offset.zero;
                         const curve = Curves.easeInOutQuad;
 
-                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
                         var offsetAnimation = animation.drive(tween);
 
                         return SlideTransition(
@@ -138,12 +138,12 @@ class GetStartedScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       Icons.arrow_forward_ios,
-                      color: const Color(0xFF120A53),
+                      color: Color(0xFF120A53),
                       size: 20,
                     ),
                     SizedBox(width: 10),
@@ -153,7 +153,7 @@ class GetStartedScreen extends StatelessWidget {
                         fontFamily: 'Inter',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF120A53),
+                        color: Color(0xFF120A53),
                       ),
                     ),
                   ],

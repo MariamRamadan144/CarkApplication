@@ -11,6 +11,7 @@ import '../../features/cars/presentation/screens/add_car_screen.dart';
 import '../../features/cars/presentation/screens/car_rental_options_screen.dart';
 import '../../features/cars/presentation/screens/car_usage_policy_screen.dart';
 import '../../features/cars/presentation/screens/view_cars_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/booking_history_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/car_details_screen.dart';
 import '../../features/home/presentation/screens/home_screens/filter_screen.dart';
 import '../../features/home/presentation/screens/home_screens/home_screen.dart';
@@ -106,6 +107,9 @@ abstract class RoutesManager {
 
       case ScreensName.viewCarsScreen:
         return MaterialPageRoute(builder: (context) => const ViewCarsScreen());
+
+      case ScreensName.bookingHistoryScreen:
+        return MaterialPageRoute(builder: (context) => const BookingHistoryScreen());
 
       case ScreensName.addCarScreen:
         return MaterialPageRoute(builder: (context) => const AddCarScreen());

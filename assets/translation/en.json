@@ -101,7 +101,7 @@
   "maximum_deductible": "Maximum deductible",
   "up_to_800": "Up to $800.00",
   "included_no_extra_cost": "Included (no extra cost)",
-  "booking_overview": "📦 Your Booking Overview",
+  "booking_overview": "Your Booking Overview",
   "third_party_insurance": "Third party insurance",
   "collision_damage_waiver": "Collision Damage Waiver up to $800.00 financial responsibility",
   "theft_protection": "Theft Protection up to $800.00 financial responsibility",
@@ -181,5 +181,45 @@
 
   "add_car_button": "Add Car",
   "car_added_success": "Car added successfully!",
-  "car_added_error": "Failed to add car. Please try again."
+  "car_added_error": "Failed to add car. Please try again.",
+  "document": {
+    "id_front": "ID Front",
+    "id_back": "ID Back",
+    "driver_license": "Driver License",
+    "drugs_test": "Drugs Test",
+    "criminal_record": "Criminal Record",
+    "driving_violations": "Driving Violations",
+    "profile_photo": "Profile Photo",
+    "car_photo": "Car Photo",
+    "car_license": "Car License",
+    "vehicle_violations": "Vehicle Violations",
+    "insurance": "Insurance",
+    "car_test": "Car Test"
+  },
+
+  "instructions": {
+    "id_front": "Upload your Front National ID (valid and not expired).\n\nFront side must be shown clearly.",
+    "id_back": "Upload the back side of your National ID.\n\nEnsure all details are visible and the document is not expired.",
+    "driver_license": "Make sure both front and back sides of your driver's license are visible.\n\nEnsure the license is not expired and all details are readable.",
+    "drugs_test": "Upload a recent drug test result issued by an authorized center.\n\nMake sure the result includes your full name and test date.",
+    "criminal_record": "Upload an official criminal record certificate issued by the government.\n\nEnsure it is stamped, recent (within 3 months), and your name is clear.",
+    "driving_violations": "Provide a copy or screenshot of your driving record from official sources.\n\nMake sure any recent violations are clearly visible.",
+    "profile_photo": "Upload a clear photo of yourself facing forward with good lighting.\n\nAvoid sunglasses, filters, or background distractions.",
+    "car_photo": "Upload multiple photos of the car from front, side, and back.\n\nEnsure the car is clean and license plate is visible.",
+    "car_license": "Upload the official car registration document.\n\nEnsure the car details and expiry date are visible.",
+    "vehicle_violations": "Provide a screenshot or document showing no pending vehicle violations.\n\nEnsure your license plate number appears in the document.",
+    "insurance": "Upload a valid car insurance document with your name and coverage dates.\n\nEnsure the policy is active and clearly readable.",
+    "car_test": "Upload a photo or PDF of the latest car inspection report.\n\nMake sure the report includes the inspection date and pass status."
+  },
+
+  "button": {
+    "upload": "Upload",
+    "uploading": "Uploading..."
+  },
+
+  "upload_success": "Document uploaded successfully",
+  "remove_success": "Document removed successfully",
+  "upload_failed": "Upload failed. Please try again",
+
+  "skip_now": "Skip Now"
 }

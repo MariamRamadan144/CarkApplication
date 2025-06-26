@@ -84,7 +84,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(widget.carToEdit != null ? 'Edit Car' : TextManager.add_car_title.tr()),
+            title: Text(widget.carToEdit != null ? 'Edit Car' : TextManager.addCarTitle.tr()),
           ),
           body: Stack(
             children: [

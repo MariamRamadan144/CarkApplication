@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../model/car_model.dart';
 import '../../model/location_model.dart';
-import '../../cubit/booking_cubit.dart';
 
 class TripManagementScreen extends StatefulWidget {
   final CarModel car;
