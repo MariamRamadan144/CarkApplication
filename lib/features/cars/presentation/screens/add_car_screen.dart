@@ -5,6 +5,7 @@ import '../../../../config/routes/screens_name.dart';
 import '../../../../core/utils/assets_manager.dart';
 import '../../../../core/utils/text_manager.dart';
 import 'package:test_cark/features/home/presentation/model/car_model.dart';
+import '../../../auth/presentation/cubits/auth_cubit.dart';
 import '../widgets/add_car_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubits/add_car_cubit.dart';
@@ -82,91 +83,97 @@ class _AddCarScreenState extends State<AddCarScreen> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.carToEdit != null ? 'Edit Car' : TextManager.addCarTitle.tr()),
-          ),
-          body: Stack(
-            children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  children: [
-                    // Logo Section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+        return BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            final authCubit = context.read<AuthCubit>();
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(widget.carToEdit != null ? 'Edit Car' : TextManager.addCarTitle.tr()),
+              ),
+              body: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: EdgeInsets.all(16.w),
+                    child: Column(
                       children: [
-                        Image.asset(AssetsManager.carSignUp, height: 0.05.sh),
-                        SizedBox(width: 0.02.sw),
-                        Image.asset(AssetsManager.carkSignUp, height: 0.03.sh),
+                        // Logo Section
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(AssetsManager.carSignUp, height: 0.05.sh),
+                            SizedBox(width: 0.02.sw),
+                            Image.asset(AssetsManager.carkSignUp, height: 0.03.sh),
+                          ],
+                        ),
+                        SizedBox(height: 24.h),
+
+                        // Form Section
+                        AddCarForm(
+                          formKey: _formKey,
+                          modelController: _modelController,
+                          brandController: _brandController,
+                          carTypeController: _carTypeController,
+                          carCategoryController: _carCategoryController,
+                          plateNumberController: _plateNumberController,
+                          yearController: _yearController,
+                          colorController: _colorController,
+                          seatingCapacityController: _seatingCapacityController,
+                          transmissionTypeController: _transmissionTypeController,
+                          fuelTypeController: _fuelTypeController,
+                          odometerController: _odometerController,
+                        ),
+                        // Add extra padding at bottom for FAB
+                        SizedBox(height: 80.h),
                       ],
                     ),
-                    SizedBox(height: 24.h),
-
-                    // Form Section
-                    AddCarForm(
-                      formKey: _formKey,
-                      modelController: _modelController,
-                      brandController: _brandController,
-                      carTypeController: _carTypeController,
-                      carCategoryController: _carCategoryController,
-                      plateNumberController: _plateNumberController,
-                      yearController: _yearController,
-                      colorController: _colorController,
-                      seatingCapacityController: _seatingCapacityController,
-                      transmissionTypeController: _transmissionTypeController,
-                      fuelTypeController: _fuelTypeController,
-                      odometerController: _odometerController,
-                    ),
-                    // Add extra padding at bottom for FAB
-                    SizedBox(height: 80.h),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 16.w,
-                bottom: 16.h,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      final car = CarModel(
-                        id: DateTime.now().millisecondsSinceEpoch,
-                        model: _modelController.text,
-                        brand: _brandController.text,
-                        carType: _carTypeController.text,
-                        carCategory: _carCategoryController.text,
-                        plateNumber: _plateNumberController.text,
-                        year: int.parse(_yearController.text),
-                        color: _colorController.text,
-                        seatingCapacity: int.parse(_seatingCapacityController.text),
-                        transmissionType: _transmissionTypeController.text,
-                        fuelType: _fuelTypeController.text,
-                        currentOdometerReading: int.parse(_odometerController.text),
-                        availability: true,
-                        currentStatus: 'Available',
-                        approvalStatus: false,
-                        rentalOptions: RentalOptions(
-                          availableWithoutDriver: false,
-                          availableWithDriver: false,
-                          dailyRentalPrice: 0.0,
-                        ),
-                      );
-                      Navigator.pushNamed(
-                        context,
-                        ScreensName.rentalOptionScreen,
-                        arguments: car,
-                      );
-                    }
-                  },
-                  backgroundColor: const Color(0xFF1a237e),
-                  child: const Icon(
-                    Icons.arrow_forward,
-                    color: Colors.white,
                   ),
-                ),
+                  Positioned(
+                    right: 16.w,
+                    bottom: 16.h,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          final car = CarModel(
+                            id: DateTime.now().millisecondsSinceEpoch,
+                            model: _modelController.text,
+                            brand: _brandController.text,
+                            carType: _carTypeController.text,
+                            carCategory: _carCategoryController.text,
+                            plateNumber: _plateNumberController.text,
+                            year: int.parse(_yearController.text),
+                            color: _colorController.text,
+                            seatingCapacity: int.parse(_seatingCapacityController.text),
+                            transmissionType: _transmissionTypeController.text,
+                            fuelType: _fuelTypeController.text,
+                            currentOdometerReading: int.parse(_odometerController.text),
+                            availability: true,
+                            currentStatus: 'Available',
+                            approvalStatus: false,
+                            rentalOptions: RentalOptions(
+                              availableWithoutDriver: false,
+                              availableWithDriver: false,
+                              dailyRentalPrice: 0.0,
+                            ),
+                            ownerId: authCubit.userModel!.id,
+                          );
+                          Navigator.pushNamed(
+                            context,
+                            ScreensName.rentalOptionScreen,
+                            arguments: car,
+                          );
+                        }
+                      },
+                      backgroundColor: const Color(0xFF1a237e),
+                      child: const Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

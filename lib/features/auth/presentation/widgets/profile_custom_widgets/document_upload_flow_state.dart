@@ -9,6 +9,7 @@ import 'document_upload_flow.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/auth_cubit.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
+import '../../../../../../core/services/notification_service.dart';
 
 ///DONE
 class DocumentUploadFlowState extends State<DocumentUploadFlow> {
@@ -47,10 +48,22 @@ class DocumentUploadFlowState extends State<DocumentUploadFlow> {
 
   bool get _allDocumentsUploaded => _documentTypes.every((type) => _uploadedDocs[type] != null);
 
-  void _bookNow() {
+  void _bookNow() async {
     if (_allDocumentsUploaded) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Booking confirmed!')),
+      );
+      // Send notification to owner (for testing, using hardcoded values)
+      final renterName = 'Test Renter'; // Hardcoded for testing without login
+      final carBrand = 'Test Car'; // Hardcoded for testing
+      final carModel = 'Test Model'; // Hardcoded for testing
+      final ownerId = '2'; // Hardcoded owner ID for testing
+      
+      await NotificationService().sendNotificationToUser(
+        userId: ownerId,
+        title: 'New Booking Request',
+        body: 'You have a new booking request for your car $carBrand $carModel from renter $renterName.',
+        type: 'owner',
       );
       // TODO: Trigger actual booking logic here
     } else {

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:test_cark/features/cars/presentation/screens/add_car_screen.dart';
 import 'owner_home_screen.dart';
 import 'owner_profile_screen.dart';
-import 'package:test_cark/features/notifications/presentation/screens/owner_notification_screen.dart' as notif;
+import 'package:test_cark/features/notifications/presentation/screens/owner_notification_screen.dart'
+    as notif;
 
 class OwnerNavigationScreen extends StatefulWidget {
   const OwnerNavigationScreen({Key? key}) : super(key: key);
@@ -26,7 +27,8 @@ class _OwnerNavigationScreenState extends State<OwnerNavigationScreen> {
       // Notification tab: push to notification screen
       await Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const notif.OwnerNotificationScreen()),
+        MaterialPageRoute(
+            builder: (context) => const notif.OwnerNotificationScreen()),
       );
       // Stay on the current tab (Home)
       setState(() {
@@ -68,10 +70,11 @@ class _OwnerNavigationScreenState extends State<OwnerNavigationScreen> {
         onTap: _onTabTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notification'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications), label: 'Notification'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
   }
-} 
+}

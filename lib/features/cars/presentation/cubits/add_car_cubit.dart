@@ -26,7 +26,8 @@ class AddCarCubit extends Cubit<AddCarState> {
         availableWithoutDriver: true,
         availableWithDriver: false,
         dailyRentalPrice: 500.0,
-      ),
+
+      ), ownerId: '1',
     ),
 
     CarModel(
@@ -49,7 +50,7 @@ class AddCarCubit extends Cubit<AddCarState> {
         availableWithoutDriver: true,
         availableWithDriver: true,
         dailyRentalPrice: 300.0,
-      ),
+      ), ownerId: '2',
     ),
   ];
 

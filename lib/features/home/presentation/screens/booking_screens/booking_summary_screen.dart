@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/themes/app_colors.dart';
-import 'package:test_cark/config/routes/screens_name.dart';
-import 'package:test_cark/features/home/presentation/screens/booking_screens/request_sent_screen.dart';
+import '../../../../../core/services/notification_service.dart';
 import '../../../../auth/presentation/widgets/profile_custom_widgets/document_upload_flow.dart';
 import '../../model/car_model.dart';
-import '../../model/location_model.dart';
 import '../../cubit/car_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_cark/features/home/presentation/screens/booking_screens/deposit_input_screen.dart';
+import '../../../../auth/presentation/cubits/auth_cubit.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
   final CarModel car;
@@ -238,7 +238,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: _agreedToTerms
-            ? () {
+            ? () async {
                 var stops = context.read<CarCubit>().state.stops;
                 stops = List.from(stops); // Make mutable copy
 
@@ -260,12 +260,21 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                   return;
                 }
 
+                // Send notification to owner after agreeing to terms
+                final renterName = 'Test Renter'; // Hardcoded for testing without login
+                await NotificationService().sendNotificationToUser(
+                  userId: widget.car.ownerId,
+                  title: 'New Booking Request',
+                  body: 'You have a new booking request for your car ${widget.car.brand} ${widget.car.model} from renter $renterName.',
+                  type: 'owner',
+                );
+
                 // Branch by car rental option
                 if (widget.car.rentalOptions.availableWithDriver) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => RequestSentScreen(
+                      builder: (_) => DepositInputScreen(
                         car: widget.car,
                         totalPrice: widget.totalPrice,
                         stops: stops,

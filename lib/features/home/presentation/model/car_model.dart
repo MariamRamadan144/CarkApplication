@@ -1,20 +1,23 @@
 class CarModel {
+  final String ownerId; // ForeignKey to User
   final int id;
   final String model;
   final String brand;
-  final String carType;
-  final String carCategory;
+  final String carType; // choices: CAR_TYPE_CHOICES
+  final String carCategory; // choices: CAR_CATEGORY_CHOICES
   final String plateNumber;
   final int year;
   final String color;
   final int seatingCapacity;
   final int luggageCapacity;
-  final String transmissionType;
-  final String fuelType;
+  final String transmissionType; // choices: TRANSMISSION_CHOICES
+  final String fuelType; // choices: FUEL_CHOICES
   final int currentOdometerReading;
   final bool availability;
-  final String currentStatus;
+  final String currentStatus; // choices: STATUS_CHOICES
   final bool approvalStatus;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final RentalOptions rentalOptions;
   final String imageUrl;
   
@@ -27,6 +30,7 @@ class CarModel {
   final double? extraKmRate;
 
   CarModel({
+    required this.ownerId,
     required this.id,
     required this.model,
     required this.brand,
@@ -43,8 +47,10 @@ class CarModel {
     required this.availability,
     required this.currentStatus,
     required this.approvalStatus,
+    this.createdAt,
+    this.updatedAt,
     required this.rentalOptions,
-    this.imageUrl = 'https://cdn-icons-png.flaticon.com/512/743/743007.png', // placeholder
+    this.imageUrl = 'https://cdn-icons-png.flaticon.com/512/743/743007.png',
     this.driverName,
     this.driverRating,
     this.driverTrips,
@@ -55,6 +61,7 @@ class CarModel {
 
   factory CarModel.fromJson(Map<String, dynamic> json) {
     return CarModel(
+      ownerId: json['ownerId'],
       id: json['id'],
       model: json['model'],
       brand: json['brand'],
@@ -71,8 +78,10 @@ class CarModel {
       availability: json['availability'],
       currentStatus: json['current_status'],
       approvalStatus: json['approval_status'],
-      rentalOptions: RentalOptions.fromJson(json['rental_widgets']),
-      imageUrl: 'https://cdn-icons-png.flaticon.com/512/743/743007.png',
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at']) : null,
+      rentalOptions: RentalOptions.fromJson(json['rental_widgets'] ?? {}),
+      imageUrl: json['image_url'] ?? 'https://cdn-icons-png.flaticon.com/512/743/743007.png',
       driverName: json['driver_name'],
       driverRating: json['driver_rating']?.toDouble(),
       driverTrips: json['driver_trips'],
@@ -83,6 +92,7 @@ class CarModel {
   }
 
   CarModel copyWith({
+    String? ownerId,
     int? id,
     String? model,
     String? brand,
@@ -99,6 +109,8 @@ class CarModel {
     bool? availability,
     String? currentStatus,
     bool? approvalStatus,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     RentalOptions? rentalOptions,
     String? imageUrl,
     String? driverName,
@@ -109,6 +121,7 @@ class CarModel {
     double? extraKmRate,
   }) {
     return CarModel(
+      ownerId: ownerId ?? this.ownerId,
       id: id ?? this.id,
       model: model ?? this.model,
       brand: brand ?? this.brand,
@@ -121,11 +134,12 @@ class CarModel {
       luggageCapacity: luggageCapacity ?? this.luggageCapacity,
       transmissionType: transmissionType ?? this.transmissionType,
       fuelType: fuelType ?? this.fuelType,
-      currentOdometerReading:
-          currentOdometerReading ?? this.currentOdometerReading,
+      currentOdometerReading: currentOdometerReading ?? this.currentOdometerReading,
       availability: availability ?? this.availability,
       currentStatus: currentStatus ?? this.currentStatus,
       approvalStatus: approvalStatus ?? this.approvalStatus,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       rentalOptions: rentalOptions ?? this.rentalOptions,
       imageUrl: imageUrl ?? this.imageUrl,
       driverName: driverName ?? this.driverName,
@@ -139,6 +153,7 @@ class CarModel {
 
   factory CarModel.mock() {
     return CarModel(
+      ownerId: 'owner_mock_id',
       id: 1,
       model: 'Accord',
       brand: 'Honda',
@@ -154,10 +169,12 @@ class CarModel {
       availability: true,
       currentStatus: 'Available',
       approvalStatus: true,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
       rentalOptions: RentalOptions.mock(),
       imageUrl: 'https://imgd.aeplcdn.com/1280x720/n/cw/ec/140945/camry-exterior-right-front-three-quarter-2.jpeg?is-cms=true&q=80',
       kmLimitPerDay: 450,
-      extraKmRate: 0.60
+      extraKmRate: 0.60,
     );
   }
 }

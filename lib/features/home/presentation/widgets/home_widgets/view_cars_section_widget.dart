@@ -42,6 +42,7 @@ class ViewCarsSectionWidget extends StatelessWidget {
       kmLimitPerDay: 200,
       waitingHourCost: 15.0,
       extraKmRate: 0.5,
+      ownerId: 'owner1',
     ),
     CarModel(
       id: 2,
@@ -73,6 +74,7 @@ class ViewCarsSectionWidget extends StatelessWidget {
       kmLimitPerDay: 250,
       waitingHourCost: 18.0,
       extraKmRate: 0.6,
+      ownerId: 'owner2',
     ),
     CarModel(
       id: 3,
@@ -104,6 +106,7 @@ class ViewCarsSectionWidget extends StatelessWidget {
       kmLimitPerDay: 300,
       waitingHourCost: 20.0,
       extraKmRate: 0.7,
+      ownerId: 'owner3',
     ),
     CarModel(
       id: 4,
@@ -135,6 +138,7 @@ class ViewCarsSectionWidget extends StatelessWidget {
       kmLimitPerDay: 350,
       waitingHourCost: 25.0,
       extraKmRate: 0.8,
+      ownerId: 'owner4',
     ),
   ];
 
