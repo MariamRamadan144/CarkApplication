@@ -143,7 +143,10 @@ class _TripManagementScreenState extends State<TripManagementScreen>
     Navigator.pushNamed(
       context,
       '/payment_screen',
-      arguments: {'totalPrice': widget.totalPrice},
+      arguments: {
+        'totalPrice': widget.totalPrice,
+        'car': widget.car,
+      },
     );
   }
 

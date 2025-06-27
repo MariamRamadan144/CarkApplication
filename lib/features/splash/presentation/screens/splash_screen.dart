@@ -45,7 +45,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           context,
           PageRouteBuilder(
             transitionDuration: const Duration(seconds: 1), // Set duration to 1 second
-            pageBuilder: (context, animation, secondaryAnimation) => MainNavigationScreen(),
+            // pageBuilder: (context, animation, secondaryAnimation) => MainNavigationScreen(),
+            pageBuilder: (context, animation, secondaryAnimation) => const GetStartedScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0); // Slide from right
               const end = Offset.zero;

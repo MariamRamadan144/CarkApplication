@@ -102,7 +102,7 @@ abstract class TextManager{
   /// UI Texts - Add Car
   static const String addCarTitle = "add_car_title";
   static const String editCarTitle = "edit_car_title";
-  static const String viewCarsTitle = "view_cars_title";
+  // static const String viewCarsTitle = "view_cars_title";
   static const String addCarButton = "add_car_button";
   static const String carAddedSuccess = "car_added_success";
   static const String carUpdatedSuccess = "car_updated_success";

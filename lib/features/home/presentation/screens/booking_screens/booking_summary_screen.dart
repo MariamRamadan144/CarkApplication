@@ -266,7 +266,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                   userId: widget.car.ownerId,
                   title: 'New Booking Request',
                   body: 'You have a new booking request for your car ${widget.car.brand} ${widget.car.model} from renter $renterName.',
-                  type: 'owner',
+                  type: 'booking',
                 );
 
                 // Branch by car rental option

@@ -5,13 +5,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'package:test_cark/core/utils/custom_toast.dart';
+import 'package:test_cark/core/services/notification_service.dart';
+import 'package:test_cark/features/home/presentation/model/car_model.dart';
+import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PaymentScreen extends material.StatefulWidget {
   final double totalPrice;
+  final CarModel? car;
 
-  const PaymentScreen({super.key, required this.totalPrice});
+  const PaymentScreen({super.key, required this.totalPrice, this.car});
 
   @override
   material.State<PaymentScreen> createState() => _PaymentScreenState();
@@ -21,6 +25,13 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
   String _selectedPaymentMethod = 'visa';
   bool _isLoading = false;
   Map<String, dynamic>? _paymentIntent;
+
+  // Vodafone Cash form key and controllers
+  final _vodafoneFormKey = GlobalKey<FormState>();
+  final _walletController = TextEditingController(text: '01028218559');
+  final _amountController = TextEditingController();
+  final _pinController = TextEditingController();
+  final _otpController = TextEditingController();
 
   // IMPORTANT: Replace with your backend endpoint
   final String _paymentIntentUrl =
@@ -34,6 +45,15 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
   void initState() {
     super.initState();
     Stripe.publishableKey = _stripePublishableKey;
+  }
+
+  @override
+  void dispose() {
+    _walletController.dispose();
+    _amountController.dispose();
+    _pinController.dispose();
+    _otpController.dispose();
+    super.dispose();
   }
 
   /// SIMULATED Backend Call
@@ -94,7 +114,8 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
       // 3. Present the payment sheet
       await Stripe.instance.presentPaymentSheet();
 
-      // 4. Handle success
+      // 4. Handle success - Send booking notifications
+      await _sendBookingNotifications();
       _showPaymentResult('Success!', 'Your payment was processed successfully.');
     } on StripeException catch (e) {
       _showPaymentResult('Payment Failed', 'Error: ${e.error.localizedMessage}',
@@ -106,6 +127,39 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  // Send booking notifications for both renter and owner
+  Future<void> _sendBookingNotifications() async {
+    if (widget.car == null) {
+      print('Car information not available for notifications');
+      return;
+    }
+
+    try {
+      final authCubit = context.read<AuthCubit>();
+      final currentUser = authCubit.userModel;
+      
+      if (currentUser == null) {
+        print('Current user not available for notifications');
+        return;
+      }
+
+      final renterId = currentUser.id.toString();
+      final ownerId = widget.car!.ownerId;
+      final carName = '${widget.car!.brand} ${widget.car!.model}';
+
+      await NotificationService().sendBookingNotifications(
+        renterId: renterId,
+        ownerId: ownerId,
+        carName: carName,
+      );
+
+      print('Booking notifications sent successfully');
+      print('Renter ID: $renterId, Owner ID: $ownerId, Car: $carName');
+    } catch (e) {
+      print('Error sending booking notifications: $e');
     }
   }
 
@@ -157,8 +211,13 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
             _buildPaymentMethodSelector('visa', 'Credit/Debit Card', 'assets/images/img/visa_logo.png'),
             _buildPaymentMethodSelector('paypal', 'PayPal', 'assets/images/img/paypal_logo.png'),
             _buildPaymentMethodSelector('vodafone', 'Vodafone Cash', 'assets/images/img/vodafone_logo.png'),
-            material.SizedBox(height: 40.h),
-            _buildPayButton(),
+            if (_selectedPaymentMethod == 'vodafone') ...[
+              material.SizedBox(height: 24.h),
+              _buildVodafoneCashForm(),
+            ] else ...[
+              material.SizedBox(height: 40.h),
+              _buildPayButton(),
+            ],
           ],
         ),
       ),
@@ -245,6 +304,112 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
       ),
     );
   }
+
+  material.Widget _buildVodafoneCashForm() {
+    _amountController.text = '${widget.totalPrice.toStringAsFixed(2)} L.E';
+    return Form(
+      key: _vodafoneFormKey,
+      child: material.Column(
+        crossAxisAlignment: material.CrossAxisAlignment.center,
+        children: [
+          // Vodafone logo and text (replace with your asset)
+          material.Row(
+            mainAxisAlignment: material.MainAxisAlignment.center,
+            children: [
+              material.Image.asset('assets/images/img/vodafone_logo.png', height: 40.h),
+              material.SizedBox(width: 8.w),
+              material.Text('المحفظة رقم 1 في مصر', style: material.TextStyle(fontSize: 14.sp, color: material.Colors.red, fontWeight: material.FontWeight.bold)),
+            ],
+          ),
+          material.SizedBox(height: 16.h),
+          material.Text('Checkout', style: material.TextStyle(fontSize: 20.sp, fontWeight: material.FontWeight.bold)),
+          material.SizedBox(height: 16.h),
+          _buildLabel('Wallet Number - رقم المحفظة'),
+          material.SizedBox(height: 6.h),
+          material.TextFormField(
+            controller: _walletController,
+            readOnly: true,
+            decoration: _inputDecoration(),
+          ),
+          material.SizedBox(height: 16.h),
+          _buildLabel('Amount - المبلغ'),
+          material.SizedBox(height: 6.h),
+          material.TextFormField(
+            controller: _amountController,
+            readOnly: true,
+            decoration: _inputDecoration(),
+          ),
+          material.SizedBox(height: 16.h),
+          _buildLabel('PIN - الرقم السري للمحفظة'),
+          material.SizedBox(height: 6.h),
+          material.TextFormField(
+            controller: _pinController,
+            obscureText: true,
+            decoration: _inputDecoration(),
+            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+          ),
+          material.SizedBox(height: 16.h),
+          _buildLabel('OTP - الرقم السري المتغير'),
+          material.SizedBox(height: 6.h),
+          material.TextFormField(
+            controller: _otpController,
+            obscureText: true,
+            decoration: _inputDecoration(),
+            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+          ),
+          material.SizedBox(height: 8.h),
+          material.Align(
+            alignment: material.Alignment.centerLeft,
+            child: material.TextButton(
+              onPressed: () {},
+              style: material.TextButton.styleFrom(padding: material.EdgeInsets.zero, minimumSize: material.Size(0, 0)),
+              child: material.Text('Resend OTP - إعادة إرسال الرقم السري المتغير', style: material.TextStyle(color: material.Colors.blue, fontSize: 13.sp, decoration: material.TextDecoration.underline)),
+            ),
+          ),
+          material.SizedBox(height: 16.h),
+          material.SizedBox(
+            width: double.infinity,
+            child: material.ElevatedButton(
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      if (_vodafoneFormKey.currentState?.validate() ?? false) {
+                        _showPaymentResult('Success!', 'Your Vodafone Cash payment was processed successfully.');
+                      }
+                    },
+              style: material.ElevatedButton.styleFrom(
+                backgroundColor: material.Colors.red,
+                padding: material.EdgeInsets.symmetric(vertical: 14.h),
+                shape: material.RoundedRectangleBorder(borderRadius: material.BorderRadius.circular(8.r)),
+              ),
+              child: material.Text('Pay with Wallet', style: material.TextStyle(fontSize: 16.sp, color: material.Colors.white)),
+            ),
+          ),
+          material.SizedBox(height: 24.h),
+          material.Row(
+            mainAxisAlignment: material.MainAxisAlignment.center,
+            children: [
+              material.Image.asset('assets/images/img/paymob_logo.png', height: 28.h),
+              material.SizedBox(width: 16.w),
+              material.Image.asset('assets/images/img/meeza_logo.png', height: 28.h),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  material.Widget _buildLabel(String text) => material.Align(
+        alignment: material.Alignment.centerLeft,
+        child: material.Text(text, style: material.TextStyle(fontSize: 14.sp, color: material.Colors.grey[700])),
+      );
+
+  material.InputDecoration _inputDecoration() => material.InputDecoration(
+        filled: true,
+        fillColor: material.Colors.grey[200],
+        border: material.OutlineInputBorder(borderRadius: material.BorderRadius.circular(8.r)),
+        contentPadding: material.EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      );
 }
 
 class PaymentMethodsScreen extends StatelessWidget {

@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../models/notification_model.dart';
+import '../../../../core/services/notification_service.dart';
 
 // Simple notification model
 class AppNotification extends Equatable {
@@ -39,7 +41,7 @@ abstract class NotificationState extends Equatable {
 class NotificationInitial extends NotificationState {}
 class NotificationLoading extends NotificationState {}
 class NotificationLoaded extends NotificationState {
-  final List<AppNotification> notifications;
+  final List<NotificationModel> notifications;
   const NotificationLoaded(this.notifications);
   @override
   List<Object?> get props => [notifications];
@@ -54,40 +56,67 @@ class NotificationError extends NotificationState {
 // Cubit
 class NotificationCubit extends Cubit<NotificationState> {
   NotificationCubit() : super(NotificationInitial());
+  final NotificationService _notificationService = NotificationService();
 
-  // Simulate fetching notifications
-  Future<void> fetchNotifications() async {
+  // Fetch notifications for a specific user and type
+  Future<void> fetchNotificationsForUser(String userId, String type) async {
     emit(NotificationLoading());
-    await Future.delayed(const Duration(seconds: 1));
     try {
-      // Replace with real data source
-      final notifications = [
-        AppNotification(
-          id: '1',
-          title: 'Booking Confirmed',
-          message: 'Your booking for Toyota Camry is confirmed.',
-          date: DateTime.now().subtract(const Duration(hours: 1)),
-        ),
-        AppNotification(
-          id: '2',
-          title: 'Booking Cancelled',
-          message: 'Your booking for Ford Focus was cancelled.',
-          date: DateTime.now().subtract(const Duration(days: 1)),
-        ),
-      ];
-      emit(NotificationLoaded(notifications));
+      await for (final notifications in _notificationService.getNotificationsForUser(userId, type)) {
+        emit(NotificationLoaded(notifications));
+      }
     } catch (e) {
-      emit(NotificationError('Failed to load notifications'));
+      emit(NotificationError('Failed to load notifications: $e'));
     }
   }
 
-  void markAsRead(String id) {
-    if (state is NotificationLoaded) {
-      final notifications = (state as NotificationLoaded).notifications.map((n) {
-        if (n.id == id) return n.copyWith(isRead: true);
-        return n;
-      }).toList();
-      emit(NotificationLoaded(notifications));
+  // Fetch all notifications for a user (both types)
+  Future<void> fetchAllNotificationsForUser(String userId) async {
+    emit(NotificationLoading());
+    try {
+      await for (final notifications in _notificationService.getAllNotificationsForUser(userId)) {
+        emit(NotificationLoaded(notifications));
+      }
+    } catch (e) {
+      emit(NotificationError('Failed to load notifications: $e'));
+    }
+  }
+
+  // Mark notification as read
+  Future<void> markAsRead(String notificationId) async {
+    try {
+      await _notificationService.markNotificationAsRead(notificationId);
+      
+      // Update local state
+      if (state is NotificationLoaded) {
+        final currentNotifications = (state as NotificationLoaded).notifications;
+        final updatedNotifications = currentNotifications.map((notification) {
+          if (notification.id == notificationId) {
+            return notification.copyWith(isRead: true);
+          }
+          return notification;
+        }).toList();
+        emit(NotificationLoaded(updatedNotifications));
+      }
+    } catch (e) {
+      emit(NotificationError('Failed to mark notification as read: $e'));
+    }
+  }
+
+  // Send booking notifications
+  Future<void> sendBookingNotifications({
+    required String renterId,
+    required String ownerId,
+    required String carName,
+  }) async {
+    try {
+      await _notificationService.sendBookingNotifications(
+        renterId: renterId,
+        ownerId: ownerId,
+        carName: carName,
+      );
+    } catch (e) {
+      emit(NotificationError('Failed to send booking notifications: $e'));
     }
   }
 } 

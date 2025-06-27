@@ -1,76 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_cark/features/cars/presentation/widgets/car_data_table.dart';
-import 'package:test_cark/features/cars/presentation/cubits/add_car_cubit.dart';
-import 'package:test_cark/features/cars/presentation/cubits/add_car_state.dart';
-import 'package:test_cark/features/cars/presentation/screens/add_car_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../auth/presentation/cubits/auth_cubit.dart';
+import '../../../auth/presentation/screens/profile/profile_screen.dart';
+import '../../../cars/presentation/screens/add_car_screen.dart';
+import '../../../cars/presentation/screens/view_cars_screen.dart';
+import '../../../../config/routes/screens_name.dart';
+import '../../../../core/utils/assets_manager.dart';
+import '../widgets/owner_drawer.dart';
 
 class OwnerHomeScreen extends StatelessWidget {
   const OwnerHomeScreen({Key? key}) : super(key: key);
-
-  void _navigateToAddCar(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const AddCarScreen()),
-    );
-    if (result == true) {
-      // Just pop back, OwnerNavigationScreen will handle refresh and tab switch
-      Navigator.pop(context);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Cars'),
-        centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _navigateToAddCar(context),
-            tooltip: 'Add Car',
+          // Notification icon
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {
+                  Navigator.pushNamed(context, ScreensName.ownerNotificationScreen);
+                },
+              ),
+              // Notification badge
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: const Text(
+                    '0', // TODO: Replace with real unread count
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocConsumer<AddCarCubit, AddCarState>(
-          listener: (context, state) {
-            if (state is AddCarError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            }
-          },
-          builder: (context, state) {
-            final cars = context.read<AddCarCubit>().getCars();
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  CarDataTable(
-                    cars: cars,
-                    onEdit: (car) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Edit tapped!')),
-                      );
-                    },
-                    onDelete: (car) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Delete tapped!')),
-                      );
-                    },
-                    onViewDetails: (car) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('View details tapped!')),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+      drawer: const OwnerDrawer(),
+      body: const ViewCarsScreen(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, ScreensName.addCarScreen);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

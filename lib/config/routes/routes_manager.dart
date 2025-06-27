@@ -22,10 +22,7 @@ import '../../features/home/presentation/screens/booking_screens/trip_management
 import '../../features/home/presentation/screens/booking_screens/payment_screen.dart';
 import '../../features/home/presentation/model/car_model.dart';
 import '../../features/home/presentation/model/location_model.dart';
-import '../../features/owner/presentation/screens/owner_navigation_screen.dart';
 import '../../features/owner/presentation/screens/owner_home_screen.dart';
-import '../../features/owner/presentation/screens/owner_profile_screen.dart';
-import '../../features/owner/presentation/screens/owner_notification_screen.dart' hide OwnerNotificationScreen;
 
 abstract class RoutesManager {
   static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
@@ -48,8 +45,8 @@ abstract class RoutesManager {
       case ScreensName.homeScreen:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
 
-      case ScreensName.mainNavigationScreen:
-        return MaterialPageRoute(builder: (context) => MainNavigationScreen());
+      // case ScreensName.mainNavigationScreen:
+      //   return MaterialPageRoute(builder: (context) => MainNavigationScreen());
       case ScreensName.filterScreen:
         return MaterialPageRoute(builder: (context) => const FilterScreen());
 
@@ -79,9 +76,11 @@ abstract class RoutesManager {
       case ScreensName.paymentScreen:
         final args = routeSettings.arguments as Map<String, dynamic>;
         final totalPrice = args['totalPrice'] as double;
+        final car = args['car'] as CarModel?;
         return MaterialPageRoute(
             builder: (context) => PaymentScreen(
                   totalPrice: totalPrice,
+                  car: car,
                 ));
       case ScreensName.ownerNotificationScreen:
         return MaterialPageRoute(
@@ -145,14 +144,8 @@ abstract class RoutesManager {
           ),
         );
 
-      case ScreensName.ownerNavigationScreen:
-        return MaterialPageRoute(builder: (context) => const OwnerNavigationScreen());
       case ScreensName.ownerHomeScreen:
         return MaterialPageRoute(builder: (context) => const OwnerHomeScreen());
-      case ScreensName.ownerProfileScreen:
-        return MaterialPageRoute(builder: (context) => const OwnerProfileScreen());
-      case ScreensName.ownerNotificationScreenMain:
-        return MaterialPageRoute(builder: (context) => const OwnerNotificationScreen());
 
       default:
         return MaterialPageRoute(builder: (context) {

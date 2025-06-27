@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/text_manager.dart';
+import '../../../../core/utils/assets_manager.dart';
+import '../../../../config/routes/screens_name.dart';
 import '../cubits/add_car_cubit.dart';
 import '../cubits/add_car_state.dart';
 import 'package:test_cark/features/home/presentation/model/car_model.dart';
+import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:test_cark/features/auth/presentation/screens/profile/profile_screen.dart';
 import 'add_car_screen.dart';
 import '../widgets/car_data_table.dart';
 import 'view_car_details_screen.dart';
@@ -96,28 +100,153 @@ class ViewCarsScreen extends StatelessWidget {
     );
   }
 
+  void _navigateAndCloseDrawer(BuildContext context, Widget screen) {
+    Navigator.pop(context); // Close the drawer
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => screen),
+    );
+  }
+
+  void _logout(BuildContext context) {
+    final authCubit = context.read<AuthCubit>();
+    // Clear user session
+    authCubit.userModel = null;
+    Navigator.pop(context); // Close drawer
+    Navigator.pushReplacementNamed(context, ScreensName.login);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Logged out successfully')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get the cars when the screen is built
     final cars = context.read<AddCarCubit>().getCars();
     
     return Scaffold(
-      appBar: AppBar(
-        title: Text(TextManager.viewCarsTitle.tr()),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddCarScreen()),
-              ).then((_) {
-                // Rebuild the screen when returning from AddCarScreen
-                (context as Element).markNeedsBuild();
-              });
-            },
-          ),
-        ],
+      // appBar: AppBar(
+      //   actions: [
+      //     // Notification icon
+      //     Stack(
+      //       children: [
+      //         IconButton(
+      //           icon: const Icon(Icons.notifications),
+      //           onPressed: () {
+      //             Navigator.pushNamed(context, ScreensName.ownerNotificationScreen);
+      //           },
+      //         ),
+      //         // Notification badge
+      //         Positioned(
+      //           right: 8,
+      //           top: 8,
+      //           child: Container(
+      //             padding: const EdgeInsets.all(2),
+      //             decoration: BoxDecoration(
+      //               color: Colors.red,
+      //               borderRadius: BorderRadius.circular(8),
+      //             ),
+      //             constraints: const BoxConstraints(
+      //               minWidth: 16,
+      //               minHeight: 16,
+      //             ),
+      //             child: const Text(
+      //               '0', // TODO: Replace with real unread count
+      //               style: TextStyle(
+      //                 color: Colors.white,
+      //                 fontSize: 10,
+      //                 fontWeight: FontWeight.bold,
+      //               ),
+      //               textAlign: TextAlign.center,
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //     IconButton(
+      //       icon: const Icon(Icons.add),
+      //       onPressed: () {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => const AddCarScreen()),
+      //         ).then((_) {
+      //           // Rebuild the screen when returning from AddCarScreen
+      //           (context as Element).markNeedsBuild();
+      //         });
+      //       },
+      //     ),
+      //   ],
+      // ),
+      drawer: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          final authCubit = context.read<AuthCubit>();
+          final user = authCubit.userModel;
+          
+          return Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image(
+                        image: const AssetImage(AssetsManager.carLogo),
+                        width: 0.15.sw,
+                      ),
+                      SizedBox(height: 0.01.sh),
+                      if (user != null)
+                        Text(
+                          '${user.firstName} ${user.lastName}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (user != null)
+                        Text(
+                          'Car Owner',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                // Home (My Cars)
+                ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text('My Cars'),
+                  onTap: () => Navigator.pop(context), // Already on home
+                ),
+                // Profile
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text('Profile'),
+                  onTap: () => _navigateAndCloseDrawer(context, const ProfileScreen()),
+                ),
+                // Add Car
+                ListTile(
+                  leading: const Icon(Icons.add_circle_outline),
+                  title: const Text('Add Car'),
+                  onTap: () => _navigateAndCloseDrawer(context, const AddCarScreen()),
+                ),
+                const Divider(),
+                // Logout
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () => _logout(context),
+                ),
+              ],
+            ),
+          );
+        },
       ),
       body: BlocConsumer<AddCarCubit, AddCarState>(
         listener: (context, state) {
@@ -162,6 +291,17 @@ class ViewCarsScreen extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
+                  SizedBox(height: 24.h),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, ScreensName.addCarScreen);
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add Your First Car'),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                    ),
+                  ),
                 ],
               ),
             );
@@ -182,7 +322,8 @@ class ViewCarsScreen extends StatelessWidget {
                   (context as Element).markNeedsBuild();
                 });
               },
-              onDelete: (CarModel car) => _showDeleteConfirmation(context, car), onViewDetails: (CarModel car) {
+              onDelete: (CarModel car) => _showDeleteConfirmation(context, car),
+              onViewDetails: (CarModel car) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -193,6 +334,13 @@ class ViewCarsScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, ScreensName.addCarScreen);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

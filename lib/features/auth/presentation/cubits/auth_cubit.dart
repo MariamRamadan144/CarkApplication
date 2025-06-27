@@ -24,6 +24,15 @@ class AuthCubit extends Cubit<AuthState> {
     emit(LoginLoading());
     // Simulate a network call
     await Future.delayed(const Duration(seconds: 5), () {
+      // Set default user with role 'renter' - users start as renters
+      userModel = UserModel(
+        id: '1',
+        firstName: 'Demo',
+        lastName: 'User',
+        email: email,
+        phoneNumber: '01000000000',
+        role: 'renter',
+      );
       emit(LoginSuccess("Login successfully"));
     });
   }
@@ -41,6 +50,14 @@ class AuthCubit extends Cubit<AuthState> {
     emit(SignUpLoading());
     await Future.delayed(const Duration(seconds: 2));
     log("firstname: $firstname, lastname: $lastname, email: $email, phone: $phone, password: $password , id : $id");
+    userModel = UserModel(
+      id: id,
+      firstName: firstname,
+      lastName: lastname,
+      email: email,
+      phoneNumber: phone,
+      role: 'renter',
+    );
     emit(SignUpSuccess("Signup successful"));
   }
 
@@ -106,6 +123,21 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         emit(UploadProfileScreenImageSuccess());
       }
+    }
+  }
+
+  void toggleRole() {
+    if (userModel != null) {
+      final newRole = userModel!.role == 'renter' ? 'owner' : 'renter';
+      userModel = UserModel(
+        id: userModel!.id,
+        firstName: userModel!.firstName,
+        lastName: userModel!.lastName,
+        email: userModel!.email,
+        phoneNumber: userModel!.phoneNumber,
+        role: newRole,
+      );
+      emit(AuthRoleChanged(newRole));
     }
   }
 }

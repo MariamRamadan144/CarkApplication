@@ -4,6 +4,7 @@ class UserModel {
   final String email;
   final String phoneNumber;
   final String id;
+  final String role;
 
   UserModel({
     required this.id,
@@ -11,5 +12,6 @@ class UserModel {
     required this.lastName,
     required this.email,
     required this.phoneNumber,
+    this.role = 'renter',
   });
 }

@@ -73,7 +73,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       listener: (context, state) {
         if (state is AddCarSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Car added successfully!'), backgroundColor: Colors.green),
+            const SnackBar(content: Text('Car added successfully!'), backgroundColor: Colors.green),
           );
           Navigator.pop(context, true);
         } else if (state is AddCarError) {
