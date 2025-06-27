@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 ///DONE
+// This widget displays a text with two parts, where the second part is clickable and navigates to a specified screen.
+// Like login or signup
 class AuthOptionsText extends StatelessWidget {
   const AuthOptionsText(
       {super.key,

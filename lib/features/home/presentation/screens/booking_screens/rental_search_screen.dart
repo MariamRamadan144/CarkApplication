@@ -419,3 +419,22 @@ class RentalSearchScreen extends StatelessWidget {
     );
   }
 }
+
+class BookingHistoryScreen extends StatelessWidget {
+  const BookingHistoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Booking History'),
+      ),
+      body: Center(
+        child: Text(
+          'Your booking history will appear here.',
+          style: TextStyle(fontSize: 18.sp, color: Colors.grey[700]),
+        ),
+      ),
+    );
+  }
+}

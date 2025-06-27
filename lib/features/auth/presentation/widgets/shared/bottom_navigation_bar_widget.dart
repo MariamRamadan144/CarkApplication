@@ -18,14 +18,19 @@ class BottomNavigationBarWidget extends StatelessWidget {
       selectedItemColor: Theme.of(context).colorScheme.primary,
       unselectedItemColor: Colors.grey,
       items: [
+        // Home
         BottomNavigationBarItem(
             icon: const Icon(Icons.home_outlined),
             activeIcon: const Icon(Icons.home),
             label: TextManager.home.tr()),
+
+        // notifications
         BottomNavigationBarItem(
             icon: const Icon(Icons.notifications_outlined),
             activeIcon: const Icon(Icons.notifications),
             label: TextManager.renterNotification.tr()),
+
+        // profile
         BottomNavigationBarItem(
             icon: const Icon(Icons.person_outline),
             activeIcon: const Icon(Icons.person),
