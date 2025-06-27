@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../config/routes/screens_name.dart';
 import '../../../../core/utils/assets_manager.dart';
 import '../../../../core/utils/text_manager.dart';
+import '../../../../core/services/notification_service.dart';
 import 'package:test_cark/features/home/presentation/model/car_model.dart';
 import '../../../auth/presentation/cubits/auth_cubit.dart';
 import '../widgets/add_car_form.dart';
@@ -13,7 +14,7 @@ import '../cubits/add_car_state.dart';
 
 class AddCarScreen extends StatefulWidget {
   final CarModel? carToEdit;
-  
+
   const AddCarScreen({super.key, this.carToEdit});
 
   @override
@@ -41,14 +42,21 @@ class _AddCarScreenState extends State<AddCarScreen> {
     _modelController = TextEditingController(text: widget.carToEdit?.model);
     _brandController = TextEditingController(text: widget.carToEdit?.brand);
     _carTypeController = TextEditingController(text: widget.carToEdit?.carType);
-    _carCategoryController = TextEditingController(text: widget.carToEdit?.carCategory);
-    _plateNumberController = TextEditingController(text: widget.carToEdit?.plateNumber);
-    _yearController = TextEditingController(text: widget.carToEdit?.year.toString());
+    _carCategoryController =
+        TextEditingController(text: widget.carToEdit?.carCategory);
+    _plateNumberController =
+        TextEditingController(text: widget.carToEdit?.plateNumber);
+    _yearController =
+        TextEditingController(text: widget.carToEdit?.year.toString());
     _colorController = TextEditingController(text: widget.carToEdit?.color);
-    _seatingCapacityController = TextEditingController(text: widget.carToEdit?.seatingCapacity.toString());
-    _transmissionTypeController = TextEditingController(text: widget.carToEdit?.transmissionType);
-    _fuelTypeController = TextEditingController(text: widget.carToEdit?.fuelType);
-    _odometerController = TextEditingController(text: widget.carToEdit?.currentOdometerReading.toString());
+    _seatingCapacityController = TextEditingController(
+        text: widget.carToEdit?.seatingCapacity.toString());
+    _transmissionTypeController =
+        TextEditingController(text: widget.carToEdit?.transmissionType);
+    _fuelTypeController =
+        TextEditingController(text: widget.carToEdit?.fuelType);
+    _odometerController = TextEditingController(
+        text: widget.carToEdit?.currentOdometerReading.toString());
   }
 
   @override
@@ -72,10 +80,28 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return BlocConsumer<AddCarCubit, AddCarState>(
       listener: (context, state) {
         if (state is AddCarSuccess) {
+          // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Car added successfully!'), backgroundColor: Colors.green),
+            SnackBar(
+              content: Text(
+                  'Car "${state.car.brand} ${state.car.model}" added successfully!'),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 3),
+            ),
           );
-          Navigator.pop(context, true);
+
+          // Navigate to OwnerHomeScreen
+          Navigator.pushNamedAndRemoveUntil(
+              context, ScreensName.ownerHomeScreen, (route) => false);
+
+          // Show additional feedback
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Your car is now available for rent!'),
+              backgroundColor: Colors.blue,
+              duration: Duration(seconds: 2),
+            ),
+          );
         } else if (state is AddCarError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message), backgroundColor: Colors.red),
@@ -88,7 +114,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
             final authCubit = context.read<AuthCubit>();
             return Scaffold(
               appBar: AppBar(
-                title: Text(widget.carToEdit != null ? 'Edit Car' : TextManager.addCarTitle.tr()),
+                title: Text(widget.carToEdit != null
+                    ? 'Edit Car'
+                    : TextManager.addCarTitle.tr()),
               ),
               body: Stack(
                 children: [
@@ -100,9 +128,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(AssetsManager.carSignUp, height: 0.05.sh),
+                            Image.asset(AssetsManager.carSignUp,
+                                height: 0.05.sh),
                             SizedBox(width: 0.02.sw),
-                            Image.asset(AssetsManager.carkSignUp, height: 0.03.sh),
+                            Image.asset(AssetsManager.carkSignUp,
+                                height: 0.03.sh),
                           ],
                         ),
                         SizedBox(height: 24.h),
@@ -118,7 +148,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           yearController: _yearController,
                           colorController: _colorController,
                           seatingCapacityController: _seatingCapacityController,
-                          transmissionTypeController: _transmissionTypeController,
+                          transmissionTypeController:
+                              _transmissionTypeController,
                           fuelTypeController: _fuelTypeController,
                           odometerController: _odometerController,
                         ),
@@ -131,7 +162,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     right: 16.w,
                     bottom: 16.h,
                     child: FloatingActionButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           final car = CarModel(
                             id: DateTime.now().millisecondsSinceEpoch,
@@ -142,10 +173,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             plateNumber: _plateNumberController.text,
                             year: int.parse(_yearController.text),
                             color: _colorController.text,
-                            seatingCapacity: int.parse(_seatingCapacityController.text),
+                            seatingCapacity:
+                                int.parse(_seatingCapacityController.text),
                             transmissionType: _transmissionTypeController.text,
                             fuelType: _fuelTypeController.text,
-                            currentOdometerReading: int.parse(_odometerController.text),
+                            currentOdometerReading:
+                                int.parse(_odometerController.text),
                             availability: true,
                             currentStatus: 'Available',
                             approvalStatus: false,
@@ -156,10 +189,17 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             ),
                             ownerId: authCubit.userModel!.id,
                           );
-                          Navigator.pushNamed(
-                            context,
-                            ScreensName.rentalOptionScreen,
-                            arguments: car,
+                          
+                          // Add car using the cubit
+                          context.read<AddCarCubit>().addCar(car);
+                          
+                          // Send notification with owner name
+                          final ownerName =
+                              '${authCubit.userModel!.firstName} ${authCubit.userModel!.lastName}';
+                          await NotificationService().sendNewCarNotification(
+                            carBrand: car.brand,
+                            carModel: car.model,
+                            ownerName: ownerName,
                           );
                         }
                       },

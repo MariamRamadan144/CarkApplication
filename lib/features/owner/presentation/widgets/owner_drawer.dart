@@ -20,8 +20,8 @@ class OwnerDrawer extends StatelessWidget {
 
   void _switchToRenter(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
-    // Toggle role to renter
-    authCubit.toggleRole();
+    // Use the new switchToRenter method
+    authCubit.switchToRenter();
     Navigator.pop(context); // Close drawer
     Navigator.pushReplacementNamed(context, ScreensName.homeScreen);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -31,8 +31,8 @@ class OwnerDrawer extends StatelessWidget {
 
   void _logout(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
-    // Clear user session
-    authCubit.userModel = null;
+    // Use the new logout method from AuthCubit
+    authCubit.logout();
     Navigator.pop(context); // Close drawer
     Navigator.pushReplacementNamed(context, ScreensName.login);
     ScaffoldMessenger.of(context).showSnackBar(

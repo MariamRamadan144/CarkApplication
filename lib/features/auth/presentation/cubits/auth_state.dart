@@ -80,9 +80,3 @@ class EditProfileFailure extends AuthState {
   final String error;
   EditProfileFailure(this.error);
 }
-
-// Role switching state
-class AuthRoleChanged extends AuthState {
-  final String newRole;
-  AuthRoleChanged(this.newRole);
-}

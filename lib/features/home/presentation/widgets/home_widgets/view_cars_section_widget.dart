@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../cars/presentation/cubits/add_car_cubit.dart';
 import '../../cubit/car_cubit.dart';
 import '../../cubit/choose_car_state.dart';
 import '../../model/car_model.dart';
 import '../../screens/booking_screens/car_details_screen.dart';
 import 'car_card_widget.dart';
+import '../../../../auth/presentation/cubits/auth_cubit.dart';
 
 class ViewCarsSectionWidget extends StatelessWidget {
   ViewCarsSectionWidget({super.key});
@@ -149,8 +151,16 @@ class ViewCarsSectionWidget extends StatelessWidget {
         final rentalState = context.watch<CarCubit>().state;
         final showWithDriver = rentalState.withDriver;
         final showWithoutDriver = rentalState.withoutDriver;
+        
+        // Get current user to filter cars
+        final authCubit = context.read<AuthCubit>();
+        final currentUser = authCubit.userModel;
+        
+        // Get cars from AddCarCubit and combine with dummy cars
+        final addCarCubit = context.read<AddCarCubit>();
+        final allCars = [...dummyCars, ...addCarCubit.getCars()];
 
-        final filteredCars = dummyCars.where((car) {
+        final filteredCars = allCars.where((car) {
           final matchesType =
               state.carType == null || car.carType == state.carType;
 
@@ -172,11 +182,19 @@ class ViewCarsSectionWidget extends StatelessWidget {
                   car.rentalOptions.availableWithoutDriver == true) ||
               (showWithDriver == null && showWithoutDriver == null);
 
+          // Ownership filter: 
+          // - If user is owner: show only their own cars
+          // - If user is renter: don't show their own cars
+          final matchesOwnership = currentUser?.role == 'owner' 
+              ? car.ownerId == currentUser?.id  // Owner sees only their cars
+              : car.ownerId != currentUser?.id; // Renter sees cars they don't own
+
           return matchesType &&
               matchesCategory &&
               matchesTransmission &&
               matchesFuel &&
-              matchesDriver;
+              matchesDriver &&
+              matchesOwnership;
         }).toList();
 
         return Column(
@@ -184,7 +202,7 @@ class ViewCarsSectionWidget extends StatelessWidget {
           children: [
             // Title - Changed to "Available Cars"
             Text(
-              'Available Cars',
+              currentUser?.role == 'owner' ? 'My Cars' : 'Available Cars',
               style: TextStyle(fontSize: 0.02.sh, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 0.02.sh),

@@ -20,7 +20,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _lastnameController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
-  late final TextEditingController _idController;
+  late final TextEditingController _nationalIdController;
 
   @override
   void initState() {
@@ -31,6 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _lastnameController = TextEditingController(text: user?.lastName);
     _emailController = TextEditingController(text: user?.email);
     _phoneController = TextEditingController(text: user?.phoneNumber);
+    _nationalIdController = TextEditingController(text: user?.national_id);
 
     super.initState();
   }
@@ -41,6 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _lastnameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _nationalIdController.dispose();
     super.dispose();
   }
 
@@ -59,7 +61,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               lastnameController: _lastnameController,
               emailController: _emailController,
               phoneController: _phoneController,
-              idController: _idController,
+              nationalIdController: _nationalIdController,
             ),
           ),
         ),

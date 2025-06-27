@@ -14,8 +14,23 @@ import 'add_car_screen.dart';
 import '../widgets/car_data_table.dart';
 import 'view_car_details_screen.dart';
 
-class ViewCarsScreen extends StatelessWidget {
+class ViewCarsScreen extends StatefulWidget {
   const ViewCarsScreen({super.key});
+
+  @override
+  State<ViewCarsScreen> createState() => _ViewCarsScreenState();
+}
+
+class _ViewCarsScreenState extends State<ViewCarsScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   void _showDeleteConfirmation(BuildContext context, CarModel car) {
     showDialog(
@@ -121,62 +136,15 @@ class ViewCarsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the cars when the screen is built
-    final cars = context.read<AddCarCubit>().getCars();
+    // Get the current user
+    final authCubit = context.read<AuthCubit>();
+    final currentUser = authCubit.userModel;
+    
+    // Get the cars and filter by current user's ID
+    final allCars = context.read<AddCarCubit>().getCars();
+    final cars = allCars.where((car) => car.ownerId == currentUser?.id).toList();
     
     return Scaffold(
-      // appBar: AppBar(
-      //   actions: [
-      //     // Notification icon
-      //     Stack(
-      //       children: [
-      //         IconButton(
-      //           icon: const Icon(Icons.notifications),
-      //           onPressed: () {
-      //             Navigator.pushNamed(context, ScreensName.ownerNotificationScreen);
-      //           },
-      //         ),
-      //         // Notification badge
-      //         Positioned(
-      //           right: 8,
-      //           top: 8,
-      //           child: Container(
-      //             padding: const EdgeInsets.all(2),
-      //             decoration: BoxDecoration(
-      //               color: Colors.red,
-      //               borderRadius: BorderRadius.circular(8),
-      //             ),
-      //             constraints: const BoxConstraints(
-      //               minWidth: 16,
-      //               minHeight: 16,
-      //             ),
-      //             child: const Text(
-      //               '0', // TODO: Replace with real unread count
-      //               style: TextStyle(
-      //                 color: Colors.white,
-      //                 fontSize: 10,
-      //                 fontWeight: FontWeight.bold,
-      //               ),
-      //               textAlign: TextAlign.center,
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //     IconButton(
-      //       icon: const Icon(Icons.add),
-      //       onPressed: () {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => const AddCarScreen()),
-      //         ).then((_) {
-      //           // Rebuild the screen when returning from AddCarScreen
-      //           (context as Element).markNeedsBuild();
-      //         });
-      //       },
-      //     ),
-      //   ],
-      // ),
       drawer: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           final authCubit = context.read<AuthCubit>();
@@ -248,26 +216,7 @@ class ViewCarsScreen extends StatelessWidget {
           );
         },
       ),
-      body: BlocConsumer<AddCarCubit, AddCarState>(
-        listener: (context, state) {
-          if (state is AddCarSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(TextManager.carDeletedSuccess.tr()),
-                backgroundColor: Colors.green,
-              ),
-            );
-            // Rebuild the screen after successful operation
-            (context as Element).markNeedsBuild();
-          } else if (state is AddCarError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
+      body: BlocBuilder<AddCarCubit, AddCarState>(
         builder: (context, state) {
           if (state is AddCarLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -334,13 +283,6 @@ class ViewCarsScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, ScreensName.addCarScreen);
-        },
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

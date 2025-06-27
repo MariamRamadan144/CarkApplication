@@ -261,11 +261,25 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                 }
 
                 // Send notification to owner after agreeing to terms
-                final renterName = 'Test Renter'; // Hardcoded for testing without login
+                final authCubit = context.read<AuthCubit>();
+                final currentUser = authCubit.userModel;
+                final renterName = currentUser != null 
+                    ? '${currentUser.firstName} ${currentUser.lastName}'
+                    : 'A renter';
+                
+                // Send FCM notification to car owner
+                await NotificationService().sendCarBookedNotification(
+                  ownerId: widget.car.ownerId,
+                  renterName: renterName,
+                  carBrand: widget.car.brand,
+                  carModel: widget.car.model,
+                );
+
+                // Also send to Firestore for in-app notifications
                 await NotificationService().sendNotificationToUser(
                   userId: widget.car.ownerId,
                   title: 'New Booking Request',
-                  body: 'You have a new booking request for your car ${widget.car.brand} ${widget.car.model} from renter $renterName.',
+                  body: 'You have a new booking request for your car ${widget.car.brand} ${widget.car.model} from $renterName.',
                   type: 'booking',
                 );
 

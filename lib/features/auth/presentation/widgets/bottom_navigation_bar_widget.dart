@@ -1,10 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../../../core/utils/text_manager.dart';
+import '../../../../core/utils/text_manager.dart';
 
-
-///DONE
 class BottomNavigationBarWidget extends StatelessWidget {
   BottomNavigationBarWidget({super.key, required this.selectedIndex, required this.onTap});
   int selectedIndex;

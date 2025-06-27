@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_cark/features/home/presentation/model/car_model.dart';
+import 'package:test_cark/features/home/presentation/cubit/car_cubit.dart';
 import 'add_car_state.dart';
 
 class AddCarCubit extends Cubit<AddCarState> {
@@ -127,14 +128,19 @@ class AddCarCubit extends Cubit<AddCarState> {
     emit(AddCarInitial());
   }
 
-  /// Handles and formats error messages
+  /// Refreshes the cars list and emits a state change for UI updates
+  void refreshCars() {
+    emit(AddCarInitial());
+  }
+
+  /// Error handling helper
   String _handleError(dynamic error) {
     if (error is String) {
       return error;
     } else if (error is Exception) {
       return error.toString();
     } else {
-      return 'An unknown error occurred';
+      return 'An unexpected error occurred';
     }
   }
 }

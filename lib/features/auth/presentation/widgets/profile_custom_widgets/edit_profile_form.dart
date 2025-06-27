@@ -22,14 +22,14 @@ class EditProfileForm extends StatelessWidget {
       required this.lastnameController,
       required this.emailController,
       required this.phoneController,
-      required this.idController});
+      required this.nationalIdController});
 
   final GlobalKey<FormState> formKey;
   final TextEditingController firstnameController;
   final TextEditingController lastnameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
-  final TextEditingController idController;
+  final TextEditingController nationalIdController;
 
   String? _validateEmail(String value) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
@@ -100,6 +100,16 @@ class EditProfileForm extends StatelessWidget {
 
           SizedBox(height: 0.02.sh),
 
+          // NID Number Field
+          CustomTextFormField(
+            controller: nationalIdController,
+            prefixIcon: Icons.perm_identity,
+            hintText: TextManager.nationalIdHint,
+            // validator: _validatePassword,
+          ),
+
+          SizedBox(height: 0.03.sh),
+
           // Upload ID Image
           const IdImageWidgets(),
 
@@ -135,7 +145,7 @@ class EditProfileForm extends StatelessWidget {
                       lastname: lastnameController.text,
                       email: emailController.text,
                       phoneNumber: phoneController.text,
-                      id: idController.text,
+                      national_id: nationalIdController.text,
                       // idImage: authCubit.idImage,
                       // licenceImage: authCubit.licenceImage,
                     );

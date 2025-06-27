@@ -4,16 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
 import '../../../../../config/routes/screens_name.dart';
 import '../../../../auth/presentation/screens/profile/profile_screen.dart';
-import '../../../../cars/presentation/screens/add_car_screen.dart';
-import '../../../../cars/presentation/screens/view_cars_screen.dart';
 import '../../widgets/home_widgets/brand_section_widget.dart';
 import '../../widgets/home_widgets/view_cars_section_widget.dart';
+import '../../widgets/home_widgets/notification_badge_widget.dart';
 import '../../widgets/rental_widgets/filter_button.dart';
 import '../../widgets/rental_widgets/rental_summary_card.dart';
 import '../booking_screens/payment_screen.dart';
 import '../booking_screens/rental_search_screen.dart';
 import 'contact_help_screen.dart';
 import 'feedback_screen.dart';
+import 'notification_test_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../auth/presentation/cubits/auth_cubit.dart';
 
@@ -30,8 +30,8 @@ class HomeScreen extends StatelessWidget {
 
   void _logout(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
-    // Clear user session
-    authCubit.userModel = null;
+    // Use the new logout method from AuthCubit
+    authCubit.logout();
     Navigator.pop(context); // Close drawer
     Navigator.pushReplacementNamed(context, ScreensName.login);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -51,41 +51,18 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           actions: [
-            // Notification icon with badge (placeholder for unread count)
-            Stack(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.notifications),
-                  onPressed: () {
-                    Navigator.pushNamed(context, ScreensName.ownerNotificationScreen);
-                  },
-                ),
-                // Example badge (replace with real unread count logic)
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
-                    ),
-                    child: const Text(
-                      '0', // Replace with unread count
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
+            // Notification icon with badge
+            NotificationBadgeWidget(
+              onTap: () {
+                // Navigate to appropriate notification screen based on user role
+                final authCubit = context.read<AuthCubit>();
+                final user = authCubit.userModel;
+                if (user?.role == 'owner') {
+                  Navigator.pushNamed(context, ScreensName.ownerNotificationScreen);
+                } else {
+                  Navigator.pushNamed(context, ScreensName.renterNotificationScreen);
+                }
+              },
             ),
           ],
         ),
@@ -120,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         if (user != null)
                           Text(
-                            'Renter',
+                            user.role == 'owner' ? 'Car Owner' : 'Renter',
                             style: const TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
@@ -145,16 +122,34 @@ class HomeScreen extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.directions_car),
                     title: const Text('Switch to Owner'),
-                    onTap: () {
+                    onTap: () async {
                       final authCubit = context.read<AuthCubit>();
-                      authCubit.toggleRole();
+                      await authCubit.switchToOwner();
                       Navigator.pop(context); // Close drawer
+                      
+                      // Navigate to OwnerHomeScreen
                       Navigator.pushReplacementNamed(context, ScreensName.ownerHomeScreen);
+                      
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Switched to Owner mode')),
                       );
                     },
                   ),
+                  // Switch to Renter (only show if user is owner)
+                  if (user?.role == 'owner')
+                    ListTile(
+                      leading: const Icon(Icons.switch_account),
+                      title: const Text('Switch to Renter'),
+                      onTap: () async {
+                        final authCubit = context.read<AuthCubit>();
+                        await authCubit.switchToRenter();
+                        Navigator.pop(context); // Close drawer
+                        Navigator.pushReplacementNamed(context, ScreensName.homeScreen);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Switched to Renter mode')),
+                        );
+                      },
+                    ),
                   ListTile(
                     leading: const Icon(Icons.history),
                     title: const Text('Booking History'),
@@ -178,6 +173,13 @@ class HomeScreen extends StatelessWidget {
                     title: const Text('Feedback'),
                     onTap: () =>
                         _navigateAndCloseDrawer(context, FeedbackScreen()),
+                  ),
+                  // Test Notifications (for development)
+                  ListTile(
+                    leading: const Icon(Icons.notifications_active),
+                    title: const Text('Test Notifications'),
+                    onTap: () =>
+                        _navigateAndCloseDrawer(context, const NotificationTestScreen()),
                   ),
                   const Divider(),
                   ListTile(

@@ -10,14 +10,15 @@ class OwnerNotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.read<AuthCubit>().userModel;
     final userId = user?.id ?? '1';
-    
+    print('###################################Current userId for Notification Screen: $userId'); //
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notifications'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('Notification')
+            .collection('notifications')
             .where('userId', isEqualTo: userId)
             .orderBy('timestamp', descending: true)
             .snapshots(),
@@ -27,7 +28,8 @@ class OwnerNotificationScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
+                  Icon(Icons.error_outline,
+                      size: 64, color: Colors.grey.shade400),
                   const SizedBox(height: 16),
                   Text(
                     'Error loading notifications',
@@ -42,13 +44,13 @@ class OwnerNotificationScreen extends StatelessWidget {
               ),
             );
           }
-          
+
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          
+
           final docs = snapshot.data!.docs;
-          
+
           if (docs.isEmpty) {
             return Center(
               child: Column(
@@ -81,7 +83,7 @@ class OwnerNotificationScreen extends StatelessWidget {
               ),
             );
           }
-          
+
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: docs.length,
@@ -91,12 +93,12 @@ class OwnerNotificationScreen extends StatelessWidget {
               final date = timestamp?.toDate();
               final isRead = data['read'] ?? false;
               final notificationType = data['type'] ?? 'general';
-              
+
               String formattedTime = '';
               if (date != null) {
                 final now = DateTime.now();
                 final difference = now.difference(date);
-                
+
                 if (difference.inDays > 0) {
                   formattedTime = '${difference.inDays}d ago';
                 } else if (difference.inHours > 0) {
@@ -107,11 +109,11 @@ class OwnerNotificationScreen extends StatelessWidget {
                   formattedTime = 'Just now';
                 }
               }
-              
+
               // Choose icon based on notification type
               IconData notificationIcon;
               Color iconColor;
-              
+
               switch (notificationType) {
                 case 'booking':
                   notificationIcon = Icons.calendar_today;
@@ -129,7 +131,7 @@ class OwnerNotificationScreen extends StatelessWidget {
                   notificationIcon = Icons.notifications;
                   iconColor = Colors.grey;
               }
-              
+
               return Card(
                 margin: const EdgeInsets.only(bottom: 12),
                 color: isRead ? Colors.grey.shade50 : Colors.white,
@@ -164,7 +166,7 @@ class OwnerNotificationScreen extends StatelessWidget {
                   onTap: () {
                     // Mark as read
                     FirebaseFirestore.instance
-                        .collection('Notification')
+                        .collection('notifications')
                         .doc(docs[index].id)
                         .update({'read': true});
                   },

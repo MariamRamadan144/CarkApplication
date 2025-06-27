@@ -11,6 +11,7 @@ import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
 import 'features/cars/presentation/cubits/add_car_cubit.dart';
 import 'features/home/presentation/cubit/booking_cubit.dart';
 import 'features/home/presentation/cubit/car_cubit.dart';
+import 'features/notifications/presentation/cubits/notification_cubit.dart';
 
 class Cark extends StatelessWidget {
   const Cark({super.key});
@@ -47,8 +48,9 @@ class Cark extends StatelessWidget {
                 create: (context) => DocumentCubit(),
               ),
               BlocProvider(
-                create: (context) => NavigationCubit(),
+                create: (context) => NotificationCubit(),
               ),
+
             ],
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
@@ -60,7 +62,7 @@ class Cark extends StatelessWidget {
               theme: lightTheme,
               // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.homeScreen // Initial screen
+              initialRoute: ScreensName.signup // Initial screen
             ),
           );
         },
