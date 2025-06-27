@@ -1,9 +1,8 @@
 // AvailabilityFilterScreen.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AvailabilityFilterScreen extends StatefulWidget {
-  const AvailabilityFilterScreen({Key? key}) : super(key: key);
+  const AvailabilityFilterScreen({super.key});
 
   @override
   _AvailabilityFilterScreenState createState() => _AvailabilityFilterScreenState();

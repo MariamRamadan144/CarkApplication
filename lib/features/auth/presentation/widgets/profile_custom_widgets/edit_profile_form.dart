@@ -13,6 +13,7 @@ import '../../cubits/auth_cubit.dart';
 import 'id_image_widgets.dart';
 import 'licence_image_widget.dart';
 
+///DONE
 class EditProfileForm extends StatelessWidget {
   const EditProfileForm(
       {super.key,
@@ -20,24 +21,26 @@ class EditProfileForm extends StatelessWidget {
       required this.firstnameController,
       required this.lastnameController,
       required this.emailController,
-      required this.phoneController});
+      required this.phoneController,
+      required this.nationalIdController});
 
   final GlobalKey<FormState> formKey;
   final TextEditingController firstnameController;
   final TextEditingController lastnameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
+  final TextEditingController nationalIdController;
 
   String? _validateEmail(String value) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) return TextManager.email_invalid.tr();
+    if (!emailRegex.hasMatch(value)) return TextManager.emailInvalid.tr();
     return null;
   }
 
   // Phone Number Validator
   String? _validatePhone(String value) {
     final phoneRegex = RegExp(r'^01[0-9]{9}$');
-    if (!phoneRegex.hasMatch(value)) return TextManager.phone_invalid.tr();
+    if (!phoneRegex.hasMatch(value)) return TextManager.phoneInvalid.tr();
     return null;
   }
 
@@ -50,7 +53,7 @@ class EditProfileForm extends StatelessWidget {
         children: [
           // Edit Profile
           Text(
-            TextManager.edit_profile_text.tr(),
+            TextManager.editProfileText.tr(),
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -63,7 +66,7 @@ class EditProfileForm extends StatelessWidget {
           CustomTextFormField(
             controller: firstnameController,
             prefixIcon: Icons.person,
-            hintText: TextManager.first_name_hint,
+            hintText: TextManager.firstNameHint,
           ),
 
           SizedBox(height: 0.02.sh),
@@ -72,7 +75,7 @@ class EditProfileForm extends StatelessWidget {
           CustomTextFormField(
             controller: lastnameController,
             prefixIcon: Icons.person,
-            hintText: TextManager.last_name_hint,
+            hintText: TextManager.lastNameHint,
           ),
 
           SizedBox(height: 0.02.sh),
@@ -81,7 +84,7 @@ class EditProfileForm extends StatelessWidget {
           CustomTextFormField(
             controller: emailController,
             prefixIcon: Icons.email,
-            hintText: TextManager.email_hint,
+            hintText: TextManager.emailHint,
             validator: _validateEmail,
           ),
 
@@ -91,11 +94,21 @@ class EditProfileForm extends StatelessWidget {
           CustomTextFormField(
             controller: phoneController,
             prefixIcon: Icons.phone,
-            hintText: TextManager.phone_hint,
+            hintText: TextManager.phoneHint,
             validator: _validatePhone,
           ),
 
           SizedBox(height: 0.02.sh),
+
+          // NID Number Field
+          CustomTextFormField(
+            controller: nationalIdController,
+            prefixIcon: Icons.perm_identity,
+            hintText: TextManager.nationalIdHint,
+            // validator: _validatePassword,
+          ),
+
+          SizedBox(height: 0.03.sh),
 
           // Upload ID Image
           const IdImageWidgets(),
@@ -132,6 +145,7 @@ class EditProfileForm extends StatelessWidget {
                       lastname: lastnameController.text,
                       email: emailController.text,
                       phoneNumber: phoneController.text,
+                      national_id: nationalIdController.text,
                       // idImage: authCubit.idImage,
                       // licenceImage: authCubit.licenceImage,
                     );

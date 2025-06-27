@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 
+/// DONE
 class ProfilePicture extends StatefulWidget {
   const ProfilePicture({super.key});
 
@@ -12,56 +13,51 @@ class ProfilePicture extends StatefulWidget {
 }
 
 class _ProfilePictureState extends State<ProfilePicture> {
-  /// 1
-  // File? _imageFile;
-
-  // Future<void> _pickImageFromCamera() async {
-  //   final picker = ImagePicker();
-  //   final pickedFile = await picker.pickImage(source: ImageSource.camera);
-  //
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _imageFile = File(pickedFile.path);
-  //     });
-  //   }
-  // }
-
-   @override
+  @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      final authCubit = context.read<AuthCubit>();
-      return Center(
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              backgroundImage: authCubit.profileImage.isNotEmpty
-                  ? FileImage(File(authCubit.profileImage))
-                  : null,
-              child: authCubit.profileImage.isEmpty
-                  ? Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-            ),
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Theme.of(context).colorScheme.onSecondary,
-              child: IconButton(
-                icon: Icon(Icons.edit,
-                    color: Theme.of(context).colorScheme.onPrimary, size: 18),
-                onPressed: () {
-                  authCubit.uploadProfileImage();
-                },
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (previous, current) =>
+          current is UploadProfileScreenImageSuccess ||
+          current is UploadProfileScreenImageFailure,
+
+      builder: (context, state) {
+        final authCubit = context.read<AuthCubit>();
+        return Center(
+          child: Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              // Profile picture
+              CircleAvatar(
+                radius: 60,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundImage: authCubit.profileImage.isNotEmpty
+                    ? FileImage(File(authCubit.profileImage))
+                    : null,
+                child: authCubit.profileImage.isEmpty
+                    ? Icon(
+                        Icons.person,
+                        size: 60,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      )
+                    : null,
               ),
-            ),
-          ],
-        ),
-      );
-    });
+
+              // Edit button
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                child: IconButton(
+                  icon: Icon(Icons.edit,
+                      color: Theme.of(context).colorScheme.onPrimary, size: 18),
+                  onPressed: () {
+                    authCubit.uploadProfileImage();
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

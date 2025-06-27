@@ -6,10 +6,14 @@ import 'package:test_cark/config/routes/routes_manager.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/config/themes/light_theme.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:test_cark/features/auth/presentation/cubits/document_cubit.dart';
 import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
 import 'features/cars/presentation/cubits/add_car_cubit.dart';
 import 'features/home/presentation/cubit/booking_cubit.dart';
 import 'features/home/presentation/cubit/car_cubit.dart';
+import 'features/home/presentation/cubit/location_tracking_cubit.dart';
+import 'features/handover/presentation/cubits/renter_drop_off_cubit.dart';
+import 'features/handover/presentation/cubits/owner_drop_off_cubit.dart';
 
 class Cark extends StatelessWidget {
   const Cark({super.key});
@@ -41,10 +45,19 @@ class Cark extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) => AddCarCubit(),
-              )
-              // BlocProvider(
-              //   create: (context) => RentalCubit(),
-              // ),
+              ),
+              BlocProvider(
+                create: (context) => DocumentCubit(),
+              ),
+              BlocProvider(
+                create: (context) => LocationTrackingCubit(),
+              ),
+              BlocProvider(
+                create: (context) => RenterDropOffCubit(),
+              ),
+              BlocProvider(
+                create: (context) => OwnerDropOffCubit(),
+              ),
             ],
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
@@ -56,7 +69,7 @@ class Cark extends StatelessWidget {
               theme: lightTheme,
               // darkTheme: ThemeData.dark(),
               themeMode: ThemeMode.light,
-              initialRoute: ScreensName.ownerNavigationScreen, // Initial screen
+              initialRoute: ScreensName.splash // Changed back to splash screen
             ),
           );
         },

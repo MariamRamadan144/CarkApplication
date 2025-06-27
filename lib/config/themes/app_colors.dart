@@ -10,5 +10,7 @@ abstract class AppColors {
   static const Color green = Colors.green;
   static Color lightBlack = Colors.black.withOpacity(0.40);
 
+  static var primaryColor;
+
 
 }

@@ -3,21 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../home/presentation/screens/booking_screens/rental_search_screen.dart';
 import 'document_upload_screen.dart';
-
-enum DocumentType {
-  IDFront,
-  IDBack,
-  DriverLicense,
-  DrugsTest,
-  CriminalRecord,
-  DrivingViolations,
-  ProfilePhoto,
-  CarPhoto,
-  CarLicense,
-  VehicleViolations,
-  Insurance,
-  CarTest,
-}
+import '../../widgets/profile_custom_widgets/document_upload_flow.dart' show DocumentType;
 
 class DocumentUploadFlow extends StatefulWidget {
   const DocumentUploadFlow({super.key});
@@ -29,18 +15,18 @@ class DocumentUploadFlow extends StatefulWidget {
 class _DocumentUploadFlowState extends State<DocumentUploadFlow> {
   // Only require ID front and back as mandatory
   final List<DocumentType> _documentTypes = [
-    DocumentType.IDFront,
-    DocumentType.IDBack,
-    DocumentType.DriverLicense,
-    DocumentType.DrugsTest,
-    DocumentType.CriminalRecord,
-    DocumentType.DrivingViolations,
-    DocumentType.ProfilePhoto,
-    DocumentType.CarPhoto,
-    DocumentType.CarLicense,
-    DocumentType.VehicleViolations,
-    DocumentType.Insurance,
-    DocumentType.CarTest,
+    DocumentType.idFront,
+    DocumentType.idBack,
+    DocumentType.driverLicense,
+    DocumentType.drugsTest,
+    DocumentType.criminalRecord,
+    DocumentType.drivingViolations,
+    DocumentType.profilePhoto,
+    DocumentType.carPhoto,
+    DocumentType.carLicense,
+    DocumentType.vehicleViolations,
+    DocumentType.insurance,
+    DocumentType.carTest,
   ];
   int _currentIndex = 0;
   final Map<DocumentType, File> _uploadedDocuments = {};

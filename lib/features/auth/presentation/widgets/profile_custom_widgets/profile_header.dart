@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/utils/text_manager.dart';
 
+
+///DONE
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 

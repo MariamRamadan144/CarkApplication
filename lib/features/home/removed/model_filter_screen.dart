@@ -1,9 +1,8 @@
 // ModelFilterScreen.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ModelFilterScreen extends StatefulWidget {
-  const ModelFilterScreen({Key? key}) : super(key: key);
+  const ModelFilterScreen({super.key});
 
   @override
   _ModelFilterScreenState createState() => _ModelFilterScreenState();

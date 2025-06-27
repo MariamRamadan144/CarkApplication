@@ -5,9 +5,10 @@ import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/text_manager.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import '../../../../../core/utils/assets_manager.dart';
-import '../../widgets/auth_options_text.dart';
+import '../../widgets/shared/auth_options_text.dart';
 import '../../widgets/signup_custom_widgets/signup_form.dart';
 
+/// DONE
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -49,44 +50,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0.08.sw, vertical: 0.02.sh),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Car Image
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(AssetsManager.carSignUp, height: 0.05.sh),
-                    SizedBox(width: 0.02.sw),
-                    Image.asset(AssetsManager.carkSignUp, height: 0.03.sh),
-                  ],
-                ),
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is SignUpSuccess) {
+          print("✅ BlocListener caught SignUpSuccess");
+          Navigator.pushReplacementNamed(context, ScreensName.login);
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: 0.08.sw, vertical: 0.03.sh),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // Car Image
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(AssetsManager.carSignUp, height: 0.05.sh),
+                      SizedBox(width: 0.02.sw),
+                      Image.asset(AssetsManager.carkSignUp, height: 0.03.sh),
+                    ],
+                  ),
 
-                // Signup with name , email , phone number and password
-                SignupForm(
-                  formKey: _formKey,
-                  firstnameController: _firstnameController,
-                  lastnameController: _lastnameController,
-                  emailController: _emailController,
-                  phoneController: _phoneController,
-                  passwordController: _passwordController,
-                  nationalIdController: _nationalIdController,
-                  headerText: TextManager.create_account,
-                ),
+                  SizedBox(height: 0.05.sh),
 
-                SizedBox(height: 0.02.sh),
+                  // Signup with name , email , phone number and password
+                  SignupForm(
+                    formKey: _formKey,
+                    firstnameController: _firstnameController,
+                    lastnameController: _lastnameController,
+                    emailController: _emailController,
+                    phoneController: _phoneController,
+                    passwordController: _passwordController,
+                    nationalIdController: _nationalIdController,
+                    headerText: TextManager.createAccount,
+                  ),
 
-                // Signup Or Login
-                const AuthOptionsText(
-                  text1: TextManager.already_have_account,
-                  text2: TextManager.login_text,
-                  screenName: ScreensName.login,
-                )
-              ],
+                  SizedBox(height: 0.02.sh),
+
+                  // Signup Or Login
+                  const AuthOptionsText(
+                    text1: TextManager.alreadyHaveAccount,
+                    text2: TextManager.loginText,
+                    screenName: ScreensName.login,
+                  )
+                ],
+              ),
             ),
           ),
         ),

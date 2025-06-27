@@ -1,9 +1,8 @@
 // CarCategoryFilterScreen.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CarCategoryFilterScreen extends StatefulWidget {
-  const CarCategoryFilterScreen({Key? key}) : super(key: key);
+  const CarCategoryFilterScreen({super.key});
 
   @override
   _CarCategoryFilterScreenState createState() => _CarCategoryFilterScreenState();

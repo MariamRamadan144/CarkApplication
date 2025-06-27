@@ -1,0 +1,2 @@
+D:/Yousef/GithubClones/NahlaYousefCark/android/app/.cxx/Debug/5b254e15/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Yousef/GithubClones/NahlaYousefCark/android/app/.cxx/Debug/5b254e15/armeabi-v7a/CMakeFiles/rebuild_cache.dir

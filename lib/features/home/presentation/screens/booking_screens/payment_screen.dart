@@ -2,11 +2,8 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'package:test_cark/core/utils/custom_toast.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class PaymentScreen extends material.StatefulWidget {
   final double totalPrice;
@@ -20,57 +17,6 @@ class PaymentScreen extends material.StatefulWidget {
 class _PaymentScreenState extends material.State<PaymentScreen> {
   String _selectedPaymentMethod = 'visa';
   bool _isLoading = false;
-  Map<String, dynamic>? _paymentIntent;
-
-  // IMPORTANT: Replace with your backend endpoint
-  final String _paymentIntentUrl =
-      'https://your-backend-server.com/create-payment-intent';
-
-  // IMPORTANT: Replace with your publishable key from Stripe
-  final String _stripePublishableKey =
-      'pk_test_51...'; // Example, replace with your actual key
-
-  @override
-  void initState() {
-    super.initState();
-    Stripe.publishableKey = _stripePublishableKey;
-  }
-
-  /// SIMULATED Backend Call
-  /// In a real app, this function would make an HTTP request to your server.
-  Future<Map<String, dynamic>> _createPaymentIntent() async {
-    /*
-    // REAL IMPLEMENTATION EXAMPLE:
-    try {
-      final response = await http.post(
-        Uri.parse(_paymentIntentUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'amount': (widget.totalPrice * 100).toInt(), // Amount in cents
-          'currency': 'usd',
-          'payment_method_types': ['card'],
-        }),
-      );
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        throw Exception('Failed to create payment intent');
-      }
-    } catch (e) {
-      // Handle server errors
-      print(e.toString());
-      rethrow;
-    }
-    */
-
-    // For demonstration, we return a mock response.
-    // The 'client_secret' is what Stripe's SDK uses to confirm the payment.
-    await Future.delayed(const Duration(seconds: 1));
-    return {
-      'client_secret': 'pi_..._secret_...', // This is a fake secret
-      'amount': (widget.totalPrice * 100).toInt(),
-    };
-  }
 
   Future<void> _handlePayment() async {
     setState(() {
@@ -78,27 +24,11 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
     });
 
     try {
-      // 1. Create Payment Intent on the backend
-      _paymentIntent = await _createPaymentIntent();
-      final clientSecret = _paymentIntent!['client_secret'];
-
-      // 2. Initialize the payment sheet
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: 'Cark Rentals',
-          style: material.ThemeMode.light,
-        ),
-      );
-
-      // 3. Present the payment sheet
-      await Stripe.instance.presentPaymentSheet();
-
-      // 4. Handle success
+      // Simulate payment processing
+      await Future.delayed(const Duration(seconds: 2));
+      
+      // Simulate successful payment
       _showPaymentResult('Success!', 'Your payment was processed successfully.');
-    } on StripeException catch (e) {
-      _showPaymentResult('Payment Failed', 'Error: ${e.error.localizedMessage}',
-          isError: true);
     } catch (e) {
       _showPaymentResult('Error', 'An unexpected error occurred.',
           isError: true);

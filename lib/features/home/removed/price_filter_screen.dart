@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 
 class PriceFilterScreen extends StatefulWidget {
-  const PriceFilterScreen({Key? key}) : super(key: key);
+  const PriceFilterScreen({super.key});
 
   @override
   _PriceFilterScreenState createState() => _PriceFilterScreenState();

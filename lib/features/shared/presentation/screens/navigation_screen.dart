@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_cark/features/auth/presentation/screens/profile/profile_screen.dart';
 import 'package:test_cark/features/home/presentation/screens/home_screens/home_screen.dart';
 import 'package:test_cark/features/notifications/presentation/screens/renter_notification_screen.dart';
-
-import '../../../auth/presentation/widgets/bottom_navigation_bar_widget.dart';
+import '../../../auth/presentation/widgets/shared/bottom_navigation_bar_widget.dart';
 import '../../cubit/navigation_cubit.dart';
 import '../../cubit/navigation_state.dart';
 

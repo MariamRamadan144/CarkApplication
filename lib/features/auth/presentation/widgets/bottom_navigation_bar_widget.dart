@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/utils/text_manager.dart';
 
@@ -23,7 +22,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
         BottomNavigationBarItem(
             icon: const Icon(Icons.notifications_outlined),
             activeIcon: const Icon(Icons.notifications),
-            label: TextManager.renter_notification.tr()),
+            label: TextManager.renterNotification.tr()),
         BottomNavigationBarItem(
             icon: const Icon(Icons.person_outline),
             activeIcon: const Icon(Icons.person),

@@ -1,9 +1,8 @@
 // TransmissionTypeFilterScreen.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TransmissionTypeFilterScreen extends StatefulWidget {
-  const TransmissionTypeFilterScreen({Key? key}) : super(key: key);
+  const TransmissionTypeFilterScreen({super.key});
 
   @override
   _TransmissionTypeFilterScreenState createState() => _TransmissionTypeFilterScreenState();

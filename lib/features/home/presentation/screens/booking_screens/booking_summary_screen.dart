@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/themes/app_colors.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
+import 'package:test_cark/features/home/presentation/screens/booking_screens/request_sent_screen.dart';
+import '../../../../auth/presentation/widgets/profile_custom_widgets/document_upload_flow.dart';
 import '../../model/car_model.dart';
 import '../../model/location_model.dart';
 import '../../cubit/car_cubit.dart';
@@ -237,7 +239,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
       child: ElevatedButton(
         onPressed: _agreedToTerms
             ? () {
-                final stops = context.read<CarCubit>().state.stops;
+                var stops = context.read<CarCubit>().state.stops;
+                stops = List.from(stops); // Make mutable copy
 
                 // Ensure there's at least a pickup and return station, even if no intermediate stops are added
                 if (stops.isEmpty) {
@@ -256,16 +259,32 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                   );
                   return;
                 }
-                
-                Navigator.pushNamed(
-                  context,
-                  ScreensName.tripManagementScreen,
-                  arguments: {
-                    'car': widget.car,
-                    'totalPrice': widget.totalPrice,
-                    'stops': stops,
-                  },
-                );
+
+                // Branch by car rental option
+                if (widget.car.rentalOptions.availableWithDriver) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RequestSentScreen(
+                        car: widget.car,
+                        totalPrice: widget.totalPrice,
+                        stops: stops,
+                      ),
+                    ),
+                  );
+                } else if (widget.car.rentalOptions.availableWithoutDriver) {
+                  // For cars without driver, go directly to RequestSentScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RequestSentScreen(
+                        car: widget.car,
+                        totalPrice: widget.totalPrice,
+                        stops: stops,
+                      ),
+                    ),
+                  );
+                }
               }
             : null,
         style: ElevatedButton.styleFrom(

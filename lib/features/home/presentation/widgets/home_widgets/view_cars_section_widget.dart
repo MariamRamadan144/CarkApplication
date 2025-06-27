@@ -1,11 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/utils/text_manager.dart';
 import '../../cubit/car_cubit.dart';
 import '../../cubit/choose_car_state.dart';
-import '../../cubit/rental_cubit.dart';
 import '../../model/car_model.dart';
 import '../../screens/booking_screens/car_details_screen.dart';
 import 'car_card_widget.dart';

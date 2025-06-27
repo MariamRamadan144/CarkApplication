@@ -11,7 +11,11 @@ import '../../features/cars/presentation/screens/add_car_screen.dart';
 import '../../features/cars/presentation/screens/car_rental_options_screen.dart';
 import '../../features/cars/presentation/screens/car_usage_policy_screen.dart';
 import '../../features/cars/presentation/screens/view_cars_screen.dart';
+import '../../features/handover/presentation/cubits/renter_handover_cubit.dart';
+import '../../features/handover/presentation/screens/renter_handover_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/booking_history_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/car_details_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/trip_details_screen.dart';
 import '../../features/home/presentation/screens/home_screens/filter_screen.dart';
 import '../../features/home/presentation/screens/home_screens/home_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/rental_search_screen.dart';
@@ -22,12 +26,21 @@ import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/booking_summary_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/trip_management_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/payment_screen.dart';
+import '../../features/home/presentation/screens/location_tracking_screen.dart';
 import '../../features/home/presentation/model/car_model.dart';
 import '../../features/home/presentation/model/location_model.dart';
 import '../../features/owner/presentation/screens/owner_navigation_screen.dart';
 import '../../features/owner/presentation/screens/owner_home_screen.dart';
 import '../../features/owner/presentation/screens/owner_profile_screen.dart';
 import '../../features/owner/presentation/screens/owner_notification_screen.dart' hide OwnerNotificationScreen;
+import '../../features/handover/presentation/screens/handover_screen.dart';
+import '../../features/handover/presentation/screens/handover_confirmation_screen.dart';
+import '../../features/renter/presentation/screens/renter_handover_screen.dart';
+import '../../features/handover/presentation/screens/renter_drop_off_screen.dart';
+import '../../features/handover/presentation/screens/owner_drop_off_screen.dart';
+import '../../features/handover/presentation/models/post_trip_handover_model.dart';
+import '../../features/handover/presentation/models/handover_log_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class RoutesManager {
   static Route<dynamic>? onGenerateRoute(RouteSettings routeSettings) {
@@ -72,11 +85,36 @@ abstract class RoutesManager {
         final car = args['car'] as CarModel;
         final totalPrice = args['totalPrice'] as double;
         final stops = args['stops'] as List<dynamic>;
+        
+        // Convert stops to LocationModel list safely
+        List<LocationModel> locationStops = [];
+        try {
+          for (var stop in stops) {
+            if (stop is LocationModel) {
+              locationStops.add(stop);
+            } else if (stop is Map<String, dynamic>) {
+              // Handle case where stop is a map that needs to be converted to LocationModel
+              locationStops.add(LocationModel(
+                name: stop['name']?.toString() ?? '',
+                address: stop['address']?.toString() ?? '',
+                coordinates: stop['coordinates'] is Map<String, dynamic> 
+                  ? Map<String, double>.from(stop['coordinates'])
+                  : null,
+                description: stop['description']?.toString(),
+              ));
+            }
+          }
+        } catch (e) {
+          // If conversion fails, use empty list
+          print('Error converting stops to LocationModel: $e');
+          locationStops = [];
+        }
+        
         return MaterialPageRoute(
             builder: (context) => TripManagementScreen(
                   car: car,
                   totalPrice: totalPrice,
-                  stops: stops.cast<LocationModel>(),
+                  stops: locationStops,
                 ));
       case ScreensName.paymentScreen:
         final args = routeSettings.arguments as Map<String, dynamic>;
@@ -92,7 +130,7 @@ abstract class RoutesManager {
         return MaterialPageRoute(
             builder: (context) => const RenterNotificationScreen());
 
-      case ScreensName.ShowCarDetailsScreen:
+      case ScreensName.showCarDetailsScreen:
         if (routeSettings.arguments is CarModel) {
           return MaterialPageRoute(
             builder: (context) => ViewCarDetailsScreen(car: routeSettings.arguments as CarModel),
@@ -106,6 +144,9 @@ abstract class RoutesManager {
 
       case ScreensName.viewCarsScreen:
         return MaterialPageRoute(builder: (context) => const ViewCarsScreen());
+
+      case ScreensName.bookingHistoryScreen:
+        return MaterialPageRoute(builder: (context) => const BookingHistoryScreen());
 
       case ScreensName.addCarScreen:
         return MaterialPageRoute(builder: (context) => const AddCarScreen());
@@ -153,6 +194,76 @@ abstract class RoutesManager {
       case ScreensName.ownerNotificationScreenMain:
         return MaterialPageRoute(builder: (context) => const OwnerNotificationScreen());
 
+      case ScreensName.handoverScreen:
+        return MaterialPageRoute(builder: (context) => const HandoverScreen());
+
+      case ScreensName.handoverConfirmationScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HandoverConfirmationScreen(),
+        );
+
+      case ScreensName.renterHandoverScreen:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) => RenterHandoverCubit(),
+            child: const RenterHandoverScreen(),
+          ),
+        );
+
+      case ScreensName.tripDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) => const TripDetailsScreen(),
+        );
+
+      case ScreensName.locationTrackingScreen:
+        if (routeSettings.arguments is CarModel) {
+          return MaterialPageRoute(
+            builder: (context) => LocationTrackingScreen(
+              car: routeSettings.arguments as CarModel,
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(child: Text('Error: No car data provided for location tracking')),
+          ),
+        );
+
+      case ScreensName.renterDropOffScreen:
+        if (routeSettings.arguments is Map<String, dynamic>) {
+          final args = routeSettings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => RenterDropOffScreen(
+              tripId: args['tripId'] as String,
+              carId: args['carId'] as String,
+              renterId: args['renterId'] as String,
+              ownerId: args['ownerId'] as String,
+              paymentMethod: args['paymentMethod'] as String,
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(child: Text('Error: Missing required arguments for renter drop-off')),
+          ),
+        );
+
+      case ScreensName.ownerDropOffScreen:
+        if (routeSettings.arguments is Map<String, dynamic>) {
+          final args = routeSettings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => OwnerDropOffScreen(
+              handoverData: args['handoverData'] as PostTripHandoverModel,
+              logs: args['logs'] as List<HandoverLogModel>,
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(child: Text('Error: Missing required arguments for owner drop-off')),
+          ),
+        );
+
       default:
         return MaterialPageRoute(builder: (context) {
           return const Scaffold(
@@ -163,4 +274,4 @@ abstract class RoutesManager {
         });
     }
   }
-}
+} 

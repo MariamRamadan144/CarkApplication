@@ -3,11 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/routes/screens_name.dart';
 import 'package:test_cark/core/utils/assets_manager.dart';
 import '../../../../../core/utils/text_manager.dart';
-import '../../widgets/auth_options_text.dart';
+import '../../widgets/shared/auth_options_text.dart';
 import '../../widgets/login_custom_widgets/login_form.dart';
 import '../../widgets/login_custom_widgets/login_header.dart';
 
-
+/// DONE
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
@@ -40,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.sizeOf(context).width;
-    // 1
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -60,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // Signup or login
               const AuthOptionsText(
-                text1: TextManager.no_account_question,
-                text2: TextManager.sign_up_text,
+                text1: TextManager.noAccountQuestion,
+                text2: TextManager.signUpText,
                 screenName: ScreensName.signup,
               ),
 

@@ -1,9 +1,8 @@
 // FuelTypeFilterScreen.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FuelTypeFilterScreen extends StatefulWidget {
-  const FuelTypeFilterScreen({Key? key}) : super(key: key);
+  const FuelTypeFilterScreen({super.key});
 
   @override
   _FuelTypeFilterScreenState createState() => _FuelTypeFilterScreenState();

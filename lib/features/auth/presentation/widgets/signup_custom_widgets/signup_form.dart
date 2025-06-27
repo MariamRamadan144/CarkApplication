@@ -10,7 +10,7 @@ import '../../../../../core/utils/custom_toast.dart';
 import '../../../../../core/utils/text_manager.dart';
 import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../core/widgets/custom_text_form_field.dart';
-import '../../screens/upload_documents/document_upload_flow.dart';
+import '../profile_custom_widgets/document_upload_flow.dart';
 import '../profile_custom_widgets/licence_image_widget.dart';
 import 'id_image_upload_widget.dart';
 
@@ -40,20 +40,20 @@ class SignupForm extends StatelessWidget {
   // Email Validator
   String? _validateEmail(String value) {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) return TextManager.email_invalid.tr();
+    if (!emailRegex.hasMatch(value)) return TextManager.emailInvalid.tr();
     return null;
   }
 
   // Phone Number Validator
   String? _validatePhone(String value) {
     final phoneRegex = RegExp(r'^01[0-9]{9}$');
-    if (!phoneRegex.hasMatch(value)) return TextManager.phone_invalid.tr();
+    if (!phoneRegex.hasMatch(value)) return TextManager.phoneInvalid.tr();
     return null;
   }
 
   // Password Validator
   String? _validatePassword(String value) {
-    if (value.length < 6) return TextManager.password_too_short.tr();
+    if (value.length < 6) return TextManager.passwordTooShort.tr();
     return null;
   }
 
@@ -62,7 +62,7 @@ class SignupForm extends StatelessWidget {
     final nationalIdRegex = RegExp(
         r"^([23])\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])(0[1-4]|1[1-9]|2[1-9]|3[1-5]|88)\d{5}$");
     if (!nationalIdRegex.hasMatch(value))
-      return TextManager.national_id_invalid.tr();
+      return TextManager.nationalIdInvalid.tr();
     return null;
   }
 
@@ -88,7 +88,7 @@ class SignupForm extends StatelessWidget {
           CustomTextFormField(
             controller: firstnameController,
             prefixIcon: Icons.person,
-            hintText: TextManager.first_name_hint,
+            hintText: TextManager.firstNameHint,
           ),
 
           SizedBox(height: 0.02.sh),
@@ -97,7 +97,7 @@ class SignupForm extends StatelessWidget {
           CustomTextFormField(
             controller: lastnameController,
             prefixIcon: Icons.person,
-            hintText: TextManager.last_name_hint,
+            hintText: TextManager.lastNameHint,
           ),
 
           SizedBox(height: 0.02.sh),
@@ -106,7 +106,7 @@ class SignupForm extends StatelessWidget {
           CustomTextFormField(
             controller: emailController,
             prefixIcon: Icons.email,
-            hintText: TextManager.email_hint,
+            hintText: TextManager.emailHint,
             validator: _validateEmail,
           ),
 
@@ -116,7 +116,7 @@ class SignupForm extends StatelessWidget {
           CustomTextFormField(
             controller: phoneController,
             prefixIcon: Icons.phone,
-            hintText: TextManager.phone_hint,
+            hintText: TextManager.phoneHint,
             validator: _validatePhone,
           ),
 
@@ -125,7 +125,7 @@ class SignupForm extends StatelessWidget {
           CustomTextFormField(
             controller: passwordController,
             prefixIcon: Icons.lock,
-            hintText: TextManager.password_hint,
+            hintText: TextManager.passwordHint,
             obscureText: true,
             validator: _validatePassword,
           ),
@@ -135,8 +135,8 @@ class SignupForm extends StatelessWidget {
           CustomTextFormField(
             controller: nationalIdController,
             prefixIcon: Icons.perm_identity,
-            hintText: TextManager.national_id_hint,
-            // validator: _validatePassword,
+            hintText: TextManager.nationalIdHint,
+             validator: _validateNationalId,
           ),
 
           SizedBox(height: 0.03.sh),
@@ -164,7 +164,7 @@ class SignupForm extends StatelessWidget {
                 // Navigate to DocumentUploadFlow after successful signup
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (_) => const DocumentUploadFlow(),
+                    builder: (_) => const DocumentUploadFlow(signupMode: true),
                   ),
                 );
               } else if (state is SignUpFailure) {
@@ -179,7 +179,7 @@ class SignupForm extends StatelessWidget {
                 );
               }
               return CustomElevatedButton(
-                text: TextManager.sign_up_text,
+                text: TextManager.signUpText,
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     authCubit.signup(
@@ -188,6 +188,7 @@ class SignupForm extends StatelessWidget {
                       emailController.text,
                       phoneController.text,
                       passwordController.text,
+                      nationalIdController.text,
                     );
                   }
                 },

@@ -54,9 +54,7 @@ class AddCarCubit extends Cubit<AddCarState> {
   ];
 
   // Constructor with optional dependency injection
-  AddCarCubit(// this.carRepository
-      )
-      : super(AddCarInitial());
+  AddCarCubit() : super(AddCarInitial());
 
   // Get all cars
   List<CarModel> getCars() => _cars;
@@ -96,7 +94,7 @@ class AddCarCubit extends Cubit<AddCarState> {
         _cars[index] = updatedCar;
         emit(AddCarSuccess(car: updatedCar));
       } else {
-        emit(AddCarError(message: 'Car not found'));
+        emit(const AddCarError(message: 'Car not found'));
       }
     } catch (e) {
       emit(AddCarError(message: _handleError(e)));

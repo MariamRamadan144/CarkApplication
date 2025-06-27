@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
+import '../../../../../config/routes/screens_name.dart';
 import '../../../../../config/themes/app_colors.dart';
 import '../../../../../core/utils/custom_toast.dart';
 import '../../../../../core/utils/text_manager.dart';
 import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../core/widgets/custom_text_form_field.dart';
 
+/// DONE
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -36,7 +38,7 @@ class LoginForm extends StatelessWidget {
             CustomTextFormField(
               controller: emailController,
               prefixIcon: Icons.person,
-              hintText: TextManager.email_hint.tr(),
+              hintText: TextManager.emailHint.tr(),
             ),
 
             SizedBox(height: 0.02.sh),
@@ -45,7 +47,7 @@ class LoginForm extends StatelessWidget {
             CustomTextFormField(
               controller: passwordController,
               prefixIcon: Icons.lock,
-              hintText: TextManager.password_hint.tr(),
+              hintText: TextManager.passwordHint.tr(),
             ),
 
             SizedBox(height: 0.05.sh),
@@ -55,6 +57,7 @@ class LoginForm extends StatelessWidget {
               listener: (context, state) {
                 if(state is LoginSuccess) {
                   showCustomToast(state.message, false);
+                  Navigator.pushReplacementNamed(context, ScreensName.homeScreen);
                 } else if (state is LoginFailure) {
                   showCustomToast(state.error, true);
                 }
@@ -67,7 +70,7 @@ class LoginForm extends StatelessWidget {
                   );
                 }
                 return CustomElevatedButton(
-                  text: TextManager.login_text,
+                  text: TextManager.loginText,
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       authCubit.login(

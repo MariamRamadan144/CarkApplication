@@ -6,6 +6,7 @@ import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import '../../widgets/profile_custom_widgets/edit_profile_form.dart';
 import '../../widgets/signup_custom_widgets/signup_form.dart';
 
+/// DONE
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
 
@@ -19,6 +20,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _lastnameController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _nationalIdController;
 
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _lastnameController = TextEditingController(text: user?.lastName);
     _emailController = TextEditingController(text: user?.email);
     _phoneController = TextEditingController(text: user?.phoneNumber);
+    _nationalIdController = TextEditingController(text: user?.national_id);
 
     super.initState();
   }
@@ -39,6 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _lastnameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _nationalIdController.dispose();
     super.dispose();
   }
 
@@ -57,6 +61,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               lastnameController: _lastnameController,
               emailController: _emailController,
               phoneController: _phoneController,
+              nationalIdController: _nationalIdController,
             ),
           ),
         ),

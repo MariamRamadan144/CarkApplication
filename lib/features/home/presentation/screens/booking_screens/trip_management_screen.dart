@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../model/car_model.dart';
 import '../../model/location_model.dart';
-import '../../cubit/booking_cubit.dart';
+import '../../cubit/location_tracking_cubit.dart';
+import '../../cubit/location_tracking_state.dart';
+import '../../../../../config/routes/screens_name.dart';
 
 class TripManagementScreen extends StatefulWidget {
   final CarModel car;
@@ -149,6 +151,20 @@ class _TripManagementScreenState extends State<TripManagementScreen>
     );
   }
 
+  void _proceedToRenterDropOff() {
+    Navigator.pushNamed(
+      context,
+      ScreensName.renterDropOffScreen,
+      arguments: {
+        'tripId': 'trip_${DateTime.now().millisecondsSinceEpoch}',
+        'carId': widget.car.id,
+        'renterId': 'renter_001', // Mock data
+        'ownerId': 'owner_001', // Mock data
+        'paymentMethod': 'visa', // Mock data
+      },
+    );
+  }
+
   String _formatDuration(Duration duration) {
     return '${(duration.inHours).toString().padLeft(2, '0')}:${(duration.inMinutes.remainder(60)).toString().padLeft(2, '0')}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
   }
@@ -164,19 +180,64 @@ class _TripManagementScreenState extends State<TripManagementScreen>
         actions: [
           if (isTripStarted)
             IconButton(
+              onPressed: () {
+                context.read<LocationTrackingCubit>().requestCarLocation(widget.car.id);
+              },
+              icon: const Icon(Icons.location_searching),
+              tooltip: 'Request Car Location',
+            ),
+          if (isTripStarted)
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  ScreensName.locationTrackingScreen,
+                  arguments: widget.car,
+                );
+              },
+              icon: const Icon(Icons.location_on),
+              tooltip: 'View Location History',
+            ),
+          if (isTripStarted)
+            IconButton(
               onPressed: _stopOrder,
               icon: const Icon(Icons.stop),
               tooltip: 'Stop Order',
             ),
+          IconButton(
+            onPressed: _proceedToRenterDropOff,
+            icon: const Icon(Icons.handshake),
+            tooltip: 'Proceed to Renter Drop-Off',
+          ),
         ],
       ),
-      body: Column(
-        children: [
-          _buildTripStatusCard(),
-          if (!isTripStarted) _buildStartTripButton(),
-          if (showMap) _buildMapPlaceholder(),
-          _buildStopsList(),
-        ],
+      body: BlocListener<LocationTrackingCubit, LocationTrackingState>(
+        listener: (context, state) {
+          if (state is LocationTrackingSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Car location updated: ${state.locationRequest.latitude.toStringAsFixed(4)}, ${state.locationRequest.longitude.toStringAsFixed(4)}'),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          } else if (state is LocationTrackingError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: Column(
+          children: [
+            _buildTripStatusCard(),
+            if (!isTripStarted) _buildStartTripButton(),
+            if (showMap) _buildMapPlaceholder(),
+            _buildStopsList(),
+          ],
+        ),
       ),
     );
   }

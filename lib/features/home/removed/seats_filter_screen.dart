@@ -1,9 +1,8 @@
 // SeatsFilterScreen.dart
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SeatsFilterScreen extends StatefulWidget {
-  const SeatsFilterScreen({Key? key}) : super(key: key);
+  const SeatsFilterScreen({super.key});
 
   @override
   _SeatsFilterScreenState createState() => _SeatsFilterScreenState();
