@@ -9,6 +9,11 @@ import 'package:test_cark/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:test_cark/features/auth/presentation/cubits/document_cubit.dart';
 import 'package:test_cark/features/shared/cubit/navigation_cubit.dart';
 import 'features/cars/presentation/cubits/add_car_cubit.dart';
+import 'features/handover/handover/presentation/cubits/contract_upload_cubit.dart';
+import 'features/handover/handover/presentation/cubits/handover_cubit.dart';
+import 'features/handover/handover/presentation/cubits/owner_drop_off_cubit.dart';
+import 'features/handover/handover/presentation/cubits/renter_drop_off_cubit.dart';
+import 'features/handover/handover/presentation/cubits/renter_handover_cubit.dart';
 import 'features/home/presentation/cubit/booking_cubit.dart';
 import 'features/home/presentation/cubit/car_cubit.dart';
 import 'features/notifications/presentation/cubits/notification_cubit.dart';
@@ -49,6 +54,21 @@ class Cark extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) => NotificationCubit(),
+              ),
+              BlocProvider(
+                create: (context) => ContractUploadCubit(),
+              ),
+              BlocProvider(
+                create: (context) => HandoverCubit(),
+              ),
+              BlocProvider(
+                create: (context) => OwnerDropOffCubit(),
+              ),
+              BlocProvider(
+                create: (context) => RenterDropOffCubit(),
+              ),
+              BlocProvider(
+                create: (context) => RenterHandoverCubit(),
               ),
 
             ],

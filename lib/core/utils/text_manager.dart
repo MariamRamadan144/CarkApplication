@@ -110,7 +110,7 @@ abstract class TextManager{
   static const String carAddedError = "car_added_error";
   static const String deleteCarTitle = "delete_car_title";
   static const String deleteCarConfirmation = "delete_car_confirmation";
-  static const String noCarsMessage = "no_cars_message";
+  // static const String noCarsMessage = "no_cars_message";
   static const String cancel = "cancel";
   static const String delete = "delete";
 

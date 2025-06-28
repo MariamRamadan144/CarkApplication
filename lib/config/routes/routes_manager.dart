@@ -10,6 +10,12 @@ import '../../features/cars/presentation/screens/add_car_screen.dart';
 import '../../features/cars/presentation/screens/car_rental_options_screen.dart';
 import '../../features/cars/presentation/screens/car_usage_policy_screen.dart';
 import '../../features/cars/presentation/screens/view_cars_screen.dart';
+import '../../features/handover/handover/presentation/models/handover_log_model.dart';
+import '../../features/handover/handover/presentation/models/post_trip_handover_model.dart';
+import '../../features/handover/handover/presentation/screens/handover_screen.dart';
+import '../../features/handover/handover/presentation/screens/owner_drop_off_screen.dart';
+import '../../features/handover/handover/presentation/screens/renter_handover_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/trip_details_screen.dart';
 import '../../features/home/presentation/screens/home_screens/filter_screen.dart';
 import '../../features/home/presentation/screens/home_screens/home_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/rental_search_screen.dart';
@@ -20,6 +26,11 @@ import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/booking_summary_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/trip_management_screen.dart';
 import '../../features/home/presentation/screens/booking_screens/payment_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/booking_request_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/deposit_payment_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/booking_history_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/payment_methods_screen.dart';
+import '../../features/home/presentation/screens/booking_screens/deposit_input_screen.dart';
 import '../../features/home/presentation/model/car_model.dart';
 import '../../features/home/presentation/model/location_model.dart';
 import '../../features/owner/presentation/screens/owner_home_screen.dart';
@@ -44,6 +55,8 @@ abstract class RoutesManager {
             builder: (context) => const EditProfileScreen());
       case ScreensName.homeScreen:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
+
+
 
       // case ScreensName.mainNavigationScreen:
       //   return MaterialPageRoute(builder: (context) => MainNavigationScreen());
@@ -146,6 +159,69 @@ abstract class RoutesManager {
 
       case ScreensName.ownerHomeScreen:
         return MaterialPageRoute(builder: (context) => const OwnerHomeScreen());
+
+      case ScreensName.renterHandoverScreen:
+        return MaterialPageRoute(builder: (context) => const RenterHandoverScreen());
+
+      case ScreensName.handoverScreen:
+        return MaterialPageRoute(builder: (context) => const HandoverScreen());
+
+      case ScreensName.ownerDropOffScreen:
+        if (routeSettings.arguments is Map<String, dynamic>) {
+          final args = routeSettings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => OwnerDropOffScreen(
+              handoverData: args['handoverData'] as PostTripHandoverModel,
+              logs: args['logs'] as List<HandoverLogModel>,
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(child: Text('Error: Missing required arguments for owner drop-off')),
+          ),
+        );
+      case ScreensName.tripDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) => const TripDetailsScreen(),
+        );
+
+      case ScreensName.bookingRequestScreen:
+        return MaterialPageRoute(builder: (context) => const BookingRequestScreen());
+
+      case ScreensName.bookingHistoryScreen:
+        return MaterialPageRoute(builder: (context) => const BookingHistoryScreen());
+
+      case ScreensName.paymentMethodsScreen:
+        return MaterialPageRoute(builder: (context) => const PaymentMethodsScreen());
+
+      case ScreensName.depositPaymentScreen:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        final car = args['car'] as CarModel;
+        final totalPrice = args['totalPrice'] as double;
+        final requestId = args['requestId'] as String?;
+        final bookingData = args['bookingData'] as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (context) => DepositPaymentScreen(
+            car: car,
+            totalPrice: totalPrice,
+            requestId: requestId,
+            bookingData: bookingData,
+          ),
+        );
+
+      case ScreensName.depositInputScreen:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        final car = args['car'] as CarModel;
+        final totalPrice = args['totalPrice'] as double;
+        final stops = args['stops'] as List<dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => DepositInputScreen(
+            car: car,
+            totalPrice: totalPrice,
+            stops: stops.cast<LocationModel>(),
+          ),
+        );
 
       default:
         return MaterialPageRoute(builder: (context) {

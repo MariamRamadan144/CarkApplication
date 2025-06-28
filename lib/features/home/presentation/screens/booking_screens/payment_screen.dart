@@ -410,23 +410,4 @@ class _PaymentScreenState extends material.State<PaymentScreen> {
         border: material.OutlineInputBorder(borderRadius: material.BorderRadius.circular(8.r)),
         contentPadding: material.EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       );
-}
-
-class PaymentMethodsScreen extends StatelessWidget {
-  const PaymentMethodsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Payment Methods'),
-      ),
-      body: Center(
-        child: Text(
-          'Your saved payment methods will appear here.',
-          style: TextStyle(fontSize: 18.sp, color: Colors.grey[700]),
-        ),
-      ),
-    );
-  }
 } 

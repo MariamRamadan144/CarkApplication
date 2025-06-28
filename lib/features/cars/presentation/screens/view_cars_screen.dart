@@ -139,17 +139,18 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
     // Get the current user
     final authCubit = context.read<AuthCubit>();
     final currentUser = authCubit.userModel;
-    
+
     // Get the cars and filter by current user's ID
     final allCars = context.read<AddCarCubit>().getCars();
-    final cars = allCars.where((car) => car.ownerId == currentUser?.id).toList();
-    
+    final cars =
+        allCars.where((car) => car.ownerId == currentUser?.id).toList();
+
     return Scaffold(
       drawer: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           final authCubit = context.read<AuthCubit>();
           final user = authCubit.userModel;
-          
+
           return Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -196,13 +197,15 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
                 ListTile(
                   leading: const Icon(Icons.person),
                   title: const Text('Profile'),
-                  onTap: () => _navigateAndCloseDrawer(context, const ProfileScreen()),
+                  onTap: () =>
+                      _navigateAndCloseDrawer(context, const ProfileScreen()),
                 ),
                 // Add Car
                 ListTile(
                   leading: const Icon(Icons.add_circle_outline),
                   title: const Text('Add Car'),
-                  onTap: () => _navigateAndCloseDrawer(context, const AddCarScreen()),
+                  onTap: () =>
+                      _navigateAndCloseDrawer(context, const AddCarScreen()),
                 ),
                 const Divider(),
                 // Logout
@@ -221,7 +224,7 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
           if (state is AddCarLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          
+
           if (cars.isEmpty) {
             return Center(
               child: Column(
@@ -233,22 +236,31 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
                     color: Colors.grey,
                   ),
                   SizedBox(height: 16.h),
-                  Text(
-                    TextManager.noCarsMessage.tr(),
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  // Text(
+                  //   TextManager.noCarsMessage.tr(),
+                  //   style: TextStyle(
+                  //     fontSize: 16.sp,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
                   SizedBox(height: 24.h),
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pushNamed(context, ScreensName.addCarScreen);
                     },
-                    icon: const Icon(Icons.add),
-                    label: const Text('Add Your First Car'),
+                    icon: Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    label: Text(
+                      'Add Car',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24.w, vertical: 12.h),
                     ),
                   ),
                 ],
@@ -286,4 +298,4 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
       ),
     );
   }
-} 
+}

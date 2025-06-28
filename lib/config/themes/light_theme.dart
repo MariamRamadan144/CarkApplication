@@ -13,6 +13,7 @@ ThemeData lightTheme = ThemeData(
     primary: AppColors.primary,
     // Text color on primary elements
     onPrimary: AppColors.white,
+    onPrimaryFixed: AppColors.primary.withOpacity(0.2),
     // Secondary color
     secondary: AppColors.gray,
     // Text color on secondary

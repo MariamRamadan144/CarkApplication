@@ -23,7 +23,7 @@ class NotificationTestScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            
+
             // Test new car notification
             ElevatedButton(
               onPressed: () async {
@@ -38,51 +38,62 @@ class NotificationTestScreen extends StatelessWidget {
                   _showSnackBar(context, 'Error: $e', true);
                 }
               },
-              child: const Text('Test New Car Notification'),
+              child: Text(
+                'Test New Car Notification',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Test car booked notification
             ElevatedButton(
               onPressed: () async {
                 try {
                   final authCubit = context.read<AuthCubit>();
                   final currentUser = authCubit.userModel;
-                  
+
                   if (currentUser == null) {
                     _showSnackBar(context, 'No user logged in', true);
                     return;
                   }
-                  
+
                   await NotificationService().sendCarBookedNotification(
                     ownerId: currentUser.id,
                     renterName: 'Test Renter',
                     carBrand: 'BMW',
                     carModel: 'X5',
                   );
-                  _showSnackBar(context, 'Car booked notification sent!', false);
+                  _showSnackBar(
+                      context, 'Car booked notification sent!', false);
                 } catch (e) {
                   _showSnackBar(context, 'Error: $e', true);
                 }
               },
-              child: const Text('Test Car Booked Notification'),
+              child: Text(
+                'Test Car Booked Notification',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Test booking notifications
             ElevatedButton(
               onPressed: () async {
                 try {
                   final authCubit = context.read<AuthCubit>();
                   final currentUser = authCubit.userModel;
-                  
+
                   if (currentUser == null) {
                     _showSnackBar(context, 'No user logged in', true);
                     return;
                   }
-                  
+
                   await NotificationService().sendBookingNotifications(
                     renterId: currentUser.id,
                     ownerId: 'owner123',
@@ -93,24 +104,29 @@ class NotificationTestScreen extends StatelessWidget {
                   _showSnackBar(context, 'Error: $e', true);
                 }
               },
-              child: const Text('Test Booking Notifications'),
+              child: Text(
+                'Test Booking Notifications',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             const Text(
               'Current User Info:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            
+
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {
                 final user = context.read<AuthCubit>().userModel;
                 if (user == null) {
                   return const Text('No user logged in');
                 }
-                
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -128,7 +144,7 @@ class NotificationTestScreen extends StatelessWidget {
       ),
     );
   }
-  
+
   void _showSnackBar(BuildContext context, String message, bool isError) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -138,4 +154,4 @@ class NotificationTestScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

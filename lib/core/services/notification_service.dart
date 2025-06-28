@@ -71,10 +71,14 @@ class NotificationService {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
-          .update({'fcm_token': fcmToken});
+          .update({
+            'fcm_token': fcmToken,
+            'fcm_token_updated_at': FieldValue.serverTimestamp(),
+          });
       print('FCM token saved for user: $userId');
     } catch (e) {
       print('Error saving FCM token: $e');
+      // Don't throw the error, just log it to avoid crashing the app
     }
   }
 
@@ -85,7 +89,14 @@ class NotificationService {
           .collection('users')
           .doc(userId)
           .get();
-      return doc.data()?['fcm_token'];
+      
+      final token = doc.data()?['fcm_token'];
+      if (token != null && token.isNotEmpty) {
+        return token;
+      } else {
+        print('FCM token not found or empty for user: $userId');
+        return null;
+      }
     } catch (e) {
       print('Error getting FCM token for user $userId: $e');
       return null;
@@ -193,15 +204,20 @@ class NotificationService {
 
   // Helper method to send FCM notification (simulated - in real app this would be via backend)
   Future<void> _sendFcmNotification(String token, Map<String, dynamic> data) async {
-    // In a real implementation, this would be done via your backend server
-    // For now, we'll simulate the notification by showing a local notification
-    await _showLocalNotification(RemoteNotification(
-      title: data['title'],
-      body: data['body'],
-    ));
-    
-    print('FCM notification would be sent to token: $token');
-    print('Notification data: $data');
+    try {
+      // In a real implementation, this would be done via your backend server
+      // For now, we'll simulate the notification by showing a local notification
+      await _showLocalNotification(RemoteNotification(
+        title: data['title'],
+        body: data['body'],
+      ));
+      
+      print('FCM notification would be sent to token: $token');
+      print('Notification data: $data');
+    } catch (e) {
+      print('Error sending FCM notification: $e');
+      // Don't throw the error to avoid crashing the app
+    }
   }
 
   // Save new car notification to Firestore for all renters
@@ -253,21 +269,35 @@ class NotificationService {
     }
   }
 
-  // Add a notification to Firestore for a user
+  // Send notification to a specific user
   Future<void> sendNotificationToUser({
     required String userId,
     required String title,
     required String body,
-    required String type, // 'booking', 'payment', 'car', 'general'
+    required String type, // 'owner', 'renter', 'general'
+    String? notificationType, // 'car_booked', 'booking_accepted', 'deposit_paid', 'handover_ready', 'handover', 'renter_handover_completed'
+    Map<String, dynamic>? bookingData,
   }) async {
-    await FirebaseFirestore.instance.collection('notifications').add({
+    final notificationData = {
       'userId': userId,
       'title': title,
       'body': body,
       'type': type,
       'timestamp': FieldValue.serverTimestamp(),
       'read': false,
-    });
+    };
+
+    // Add notification type if provided
+    if (notificationType != null) {
+      notificationData['notification_type'] = notificationType;
+    }
+
+    // Add booking data if provided
+    if (bookingData != null) {
+      notificationData['booking_data'] = bookingData;
+    }
+
+    await FirebaseFirestore.instance.collection('notifications').add(notificationData);
   }
 
   // Send booking notifications for both renter and owner
@@ -355,5 +385,204 @@ class NotificationService {
         .collection('notifications')
         .doc(notificationId)
         .update({'read': true});
+  }
+
+  // Send booking acceptance notification to renter
+  Future<void> sendBookingAcceptanceNotification({
+    required String renterId,
+    required String ownerName,
+    required String carBrand,
+    required String carModel,
+  }) async {
+    try {
+      // Get renter's FCM token
+      final renterToken = await getUserFcmToken(renterId);
+      
+      if (renterToken == null) {
+        print('Renter FCM token not found for user: $renterId');
+        return;
+      }
+
+      // Create notification data for FCM
+      final notificationData = {
+        'title': '✅ Booking Accepted!',
+        'body': '$ownerName has accepted your booking request for $carBrand $carModel.',
+        'type': 'booking_accepted',
+        'owner_name': ownerName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+      };
+
+      // Send FCM notification
+      await _sendFcmNotification(renterToken, notificationData);
+
+      // Also save to Firestore for in-app notifications
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'userId': renterId,
+        'title': '✅ Booking Accepted!',
+        'body': '$ownerName has accepted your booking request for $carBrand $carModel. Please proceed to pay the deposit.',
+        'type': 'renter',
+        'timestamp': FieldValue.serverTimestamp(),
+        'read': false,
+        'notification_type': 'booking_accepted',
+        'owner_name': ownerName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+      });
+      
+      print('Booking acceptance notification sent to renter: $renterId');
+    } catch (e) {
+      print('Error sending booking acceptance notification: $e');
+    }
+  }
+
+  // Send notification to owner to proceed to handover after deposit is paid
+  Future<void> sendHandoverNotificationToOwner({
+    required String ownerId,
+    required String renterName,
+    required String carBrand,
+    required String carModel,
+  }) async {
+    try {
+      // Get owner's FCM token
+      final ownerToken = await getUserFcmToken(ownerId);
+      
+      if (ownerToken == null) {
+        print('Owner FCM token not found for user: $ownerId');
+        return;
+      }
+
+      // Create notification data for FCM
+      final notificationData = {
+        'title': '🚗 Proceed to Handover',
+        'body': 'Deposit has been paid for $carBrand $carModel. Please proceed to handover.',
+        'type': 'handover_ready',
+        'renter_name': renterName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+      };
+
+      // Send FCM notification
+      await _sendFcmNotification(ownerToken, notificationData);
+
+      // Also save to Firestore for in-app notifications
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'userId': ownerId,
+        'title': '🚗 Proceed to Handover',
+        'body': 'Deposit has been paid for $carBrand $carModel by $renterName. Please proceed to handover.',
+        'type': 'owner',
+        'timestamp': FieldValue.serverTimestamp(),
+        'read': false,
+        'notification_type': 'handover_ready',
+        'renter_name': renterName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+        'action': 'navigate_to_handover',
+      });
+      
+      print('Handover notification sent to owner: $ownerId');
+    } catch (e) {
+      print('Error sending handover notification: $e');
+    }
+  }
+
+  // Send notification to renter that owner has completed handover
+  Future<void> sendOwnerHandoverCompletedNotification({
+    required String renterId,
+    required String ownerName,
+    required String carBrand,
+    required String carModel,
+  }) async {
+    try {
+      // Get renter's FCM token
+      final renterToken = await getUserFcmToken(renterId);
+      
+      if (renterToken == null) {
+        print('Renter FCM token not found for user: $renterId');
+        return;
+      }
+
+      // Create notification data for FCM
+      final notificationData = {
+        'title': '✅ Owner Handover Completed',
+        'body': '$ownerName has completed the handover for your $carBrand $carModel. Please proceed with your handover.',
+        'type': 'owner_handover_completed',
+        'owner_name': ownerName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+      };
+
+      // Send FCM notification
+      await _sendFcmNotification(renterToken, notificationData);
+
+      // Also save to Firestore for in-app notifications
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'userId': renterId,
+        'title': '✅ Owner Handover Completed',
+        'body': '$ownerName has completed the handover for your $carBrand $carModel. Please proceed with your handover.',
+        'type': 'renter',
+        'timestamp': FieldValue.serverTimestamp(),
+        'read': false,
+        'notification_type': 'owner_handover_completed',
+        'owner_name': ownerName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+        'action': 'navigate_to_renter_handover',
+      });
+      
+      print('Owner handover completed notification sent to renter: $renterId');
+    } catch (e) {
+      print('Error sending owner handover completed notification: $e');
+    }
+  }
+
+  // Send notification to owner that renter has completed handover
+  Future<void> sendRenterHandoverCompletedNotification({
+    required String ownerId,
+    required String renterName,
+    required String carBrand,
+    required String carModel,
+  }) async {
+    try {
+      // Get owner's FCM token
+      final ownerToken = await getUserFcmToken(ownerId);
+      
+      if (ownerToken == null) {
+        print('Owner FCM token not found for user: $ownerId');
+        return;
+      }
+
+      // Create notification data for FCM
+      final notificationData = {
+        'title': '✅ Renter Handover Completed',
+        'body': '$renterName has completed the handover for your $carBrand $carModel. The trip can now begin.',
+        'type': 'renter_handover_completed',
+        'renter_name': renterName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+      };
+
+      // Send FCM notification
+      await _sendFcmNotification(ownerToken, notificationData);
+
+      // Also save to Firestore for in-app notifications
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'userId': ownerId,
+        'title': '✅ Renter Handover Completed',
+        'body': '$renterName has completed the handover for your $carBrand $carModel. The trip can now begin.',
+        'type': 'owner',
+        'timestamp': FieldValue.serverTimestamp(),
+        'read': false,
+        'notification_type': 'renter_handover_completed',
+        'renter_name': renterName,
+        'car_brand': carBrand,
+        'car_model': carModel,
+        'action': 'trip_started',
+      });
+      
+      print('Renter handover completed notification sent to owner: $ownerId');
+    } catch (e) {
+      print('Error sending renter handover completed notification: $e');
+    }
   }
 } 

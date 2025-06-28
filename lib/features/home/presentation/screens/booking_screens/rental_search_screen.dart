@@ -420,8 +420,8 @@ class RentalSearchScreen extends StatelessWidget {
   }
 }
 
-class BookingHistoryScreen extends StatelessWidget {
-  const BookingHistoryScreen({super.key});
+class RentalBookingHistoryScreen extends StatelessWidget {
+  const RentalBookingHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

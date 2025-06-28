@@ -54,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       listener: (context, state) {
         if (state is SignUpSuccess) {
           print("✅ BlocListener caught SignUpSuccess");
-          Navigator.pushReplacementNamed(context, ScreensName.login);
+          Navigator.pushReplacementNamed(context, ScreensName.rentalSearchScreen);
         }
       },
       child: Scaffold(

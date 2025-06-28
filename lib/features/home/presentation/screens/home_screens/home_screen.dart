@@ -9,6 +9,8 @@ import '../../widgets/home_widgets/view_cars_section_widget.dart';
 import '../../widgets/home_widgets/notification_badge_widget.dart';
 import '../../widgets/rental_widgets/filter_button.dart';
 import '../../widgets/rental_widgets/rental_summary_card.dart';
+import '../booking_screens/booking_history_screen.dart';
+import '../booking_screens/payment_methods_screen.dart';
 import '../booking_screens/payment_screen.dart';
 import '../booking_screens/rental_search_screen.dart';
 import 'contact_help_screen.dart';
@@ -156,6 +158,16 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => _navigateAndCloseDrawer(
                         context, BookingHistoryScreen()),
                   ),
+                  // Booking Requests (only for renters)
+                  if (user?.role == 'renter')
+                    ListTile(
+                      leading: const Icon(Icons.pending_actions),
+                      title: const Text('Booking Requests'),
+                      onTap: () {
+                        Navigator.pop(context); // Close drawer
+                        Navigator.pushNamed(context, ScreensName.bookingRequestScreen);
+                      },
+                    ),
                   ListTile(
                     leading: const Icon(Icons.credit_card),
                     title: const Text('Payment Methods'),

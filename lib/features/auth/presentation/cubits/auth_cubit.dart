@@ -70,9 +70,51 @@ class AuthCubit extends Cubit<AuthState> {
           await _notificationService.saveFcmTokenToUser(userModel!.id, fcmToken);
           
           print('FCM token saved for user: ${userModel!.id}');
+        } else {
+          print('Failed to get FCM token for user: ${userModel!.id}');
         }
       } catch (e) {
         print('Error saving FCM token: $e');
+        // Don't throw the error to avoid crashing the app
+      }
+    } else {
+      print('User model is null, cannot save FCM token');
+    }
+  }
+
+  // Enhanced FCM token saving with retry mechanism
+  Future<void> saveFcmTokenWithRetry({int maxRetries = 3}) async {
+    if (userModel == null) {
+      print('User model is null, cannot save FCM token');
+      return;
+    }
+
+    for (int attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        final fcmToken = await _notificationService.getFcmToken();
+        if (fcmToken != null) {
+          // Update user model with FCM token
+          userModel = userModel!.copyWith(fcmToken: fcmToken);
+          
+          // Save to SharedPreferences
+          await _saveUserData(userModel!);
+          
+          // Save to Firestore
+          await _notificationService.saveFcmTokenToUser(userModel!.id, fcmToken);
+          
+          print('FCM token saved successfully for user: ${userModel!.id} (attempt $attempt)');
+          return; // Success, exit the retry loop
+        } else {
+          print('Failed to get FCM token for user: ${userModel!.id} (attempt $attempt)');
+        }
+      } catch (e) {
+        print('Error saving FCM token (attempt $attempt): $e');
+        if (attempt == maxRetries) {
+          print('Failed to save FCM token after $maxRetries attempts');
+        } else {
+          // Wait before retrying
+          await Future.delayed(Duration(seconds: attempt * 2));
+        }
       }
     }
   }

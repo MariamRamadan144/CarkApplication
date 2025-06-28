@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_cark/config/themes/app_colors.dart';
+import '../../../../../config/routes/screens_name.dart';
 import '../../../../../core/services/notification_service.dart';
 import '../../../../auth/presentation/widgets/profile_custom_widgets/document_upload_flow.dart';
 import '../../model/car_model.dart';
@@ -9,6 +10,7 @@ import '../../cubit/car_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_cark/features/home/presentation/screens/booking_screens/deposit_input_screen.dart';
 import '../../../../auth/presentation/cubits/auth_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
   final CarModel car;
@@ -141,16 +143,14 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
             SizedBox(height: 16.h),
             _buildOverviewItem(Icons.check_circle, tr("third_party_insurance"),
                 AppColors.primary),
-            _buildOverviewItem(
-                Icons.check_circle,
-                tr("collision_damage_waiver"),
-                AppColors.primary),
             _buildOverviewItem(Icons.check_circle,
-                tr("theft_protection"), AppColors.primary),
+                tr("collision_damage_waiver"), AppColors.primary),
+            _buildOverviewItem(
+                Icons.check_circle, tr("theft_protection"), AppColors.primary),
             _buildOverviewItem(
                 Icons.check_circle, tr("km_included"), AppColors.primary),
-            _buildOverviewItem(Icons.check_circle,
-                tr("flexible_booking"), AppColors.primary),
+            _buildOverviewItem(
+                Icons.check_circle, tr("flexible_booking"), AppColors.primary),
           ],
         ),
       ),
@@ -167,8 +167,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
           SizedBox(width: 12.w),
           Expanded(
               child: Text(text,
-                  style: TextStyle(
-                      fontSize: 15.sp, color: Colors.grey.shade800))),
+                  style:
+                      TextStyle(fontSize: 15.sp, color: Colors.grey.shade800))),
         ],
       ),
     );
@@ -197,8 +197,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                     Expanded(
                         child: Text(tr("agree_to_terms"),
                             style: TextStyle(
-                                fontSize: 15.sp,
-                                color: Colors.grey.shade800))),
+                                fontSize: 15.sp, color: Colors.grey.shade800))),
                   ],
                 ),
                 Divider(height: 1.h, color: Colors.grey.shade200),
@@ -239,69 +238,133 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
       child: ElevatedButton(
         onPressed: _agreedToTerms
             ? () async {
-                var stops = context.read<CarCubit>().state.stops;
-                stops = List.from(stops); // Make mutable copy
+                // Check if widget is still mounted before proceeding
+                if (!mounted) return;
 
-                // Ensure there's at least a pickup and return station, even if no intermediate stops are added
-                if (stops.isEmpty) {
-                  final pickup = context.read<CarCubit>().state.pickupStation;
-                  final dropoff = context.read<CarCubit>().state.returnStation;
-                  if (pickup != null) stops.add(pickup);
-                  if (dropoff != null) stops.add(dropoff);
-                }
+                try {
+                  var stops = context.read<CarCubit>().state.stops;
+                  stops = List.from(stops); // Make mutable copy
 
-                if (stops.length < 2) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please select at least a pickup and return station.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+                  // Ensure there's at least a pickup and return station, even if no intermediate stops are added
+                  if (stops.isEmpty) {
+                    final pickup = context.read<CarCubit>().state.pickupStation;
+                    final dropoff = context.read<CarCubit>().state.returnStation;
+                    if (pickup != null) stops.add(pickup);
+                    if (dropoff != null) stops.add(dropoff);
+                  }
 
-                // Send notification to owner after agreeing to terms
-                final authCubit = context.read<AuthCubit>();
-                final currentUser = authCubit.userModel;
-                final renterName = currentUser != null 
-                    ? '${currentUser.firstName} ${currentUser.lastName}'
-                    : 'A renter';
-                
-                // Send FCM notification to car owner
-                await NotificationService().sendCarBookedNotification(
-                  ownerId: widget.car.ownerId,
-                  renterName: renterName,
-                  carBrand: widget.car.brand,
-                  carModel: widget.car.model,
-                );
+                  if (stops.length < 2) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Please select at least a pickup and return station.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    return;
+                  }
 
-                // Also send to Firestore for in-app notifications
-                await NotificationService().sendNotificationToUser(
-                  userId: widget.car.ownerId,
-                  title: 'New Booking Request',
-                  body: 'You have a new booking request for your car ${widget.car.brand} ${widget.car.model} from $renterName.',
-                  type: 'booking',
-                );
+                  // Send notification to owner after agreeing to terms
+                  final authCubit = context.read<AuthCubit>();
+                  final currentUser = authCubit.userModel;
+                  
+                  if (currentUser == null) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('User not found. Please login again.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    return;
+                  }
 
-                // Branch by car rental option
-                if (widget.car.rentalOptions.availableWithDriver) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => DepositInputScreen(
-                        car: widget.car,
-                        totalPrice: widget.totalPrice,
-                        stops: stops,
+                  final renterName = '${currentUser.firstName} ${currentUser.lastName}';
+                  final renterId = currentUser.id;
+
+                  // For demo purposes, use a valid owner ID or create one
+                  final ownerId = widget.car.ownerId == 'owner1' ? '1' : widget.car.ownerId;
+
+                  // Create booking request data
+                  final bookingRequestData = {
+                    'renterId': renterId,
+                    'renterName': renterName,
+                    'carId': widget.car.id,
+                    'carBrand': widget.car.brand,
+                    'carModel': widget.car.model,
+                    'totalPrice': widget.totalPrice,
+                    'pickupStation': context.read<CarCubit>().state.pickupStation?.name ?? '',
+                    'returnStation': context.read<CarCubit>().state.returnStation?.name ?? '',
+                    'dateRange': context.read<CarCubit>().state.dateRange?.toString() ?? '',
+                    'status': 'pending',
+                    'createdAt': DateTime.now().toIso8601String(),
+                    'ownerId': ownerId, // Add owner ID to booking data
+                  };
+
+                  // Send FCM notification to car owner (only if owner exists)
+                  try {
+                    await NotificationService().sendCarBookedNotification(
+                      ownerId: ownerId,
+                      renterName: renterName,
+                      carBrand: widget.car.brand,
+                      carModel: widget.car.model,
+                    );
+                  } catch (e) {
+                    print('FCM notification failed (owner may not exist): $e');
+                    // Don't fail the booking request if notification fails
+                  }
+
+                  // Also send to Firestore for in-app notifications with booking data
+                  try {
+                    await NotificationService().sendNotificationToUser(
+                      userId: ownerId,
+                      title: 'New Booking Request',
+                      body: 'You have a new booking request for your car ${widget.car.brand} ${widget.car.model} from $renterName.',
+                      type: 'owner',
+                      notificationType: 'car_booked',
+                      bookingData: bookingRequestData,
+                    );
+                  } catch (e) {
+                    print('Error sending notification to Firestore: $e');
+                    // Don't fail the booking request if notification fails
+                  }
+
+                  // Save booking request to Firestore for tracking
+                  await _saveBookingRequest(bookingRequestData);
+
+                  // Branch by car rental option
+                  if (widget.car.rentalOptions.availableWithDriver) {
+                    if (mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DepositInputScreen(
+                            car: widget.car,
+                            totalPrice: widget.totalPrice,
+                            stops: stops,
+                          ),
+                        ),
+                      );
+                    }
+                  } else if (widget.car.rentalOptions.availableWithoutDriver) {
+                    // For without driver, show a confirmation dialog and wait for owner acceptance
+                    if (mounted) {
+                      _showBookingRequestDialog(context, renterName);
+                    }
+                  }
+                } catch (e) {
+                  print('Error in booking request: $e');
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error creating booking request: $e'),
+                        backgroundColor: Colors.red,
                       ),
-                    ),
-                  );
-                } else if (widget.car.rentalOptions.availableWithoutDriver) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const DocumentUploadFlow(),
-                    ),
-                  );
+                    );
+                  }
                 }
               }
             : null,
@@ -321,4 +384,67 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
       ),
     );
   }
-} 
+
+  void _showBookingRequestDialog(BuildContext context, String renterName) {
+    if (!mounted) return;
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.check_circle, color: Colors.green, size: 24.sp),
+            SizedBox(width: 8.w),
+            Text('Booking Request Sent'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your booking request for ${widget.car.brand} ${widget.car.model} has been sent to the car owner.',
+              style: TextStyle(fontSize: 16.sp),
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'You will receive a notification once the owner accepts or declines your request.',
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (mounted) {
+                Navigator.pop(context);
+                // Navigate back to home screen
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  ScreensName.homeScreen,
+                  (route) => false,
+                );
+              }
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _saveBookingRequest(Map<String, dynamic> bookingRequestData) async {
+    try {
+      // Import FirebaseFirestore at the top of the file
+      await FirebaseFirestore.instance.collection('booking_requests').add({
+        ...bookingRequestData,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+      print('Booking request saved successfully');
+    } catch (e) {
+      print('Error saving booking request: $e');
+      // Don't throw the error to avoid crashing the app
+    }
+  }
+}
