@@ -10,11 +10,10 @@ import 'add_car_screen.dart';
 import '../widgets/car_data_table.dart';
 import 'view_car_details_screen.dart';
 
-<<<<<<< Updated upstream
 class ViewCarsScreen extends StatelessWidget {
   const ViewCarsScreen({super.key});
 
-=======
+
 class ViewCarsScreen extends StatefulWidget {
   // const ViewCarsScreen({super.key});
   final int? userRole; // 🟡
@@ -36,7 +35,6 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
     super.dispose();
   }
 
->>>>>>> Stashed changes
   void _showDeleteConfirmation(BuildContext context, CarModel car) {
     showDialog(
       context: context,
@@ -122,12 +120,10 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    // Get the cars when the screen is built
+     // Get the cars when the screen is built
     final cars = context.read<AddCarCubit>().getCars();
     
-=======
-    // Get the current user
+     // Get the current user
     final authCubit = context.read<AuthCubit>();
     final currentUser = authCubit.userModel;
 
@@ -139,7 +135,7 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
     final cars = context.watch<AddCarCubit>().getCars();
     final filteredCars = cars.where((car) => car.ownerId == currentUser?.id).toList();
 
->>>>>>> Stashed changes
+ 
     return Scaffold(
       appBar: AppBar(
         title: Text(TextManager.viewCarsTitle.tr()),
@@ -158,8 +154,7 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
           ),
         ],
       ),
-<<<<<<< Updated upstream
-      body: BlocConsumer<AddCarCubit, AddCarState>(
+       body: BlocConsumer<AddCarCubit, AddCarState>(
         listener: (context, state) {
           if (state is AddCarSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -179,19 +174,16 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
             );
           }
         },
-=======
-
+ 
       body: BlocBuilder<AddCarCubit, AddCarState>(
->>>>>>> Stashed changes
+ 
         builder: (context, state) {
           if (state is AddCarLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-<<<<<<< Updated upstream
-          
+           
           if (cars.isEmpty) {
-=======
-
+ 
           // if (cars.isEmpty) {
           //   return Center(
           //     child: Column(
@@ -222,7 +214,7 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
 
             if (widget.userRole == 1 || filteredCars.isEmpty) {
             // رينتر أو ماعندوش عربيات، نعرض شاشة فاضية مع زر إضافة عربية
->>>>>>> Stashed changes
+ 
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -234,13 +226,11 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
                   ),
                   SizedBox(height: 16.h),
                   Text(
-<<<<<<< Updated upstream
-                    TextManager.noCarsMessage.tr(),
+                     TextManager.noCarsMessage.tr(),
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: Colors.grey,
-=======
-                    'No cars found. Add your first car!',
+                     'No cars found. Add your first car!',
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: Colors.grey,
@@ -264,7 +254,7 @@ class _ViewCarsScreenState extends State<ViewCarsScreen> {
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
                           horizontal: 24.w, vertical: 12.h),
->>>>>>> Stashed changes
+ 
                     ),
                   ),
                 ],
