@@ -53,6 +53,42 @@ class ApiService {
   }
 
 
+  Future<Response> postWithToken(String endpoint, dynamic data) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('access_token');
+
+    try {
+      final response = await _dio.post(
+        endpoint,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+
+  Future<Response> getWithToken(String endpoint, String token) async {
+    final dio = Dio();
+    final response = await dio.get(
+      '${_dio.options.baseUrl}$endpoint',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    return response;
+  }
+
   // GET request
   Future<Response> get(String endpoint, {Map<String, dynamic>? queryParams}) async {
     try {

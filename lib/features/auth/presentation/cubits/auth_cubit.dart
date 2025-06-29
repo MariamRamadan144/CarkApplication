@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/api_service.dart';
 import '../../../../core/services/notification_service.dart';
 import '../models/user_model.dart';
+import 'auth_cubit.dart';
 
 part 'auth_state.dart';
 
@@ -144,6 +146,34 @@ class AuthCubit extends Cubit<AuthState> {
         // Save user data to SharedPreferences
         await _saveUserData(userModel!);
 
+<<<<<<< Updated upstream
+=======
+        try {
+          await login(email: email, password: password);
+
+          // 🟢 إرسال الـ role بعد ما بقى معانا التوكن
+          final roleResponse = await ApiService().postWithToken("user-roles/", {
+            "user": userModel!.id,
+            "role": 1,
+          });
+          // final roleResponse = await ApiService().post("user-roles/", {
+          //   "user": userModel!.id,
+          //   "role": 1,
+          // });
+
+          if (roleResponse.statusCode == 201 || roleResponse.statusCode == 200) {
+            print("User role assigned successfully");
+          } else {
+            print("Unexpected status while assigning role: ${roleResponse.statusCode}");
+          }
+        } catch (e) {
+          print("Error assigning user role: $e");
+        }
+
+        // Save FCM token after successful signup
+        await saveFcmToken();
+
+>>>>>>> Stashed changes
         // هنا ممكن تبدأ عملية رفع الصور بعد نجاح التسجيل
         // await uploadIdImage(...)
         // await uploadLicenceImage(...)
@@ -230,4 +260,126 @@ class AuthCubit extends Cubit<AuthState> {
       }
     }
   }
+<<<<<<< Updated upstream
+=======
+
+  // Toggle user role between renter and owner
+  void toggleRole() {
+    // This is a simple implementation - you might want to store role in UserModel
+    // For now, we'll just emit a state change
+    emit(AuthInitial());
+  }
+
+  // Switch to owner mode and navigate to add car
+  Future<void> switchToOwner() async {
+    if (userModel != null) {
+      // Update user role to owner
+      userModel = userModel!.copyWith(role: 'owner');
+      
+      // Save updated user data to SharedPreferences
+      await _saveUserData(userModel!);
+      
+      emit(AuthInitial());
+    }
+  }
+
+  // Switch back to renter mode
+  Future<void> switchToRenter() async {
+    if (userModel != null) {
+      // Update user role to renter
+      userModel = userModel!.copyWith(role: 'renter');
+      
+      // Save updated user data to SharedPreferences
+      await _saveUserData(userModel!);
+      
+      emit(AuthInitial());
+    }
+  }
+
+  // Logout user
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_data');
+    await prefs.remove('access_token');
+    await prefs.remove('refresh_token');
+    userModel = null;
+    emit(AuthInitial());
+  }
+
+
+  Future<int?> fetchLatestUserRole() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final accessToken = prefs.getString('access_token');
+      if (accessToken == null) {
+        print('No access token found');
+        return null;
+      }
+
+      final userId = userModel?.id;
+      if (userId == null) {
+        print('No user ID available');
+        return null;
+      }
+
+      final response = await ApiService().getWithToken(
+        'user-roles/',
+        accessToken,
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> rolesList = response.data;
+
+        // Filter user roles by current user
+        final userRoles = rolesList
+            .where((role) => role['user'] == userId)
+            .toList();
+
+        if (userRoles.isNotEmpty) {
+          final latest = userRoles.last;
+          print('Latest role for user $userId is ${latest['role']}');
+          return latest['role'];
+        } else {
+          print('No role found for user $userId');
+          return null;
+        }
+      } else {
+        print('Error fetching roles: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error in fetchLatestUserRole: $e');
+      return null;
+    }
+  }
+
+
+
+>>>>>>> Stashed changes
 }
+
+
+//
+// Future<int?> fetchLatestUserRole() async {
+//   try {
+//     final prefs = await SharedPreferences.getInstance();
+//     final accessToken = prefs.getString('access_token');
+//
+//     final response = await ApiService().getWithToken(
+//       "user-roles/",
+//       token: accessToken,
+//     );
+//
+//     if (response.statusCode == 200 && response.data is List) {
+//       final roles = response.data;
+//       if (roles.isNotEmpty) {
+//         roles.sort((a, b) => b['id'].compareTo(a['id'])); // Sort by latest
+//         return roles.first['role'];
+//       }
+//     }
+//   } catch (e) {
+//     print("Error fetching role: $e");
+//   }
+//
+//   return null; // default fallback
+// }

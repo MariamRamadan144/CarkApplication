@@ -60,6 +60,7 @@ class Cark extends StatelessWidget {
               ),
             ],
             child: MaterialApp(
+                navigatorKey: navigatorKey,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,

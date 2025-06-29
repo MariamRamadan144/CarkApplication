@@ -6,8 +6,10 @@ import 'package:test_cark/features/cars/presentation/cubits/add_car_state.dart';
 import 'package:test_cark/features/cars/presentation/screens/add_car_screen.dart';
 
 class OwnerHomeScreen extends StatelessWidget {
-  const OwnerHomeScreen({Key? key}) : super(key: key);
+  // const OwnerHomeScreen({Key? key}) : super(key: key);
+  final int? userRole;
 
+<<<<<<< Updated upstream
   void _navigateToAddCar(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -19,6 +21,9 @@ class OwnerHomeScreen extends StatelessWidget {
     }
   }
 
+=======
+  const OwnerHomeScreen({Key? key, this.userRole}) : super(key: key);
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +38,7 @@ class OwnerHomeScreen extends StatelessWidget {
           ),
         ],
       ),
+<<<<<<< Updated upstream
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocConsumer<AddCarCubit, AddCarState>(
@@ -71,6 +77,17 @@ class OwnerHomeScreen extends StatelessWidget {
             );
           },
         ),
+=======
+      drawer: const OwnerDrawer(),
+      // body: const ViewCarsScreen(),
+      body: ViewCarsScreen(userRole: userRole),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, ScreensName.addCarScreen);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add, color: Colors.white),
+>>>>>>> Stashed changes
       ),
     );
   }

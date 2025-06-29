@@ -29,3 +29,11 @@ class AddCarError extends AddCarState {
   @override
   List<Object?> get props => [message];
 }
+class AddCarFetchedSuccessfully extends AddCarState {
+  final List<CarModel> cars;
+
+  const AddCarFetchedSuccessfully({required this.cars});
+
+  @override
+  List<Object?> get props => [cars];
+}
